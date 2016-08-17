@@ -13,7 +13,16 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:id="@+id/btn_player"
+        android:text="選手一覧"
+        android:layout_gravity="bottom" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:id="@+id/btn_start"
-        android:text="開始" />
+        android:text="開始"
+        android:layout_gravity="bottom" />
+
 </LinearLayout>
 
