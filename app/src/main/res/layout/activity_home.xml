@@ -21,7 +21,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/btn_start"
-        android:text="開始"
+        android:text="試合"
         android:layout_gravity="bottom" />
 
 </LinearLayout>
