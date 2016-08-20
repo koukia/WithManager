@@ -18,6 +18,7 @@ public class HomeActivity extends AppCompatActivity {
     private final static int SDKVER_LOLLIPOP = 21;
     private Button mBtnStart;
     private Context context;
+    private Button pBtnPlayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +32,8 @@ public class HomeActivity extends AppCompatActivity {
         //    ImageView iv = (ImageView)findViewById(R.id.imageView);
         //    iv.setImageResource(R.drawable.play02);
 
+        pBtnPlayer = (Button)findViewById(R.id.btn_player);
+        pBtnPlayer.setOnClickListener(pBtnPlayerClicked);
     }
     private final View.OnClickListener mBtnStartClicked = new View.OnClickListener(){
         @Override
@@ -44,6 +47,18 @@ public class HomeActivity extends AppCompatActivity {
             }
         }
     };
+    private final View.OnClickListener pBtnPlayerClicked = new View.OnClickListener(){
+        @Override
+            public void onClick(View view){
+            try{
+                Intent ittPlayer = new Intent(context, Player.class);
+                startActivity(ittPlayer);
+            }catch(Exception e){
+                Log.v("IntentErr:", e.getMessage() + "," + e);
+            }
+        }
+    };
+
     @Override
     protected void onResume() {
         super.onResume();
