@@ -13,10 +13,11 @@ import android.widget.Button;
 import android.widget.ImageView;
 
 import java.io.File;
+import java.util.concurrent.ExecutionException;
 
 public class HomeActivity extends AppCompatActivity {
     private final static int SDKVER_LOLLIPOP = 21;
-    private Button mBtnStart;
+    private Button mBtnGame;
     private Context context;
     private Button pBtnPlayer;
 
@@ -27,8 +28,8 @@ public class HomeActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_home);
         context = this;
-        mBtnStart = (Button)findViewById(R.id.btn_start);
-        mBtnStart.setOnClickListener(mBtnStartClicked);
+        mBtnGame = (Button)findViewById(R.id.btn_game);
+        mBtnGame.setOnClickListener(mBtnStartClicked);
         //    ImageView iv = (ImageView)findViewById(R.id.imageView);
         //    iv.setImageResource(R.drawable.play02);
 
@@ -40,7 +41,7 @@ public class HomeActivity extends AppCompatActivity {
         public void onClick(View v) {
             //    if (Build.VERSION.SDK_INT >= SDKVER_LOLLIPOP) {
             try {
-                Intent ittView_video = new Intent(context, VideoActivity.class);
+                Intent ittView_video = new Intent(context, SelectSynchro.class);
                 startActivity(ittView_video);
             }catch (Exception e) {
                 Log.v("IntentErr:", e.getMessage() + "," + e);
@@ -58,6 +59,7 @@ public class HomeActivity extends AppCompatActivity {
             }
         }
     };
+
 
     @Override
     protected void onResume() {
