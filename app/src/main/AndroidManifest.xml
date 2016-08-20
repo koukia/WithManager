@@ -26,7 +26,9 @@
         </activity>
         <activity
             android:name=".Player"
-            android:label="@string/title_activity_player">
+            android:label="@string/title_activity_player" >
+        </activity>
+        <activity android:name=".NewPlayer" >
         </activity>
     </application>
 
