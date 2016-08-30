@@ -2,6 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.kohki.withmanager" >
 
+    <!-- Allow Connect Bluetooth-->
+    <uses-permittion android:name="android.permittion.BLUETOOTH" />
+    <uses-permittion android:name="android.permittion.RLUETOOTH_ADMIN" />
+
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />

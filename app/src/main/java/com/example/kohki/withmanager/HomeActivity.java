@@ -50,7 +50,7 @@ public class HomeActivity extends AppCompatActivity {
     };
     private final View.OnClickListener pBtnPlayerClicked = new View.OnClickListener(){
         @Override
-            public void onClick(View view){
+        public void onClick(View view){
             try{
                 Intent ittPlayer = new Intent(context, Player.class);
                 startActivity(ittPlayer);
