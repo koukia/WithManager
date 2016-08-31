@@ -26,6 +26,7 @@ public class SelectSynchro extends AppCompatActivity {
         btnSynchro = (Button)findViewById(R.id.synchro);
         btnSynchro.setOnClickListener(mBtnSynchroClicked);
     }
+
     public final View.OnClickListener mBtnSelectClicked = new View.OnClickListener(){
         @Override
         public void onClick(View view){
@@ -47,8 +48,10 @@ public class SelectSynchro extends AppCompatActivity {
                 }
                 else System.out.println("BlueToothがサポートされていません");
 
+                Intent ittSynchro = new Intent(context, Synchro.class);
+                startActivity(ittSynchro);
             }catch(Exception e){
-
+                Log.v("IntentErr:", e.getMessage() + "," + e);
             }
         }
     };

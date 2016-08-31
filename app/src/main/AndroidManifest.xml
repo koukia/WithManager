@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.kohki.withmanager" >
 
-    <!-- Allow Connect Bluetooth-->
+    <!-- Allow Connect Bluetooth -->
     <uses-permittion android:name="android.permittion.BLUETOOTH" />
     <uses-permittion android:name="android.permittion.RLUETOOTH_ADMIN" />
 
@@ -40,6 +40,8 @@
             android:name=".Title"
             android:label="@string/title_activity_title"
             android:theme="@style/AppTheme.NoActionBar" >
+        </activity>
+        <activity android:name=".Synchro" >
         </activity>
     </application>
 
