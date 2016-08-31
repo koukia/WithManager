@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/synchro"
         android:text="同期画面"
-        android:layout_alignParentTop="true"
+        android:layout_below="@+id/btn_start"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
@@ -21,7 +21,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/btn_start"
         android:text="開始"
-        android:layout_below="@+id/synchro"
+        android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
