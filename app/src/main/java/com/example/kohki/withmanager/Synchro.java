@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.SubMenu;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -31,7 +32,9 @@ public class Synchro extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_synchro);
 
+        /*
         boolean btEnable = Bt.isEnabled();
+
         if(btEnable){
         }else{
             Intent btOn = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
@@ -41,12 +44,15 @@ public class Synchro extends AppCompatActivity {
 
         btnStart = (Button)findViewById(R.id.btn_synchro_start);
         btnStart.setOnClickListener(btn_startClicked);
-
+*/
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.synchro_menu, menu);
+
+        inflater.inflate(R.menu.bluetooth_manu, menu);
+
         return true;
     }
     @Override
@@ -63,6 +69,20 @@ public class Synchro extends AppCompatActivity {
                 Toast.makeText(this, "サブで同期開始します", Toast.LENGTH_SHORT).show();
                 isSub = true;
                 break;
+
+            case R.id.connect:
+
+                if(Bt.isEnabled()){
+                }else{
+                    Intent btOn = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                    startActivityForResult(btOn, REQUEST_ENABLE_BLUETHOOTH);
+                    Toast.makeText(this, "Bluetoothをオンにしました", Toast.LENGTH_SHORT).show();
+                }
+
+
+                btnStart = (Button)findViewById(R.id.btn_synchro_start);
+                btnStart.setOnClickListener(btn_startClicked);
+
         }
         return super.onOptionsItemSelected(item);
     }
