@@ -18,21 +18,29 @@ import java.io.OutputStream;
 import java.util.Set;
 
 public class Synchro extends AppCompatActivity {
-    private BluetoothAdapter mBluetoothAdapter;
-    private BluetoothDevice mBtDevice;
-    private BluetoothSocket mBtsocket;
-    private OutputStream mOutput;
 
     Button btnStart;
     boolean isMain;
+    boolean isSub;
 
-
+    BluetoothAdapter Bt = BluetoothAdapter.getDefaultAdapter();
+    private static final int REQUEST_ENABLE_BLUETHOOTH = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_synchro);
 
+        boolean btEnable = Bt.isEnabled();
+        if(btEnable){
+        }else{
+            Intent btOn = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(btOn, REQUEST_ENABLE_BLUETHOOTH);
+            Toast.makeText(this, "Bluetoothをオンにしました", Toast.LENGTH_SHORT).show();
+        }
+
+        btnStart = (Button)findViewById(R.id.btn_synchro_start);
+        btnStart.setOnClickListener(btn_startClicked);
 
     }
     @Override
@@ -53,7 +61,7 @@ public class Synchro extends AppCompatActivity {
 
             case R.id.sub_terminal:
                 Toast.makeText(this, "サブで同期開始します", Toast.LENGTH_SHORT).show();
-                isMain = false;
+                isSub = true;
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -61,8 +69,17 @@ public class Synchro extends AppCompatActivity {
 
     private final View.OnClickListener btn_startClicked = new View.OnClickListener(){
         @Override
-        public void onClick(View view){
+        public void onClick(View view) {
+            Intent itt_start;
+
 //            Intent itt_start = new Intent(getApplication(), );
+            if (Bt.isEnabled() && isMain) {
+
+            } else if (Bt.isEnabled() && isSub) {
+
+            }else{
+                Toast.makeText(Synchro.this, "Bluetoothがオンになっていないか\nメイン/サブが選択されていません", Toast.LENGTH_SHORT).show();
+            }
         }
     };
 }
