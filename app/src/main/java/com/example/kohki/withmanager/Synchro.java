@@ -32,6 +32,9 @@ public class Synchro extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_synchro);
 
+        btnStart = (Button)findViewById(R.id.btn_synchro_start);
+        btnStart.setOnClickListener(btn_startClicked);
+
         /*
         boolean btEnable = Bt.isEnabled();
 
@@ -62,26 +65,27 @@ public class Synchro extends AppCompatActivity {
         switch(id){
             case R.id.main_terminal:
                 Toast.makeText(this, "メインで同期開始します", Toast.LENGTH_SHORT).show();
-                isMain = true;
+                isMain = true; isSub = false;
                 break;
 
             case R.id.sub_terminal:
                 Toast.makeText(this, "サブで同期開始します", Toast.LENGTH_SHORT).show();
-                isSub = true;
+                isSub = true; isMain = false;
                 break;
 
             case R.id.connect:
 
-                if(Bt.isEnabled()){
-                }else{
+                //connectを押した時の処理
+                if(Bt.isEnabled()){ //Bluetoothがオンなら、接続可能なデバイスを発見する
+
+
+
+                }else{ //Bluetoothがオフなら、オンにするように促す
                     Intent btOn = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
                     startActivityForResult(btOn, REQUEST_ENABLE_BLUETHOOTH);
                     Toast.makeText(this, "Bluetoothをオンにしました", Toast.LENGTH_SHORT).show();
                 }
 
-
-                btnStart = (Button)findViewById(R.id.btn_synchro_start);
-                btnStart.setOnClickListener(btn_startClicked);
 
         }
         return super.onOptionsItemSelected(item);
@@ -91,11 +95,12 @@ public class Synchro extends AppCompatActivity {
         @Override
         public void onClick(View view) {
             Intent itt_start;
-
-//            Intent itt_start = new Intent(getApplication(), );
+//          Intent itt_start = new Intent(getApplication(), );
             if (Bt.isEnabled() && isMain) {
+                System.out.println("Bluetoothがオン、メインで動きます");
 
             } else if (Bt.isEnabled() && isSub) {
+                System.out.println("Bluetoothがオン、サブで動きます");
 
             }else{
                 Toast.makeText(Synchro.this, "Bluetoothがオンになっていないか\nメイン/サブが選択されていません", Toast.LENGTH_SHORT).show();
