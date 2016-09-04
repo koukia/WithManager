@@ -26,6 +26,9 @@ public class Synchro extends AppCompatActivity {
 
     BluetoothAdapter Bt = BluetoothAdapter.getDefaultAdapter();
     private static final int REQUEST_ENABLE_BLUETHOOTH = 1;
+    private static final int RQ_CONNECT_DEVICE = 1;
+
+    private BluetoothManager mBluetothManager = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,8 +56,7 @@ public class Synchro extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu){
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.synchro_menu, menu);
-
-        inflater.inflate(R.menu.bluetooth_manu, menu);
+        inflater.inflate(R.menu.bluetooth_menu, menu);
 
         return true;
     }
@@ -66,31 +68,45 @@ public class Synchro extends AppCompatActivity {
             case R.id.main_terminal:
                 Toast.makeText(this, "メインで同期開始します", Toast.LENGTH_SHORT).show();
                 isMain = true; isSub = false;
-                break;
+                return true;
 
             case R.id.sub_terminal:
                 Toast.makeText(this, "サブで同期開始します", Toast.LENGTH_SHORT).show();
                 isSub = true; isMain = false;
-                break;
+                return true;
 
             case R.id.connect:
 
                 //connectを押した時の処理
                 if(Bt.isEnabled()){ //Bluetoothがオンなら、接続可能なデバイスを発見する
-
-
+                    Intent itt_DeviceDiscovery = new Intent(this, DeviceListActivity.class);
+                    startActivityForResult(itt_DeviceDiscovery, RQ_CONNECT_DEVICE);
 
                 }else{ //Bluetoothがオフなら、オンにするように促す
                     Intent btOn = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
                     startActivityForResult(btOn, REQUEST_ENABLE_BLUETHOOTH);
-                    Toast.makeText(this, "Bluetoothをオンにしました", Toast.LENGTH_SHORT).show();
                 }
+                return true;
+
+            case R.id.discoverable:
+                ensureDiscoverable();
+                return true;
 
 
         }
-        return super.onOptionsItemSelected(item);
+        return false;
     }
 
+    //その端末のBluetooth通信使用の発見有効
+    private void ensureDiscoverable(){
+        if(Bt.getScanMode() != BluetoothAdapter.SCAN_MODE_CONNECTABLE_DISCOVERABLE){
+            Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
+            intent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 480);
+            startActivity(intent);
+        }
+    }
+
+    //Goが押された時のリスナー
     private final View.OnClickListener btn_startClicked = new View.OnClickListener(){
         @Override
         public void onClick(View view) {
@@ -101,7 +117,8 @@ public class Synchro extends AppCompatActivity {
 
             } else if (Bt.isEnabled() && isSub) {
                 System.out.println("Bluetoothがオン、サブで動きます");
-
+                itt_start = new Intent(getApplication(), SubGameActivity.class);
+                startActivity(itt_start);
             }else{
                 Toast.makeText(Synchro.this, "Bluetoothがオンになっていないか\nメイン/サブが選択されていません", Toast.LENGTH_SHORT).show();
             }
