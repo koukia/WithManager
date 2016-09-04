@@ -48,6 +48,7 @@
 
 
 
+
         </LinearLayout>
 
         <LinearLayout
@@ -130,12 +131,23 @@
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="シュート"
+                android:text="2Pシュート"
                 android:id="@+id/shoot_success"
                 android:enabled="true"
                 android:clickable="false"
                 android:textColor="#0033ff"
                 android:layout_gravity="right|center_vertical" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="3Pシュート"
+                android:id="@+id/shoot_3p"
+                android:enabled="true"
+                android:clickable="false"
+                android:textColor="#0033ff"
+                />
+
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
