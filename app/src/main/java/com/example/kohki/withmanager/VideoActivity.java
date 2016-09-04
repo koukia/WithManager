@@ -237,13 +237,22 @@ public class VideoActivity extends Activity {
         //
 
 
-        findViewById(R.id.shoot_success).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.shoot_success_2p).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mRecorder.stop();
                 mRecorder.save();
                 mRecorder.start();
-                recordScore(event_who[0], event_who[1]);
+                recordScore(event_who[0], event_who[1], 2);
+            }
+        });
+        findViewById(R.id.shoot_success_3p).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mRecorder.stop();
+                mRecorder.save();
+                mRecorder.start();
+                recordScore(event_who[0], event_who[1], 3);
             }
         });
         findViewById(R.id.steal).setOnClickListener(new View.OnClickListener() {
@@ -267,7 +276,7 @@ public class VideoActivity extends Activity {
         });
     }
 
-    private void recordScore(String who_team,String who_num){
+    private void recordScore(String who_team,String who_num, int point){
 
         TextView tv_our_score = (TextView)findViewById(R.id.our_score);
         int our_score = Integer.parseInt(tv_our_score.getText().toString());
@@ -276,20 +285,19 @@ public class VideoActivity extends Activity {
 
         switch (who_team){
             case "p1":
-                int our_point = our_score + 2;
+                int our_point = our_score + point;
                 tv_our_score.setText(our_point+"");
-                Toast.makeText(context,"味方チーム"+ who_num+"番 得点！",Toast.LENGTH_SHORT).show();
+                Toast.makeText(context,"味方チーム"+ who_num+"番 得点(" + point + "点)！",Toast.LENGTH_SHORT).show();
                 break;
             case "p2":
-                int ene_point = enemies_score + 2;
+                int ene_point = enemies_score + point;
                 tv_enemies_score.setText(ene_point+"");
-                Toast.makeText(context,"敵チーム"+who_num+"番 得点！",Toast.LENGTH_SHORT).show();
+                Toast.makeText(context,"敵チーム"+who_num+"番 得点(" + point + "点)！",Toast.LENGTH_SHORT).show();
                 break;
             default:
                 Toast.makeText(context,"選手を選択してください",Toast.LENGTH_SHORT).show();
                 break;
         }
-
     }
     private static class FileSort implements Comparator<File> {
         public int compare(File src, File target) {

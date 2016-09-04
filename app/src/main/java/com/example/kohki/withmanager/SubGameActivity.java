@@ -37,9 +37,6 @@ public class SubGameActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sub_game);
         context = this;
-        SurfaceView surfacec_amera = (SurfaceView) findViewById(R.id.surface_camera);
-
-
 
         ListView lv_players1;
         ListView lv_players2;
@@ -135,16 +132,15 @@ public class SubGameActivity extends AppCompatActivity {
             }
         });
 
-        //
 
 
-        findViewById(R.id.shoot_success).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.shoot_success_2p).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 recordScore(event_who[0], event_who[1], 2);
             }
         });
-        findViewById(R.id.shoot_3p).setOnClickListener(new View.OnClickListener(){
+        findViewById(R.id.shoot_success_3p).setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
                 recordScore(event_who[0], event_who[1], 3);
@@ -177,15 +173,16 @@ public class SubGameActivity extends AppCompatActivity {
         int enemies_score = Integer.parseInt(tv_enemies_score.getText().toString());
 
         switch (who_team){
+
             case "p1":
                 int our_point = our_score + point;
                 tv_our_score.setText(our_point+"");
-                Toast.makeText(context,"味方チーム"+ who_num+"番 得点！",Toast.LENGTH_SHORT).show();
+                Toast.makeText(context,"味方チーム"+ who_num+"番 得点(" + point + "点)！",Toast.LENGTH_SHORT).show();
                 break;
             case "p2":
                 int ene_point = enemies_score + point;
                 tv_enemies_score.setText(ene_point+"");
-                Toast.makeText(context,"敵チーム"+who_num+"番 得点！",Toast.LENGTH_SHORT).show();
+                Toast.makeText(context,"敵チーム"+who_num+"番 得点(" + point + "点)！",Toast.LENGTH_SHORT).show();
                 break;
             default:
                 Toast.makeText(context,"選手を選択してください",Toast.LENGTH_SHORT).show();
