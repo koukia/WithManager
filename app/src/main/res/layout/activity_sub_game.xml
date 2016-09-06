@@ -121,6 +121,32 @@
                 android:layout_marginRight="67dp"
                 android:layout_marginEnd="67dp" />
 
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="スティール"
+                android:id="@+id/steal"
+                android:enabled="true"
+                android:clickable="false"
+                android:textColor="#0033ff"
+                android:layout_gravity="right|center_vertical"
+                android:layout_marginTop="60dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignLeft="@+id/play_and_stop_image"
+                android:layout_alignStart="@+id/play_and_stop_image" />
+
+            <Button
+                android:text="Undo"
+                android:id="@+id/miss_undo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:enabled="true"
+                android:clickable="false"
+                android:textColor="#0033ff"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
+
         </RelativeLayout>
 
         <LinearLayout
@@ -135,8 +161,7 @@
                 android:id="@+id/shoot_success_2p"
                 android:enabled="true"
                 android:clickable="false"
-                android:textColor="#0033ff"
-                android:layout_gravity="right|center_vertical" />
+                android:textColor="#0033ff" />
 
             <Button
                 android:layout_width="wrap_content"
@@ -147,16 +172,15 @@
                 android:clickable="false"
                 android:textColor="#0033ff"
                 />
-
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="スティール"
-                android:id="@+id/steal"
+                android:text="フリースロー"
+                android:id="@+id/shoot_succes_free"
                 android:enabled="true"
                 android:clickable="false"
                 android:textColor="#0033ff"
-                android:layout_gravity="right|center_vertical" />
+                />
 
         </LinearLayout>
         />

@@ -117,7 +117,7 @@ public class Synchro extends AppCompatActivity {
 
             } else if (Bt.isEnabled() && isSub) {
                 System.out.println("Bluetoothがオン、サブで動きます");
-                itt_start = new Intent(getApplication(), SubGameActivity.class);
+                itt_start = new Intent(getApplication(), SubGameActivity.class); //サブ用のアクティビティ
                 startActivity(itt_start);
             }else{
                 Toast.makeText(Synchro.this, "Bluetoothがオンになっていないか\nメイン/サブが選択されていません", Toast.LENGTH_SHORT).show();

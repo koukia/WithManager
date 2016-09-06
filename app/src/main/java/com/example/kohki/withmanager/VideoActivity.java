@@ -21,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Comparator;
 
 /**
@@ -35,7 +36,7 @@ public class VideoActivity extends Activity {
     private Context context;
     private int movie_time = 5000;
 
-//    private String sava_path  = "/storage/emulated/0/WithManager/";
+    //    private String sava_path  = "/storage/emulated/0/WithManager/";
     private String sava_path  = "sdcard/WithManager/";
 
     private VideoRecorder mRecorder;
@@ -49,6 +50,11 @@ public class VideoActivity extends Activity {
     private boolean  is_playing;
 
     private String[] event_who = {"", ""};
+
+    boolean fragUndo;
+    int point;
+    String undoTeam;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -147,14 +153,14 @@ public class VideoActivity extends Activity {
             public void onClick(View v) {
                 mOverLaySurfaceView.setVisibility(SurfaceView.VISIBLE);
                 try {
-                //    Toast.makeText(context, mRecorder.editedMovies.size() + "", Toast.LENGTH_LONG).show();
+                    //    Toast.makeText(context, mRecorder.editedMovies.size() + "", Toast.LENGTH_LONG).show();
                     if (mRecorder.editedMovies.size() > 0) {
                         if (mPreviewCallback.mMediaPlayer != null) {
                             mPreviewCallback.mMediaPlayer.release();
                             mPreviewCallback.mMediaPlayer = null;
                         }
                         mPreviewCallback.palyVideo(mRecorder.editedMovies.get(mRecorder.editedMovies.size() - 1).toString());
-                //        Toast.makeText(context, mRecorder.editedMovies.get(mRecorder.editedMovies.size() - 1).toString(), Toast.LENGTH_LONG).show();
+                        //        Toast.makeText(context, mRecorder.editedMovies.get(mRecorder.editedMovies.size() - 1).toString(), Toast.LENGTH_LONG).show();
                         mPreviewCallback.mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                             @Override
                             public void onCompletion(MediaPlayer mp) {
@@ -186,12 +192,12 @@ public class VideoActivity extends Activity {
                             ol_playing.setVisibility(ol_playing.VISIBLE);
                             mGameTimer.cancel();
                             is_playing = false;
-                    //        Toast.makeText(context, "is_playing true", Toast.LENGTH_SHORT).show();
+                            //        Toast.makeText(context, "is_playing true", Toast.LENGTH_SHORT).show();
                         } else {
                             ol_playing.setVisibility(ol_playing.INVISIBLE);
                             mGameTimer.start();
                             is_playing = true;
-                   //         Toast.makeText(context, "is_playing false", Toast.LENGTH_SHORT).show();
+                            //         Toast.makeText(context, "is_playing false", Toast.LENGTH_SHORT).show();
                         }
                         mRecorder.start();
                     }
@@ -236,31 +242,38 @@ public class VideoActivity extends Activity {
 
         //
 
-
+        findViewById(R.id.shoot_succes_free).setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                point = 1;
+                recordScore(event_who[0], event_who[1], point);
+            }
+        });
         findViewById(R.id.shoot_success_2p).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mRecorder.stop();
-                mRecorder.save();
-                mRecorder.start();
-                recordScore(event_who[0], event_who[1], 2);
+                point = 2;
+                recordScore(event_who[0], event_who[1], point);
             }
         });
-        findViewById(R.id.shoot_success_3p).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.shoot_success_3p).setOnClickListener(new View.OnClickListener(){
             @Override
-            public void onClick(View v) {
-                mRecorder.stop();
-                mRecorder.save();
-                mRecorder.start();
-                recordScore(event_who[0], event_who[1], 3);
+            public void onClick(View v){
+                point = 3;
+                recordScore(event_who[0], event_who[1], point);
+            }
+        });
+        findViewById(R.id.miss_undo).setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                if(fragUndo)
+                    undo(undoTeam, -point);
             }
         });
         findViewById(R.id.steal).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mRecorder.stop();
-                mRecorder.save();
-                mRecorder.start();
+
                 switch (event_who[0]){
                     case "p1":
                         Toast.makeText(context,"味方チーム"+event_who[1]+"番 スティール！",Toast.LENGTH_SHORT).show();
@@ -276,28 +289,60 @@ public class VideoActivity extends Activity {
         });
     }
 
-    private void recordScore(String who_team,String who_num, int point){
+    ArrayList<String> results = new ArrayList<String>(); //スコア等の結果を打ち込む
+
+    private void recordScore(String who_team, String who_num, int point){
 
         TextView tv_our_score = (TextView)findViewById(R.id.our_score);
         int our_score = Integer.parseInt(tv_our_score.getText().toString());
         TextView tv_enemies_score = (TextView)findViewById(R.id.enemies_score);
         int enemies_score = Integer.parseInt(tv_enemies_score.getText().toString());
 
+
+        String result;
         switch (who_team){
+
             case "p1":
                 int our_point = our_score + point;
                 tv_our_score.setText(our_point+"");
-                Toast.makeText(context,"味方チーム"+ who_num+"番 得点(" + point + "点)！",Toast.LENGTH_SHORT).show();
+                result = "阿南高専チーム "+ who_num + "番 得点(" + point + "点)！"; results.add(result); fragUndo = true; undoTeam = "p1";
+                Toast.makeText(context, result, Toast.LENGTH_SHORT).show();
                 break;
             case "p2":
                 int ene_point = enemies_score + point;
                 tv_enemies_score.setText(ene_point+"");
-                Toast.makeText(context,"敵チーム"+who_num+"番 得点(" + point + "点)！",Toast.LENGTH_SHORT).show();
+                result = "敵チーム "+who_num + "番 得点(" + point + "点)！"; results.add(result); fragUndo = true; undoTeam = "p2";
+                Toast.makeText(context, result ,Toast.LENGTH_SHORT).show();
                 break;
             default:
                 Toast.makeText(context,"選手を選択してください",Toast.LENGTH_SHORT).show();
                 break;
         }
+
+        for(String hoge : results){ //resultsに追加された結果を表示する
+            System.out.println(hoge);
+        }System.out.println();
+
+    }
+    public void undo(String who_team, int point){
+        TextView tv_our_score = (TextView)findViewById(R.id.our_score);
+        int our_score = Integer.parseInt(tv_our_score.getText().toString());
+        TextView tv_enemies_score = (TextView)findViewById(R.id.enemies_score);
+        int enemies_score = Integer.parseInt(tv_enemies_score.getText().toString());
+
+        if(results.size() > 0) results.remove(results.size()-1);
+        fragUndo = false;
+        undoTeam = "";
+
+        switch (who_team) {
+            case "p1":
+                tv_our_score.setText(our_score + point + "");
+                break;
+            case "p2":
+                tv_enemies_score.setText(enemies_score + point + "");
+                break;
+        }
+
     }
     private static class FileSort implements Comparator<File> {
         public int compare(File src, File target) {

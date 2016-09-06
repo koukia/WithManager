@@ -164,18 +164,46 @@
                 android:clickable="false"
                 android:textColor="#0033ff"
                 />
-
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="スティール"
-                android:id="@+id/steal"
+                android:text="フリースロー"
+                android:id="@+id/shoot_succes_free"
                 android:enabled="true"
                 android:clickable="false"
                 android:textColor="#0033ff"
-                android:layout_gravity="right|center_vertical" />
+                />
 
         </LinearLayout>
+
+        <Button
+            android:text="Undo"
+            android:id="@+id/miss_undo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:enabled="true"
+            android:clickable="false"
+            android:textColor="#0033ff"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_gravity="left|bottom" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="スティール"
+            android:id="@+id/steal"
+            android:enabled="true"
+            android:clickable="false"
+            android:textColor="#0033ff"
+            android:layout_gravity="left|top"
+            android:layout_marginTop="60dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="49dp"
+            android:layout_marginStart="49dp" />
         />
     </FrameLayout>
 
