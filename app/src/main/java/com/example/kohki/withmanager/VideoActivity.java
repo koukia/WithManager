@@ -177,7 +177,7 @@ public class VideoActivity extends Activity {
         });
         //ゲームタイマー
         TextView tv_timer = (TextView) findViewById(R.id.game_timer);
-        mGameTimer = new GameTimer(8 * 60 * 1000, 1000, tv_timer);//(8 minutes, 1 second, - )
+        mGameTimer = new GameTimer(8 * 60 * 1000, 1000, tv_timer, context);//(8 minutes, 1 second, - )
 
         //試合開始とストップ
         is_playing = false;

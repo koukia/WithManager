@@ -1,11 +1,15 @@
 package com.example.kohki.withmanager;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.PixelFormat;
 import android.hardware.Camera;
 import android.media.MediaPlayer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -30,8 +34,6 @@ public class SubGameActivity extends AppCompatActivity {
     int point;
     boolean fragUndo;
     String undoTeam;
-    TextView tv_our_score;
-    TextView tv_enemies_score;
 
     //試合タイマー
     private GameTimer mGameTimer;
@@ -47,11 +49,9 @@ public class SubGameActivity extends AppCompatActivity {
         ListView lv_players1;
         ListView lv_players2;
 
-       //undoTeam = "";
-
         //ゲームタイマー
         TextView tv_timer = (TextView) findViewById(R.id.game_timer);
-        mGameTimer = new GameTimer(8 * 60 * 1000, 1000, tv_timer);//(8 minutes, 1 second, - )
+        mGameTimer = new GameTimer(1 * 60 * 1000, 1000, tv_timer, context);//(8 minutes, 1 second, - )
 
         //試合開始とストップ
         is_playing = false;
@@ -161,6 +161,28 @@ public class SubGameActivity extends AppCompatActivity {
             }
         });
     }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.finish, menu);
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        int id = item.getItemId();
+
+        switch(id){
+            case R.id.finish:
+                Intent itt_result = new Intent(context, Result_game.class);
+
+                mGameTimer.cancel();
+                is_playing = false;
+
+                startActivity(itt_result);
+                return true;
+        }
+        return false;
+    }
 
     ArrayList<String> results = new ArrayList<String>(); //スコア等の結果を打ち込む
 
@@ -215,8 +237,9 @@ public class SubGameActivity extends AppCompatActivity {
                 tv_enemies_score.setText(enemies_score + point + "");
                 break;
         }
-
     }
+
+
     private static class FileSort implements Comparator<File> {
         public int compare(File src, File target) {
             int diff = src.getName().compareTo(target.getName());
