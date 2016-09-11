@@ -7,6 +7,7 @@ import android.hardware.Camera;
 import android.media.MediaPlayer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -20,7 +21,15 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Comparator;
 
@@ -30,6 +39,8 @@ public class SubGameActivity extends AppCompatActivity {
     private Context context;
     private int movie_time = 5000;
 
+    private OutputStream outputStream;
+    private PrintWriter writer;
     private String ene_team = "";
     int point;
     boolean fragUndo;
@@ -48,6 +59,14 @@ public class SubGameActivity extends AppCompatActivity {
 
         ListView lv_players1;
         ListView lv_players2;
+
+        try {
+            outputStream = openFileOutput("scoreLog.csv", Context.MODE_PRIVATE);
+        }catch(IOException e){
+            throw new RuntimeException(e);
+        }
+        writer = new PrintWriter(new OutputStreamWriter(outputStream));
+
 
         //ゲームタイマー
         TextView tv_timer = (TextView) findViewById(R.id.game_timer);
@@ -178,7 +197,10 @@ public class SubGameActivity extends AppCompatActivity {
                 mGameTimer.cancel();
                 is_playing = false;
 
+                writer.close();
                 startActivity(itt_result);
+
+                writer.append("0");
                 return true;
         }
         return false;
@@ -193,6 +215,8 @@ public class SubGameActivity extends AppCompatActivity {
         TextView tv_enemies_score = (TextView)findViewById(R.id.enemies_score);
         int enemies_score = Integer.parseInt(tv_enemies_score.getText().toString());
 
+        writer.append("0\n");
+
 
         String result;
         switch (who_team){
@@ -200,14 +224,22 @@ public class SubGameActivity extends AppCompatActivity {
             case "p1":
                 int our_point = our_score + point;
                 tv_our_score.setText(our_point+"");
+
                 result = "阿南高専チーム "+ who_num + "番 得点(" + point + "点)！"; results.add(result); fragUndo = true; undoTeam = "p1";
                 Toast.makeText(context, result, Toast.LENGTH_SHORT).show();
+
+//                writer.append(0 + "," + who_num + "," + point + "\n");
+                writer.append(0 + "," + who_num + "," + point + ",");
                 break;
             case "p2":
                 int ene_point = enemies_score + point;
                 tv_enemies_score.setText(ene_point+"");
+
                 result = "敵チーム "+who_num + "番 得点(" + point + "点)！"; results.add(result); fragUndo = true; undoTeam = "p2";
                 Toast.makeText(context, result ,Toast.LENGTH_SHORT).show();
+
+//                writer.append(1 + "," + who_num + "," + point + "\n");
+                writer.append(1 + "," + who_num + "," + point + ",");
                 break;
             default:
                 Toast.makeText(context,"選手を選択してください",Toast.LENGTH_SHORT).show();
@@ -237,6 +269,7 @@ public class SubGameActivity extends AppCompatActivity {
                 tv_enemies_score.setText(enemies_score + point + "");
                 break;
         }
+        writer.append("1,");
     }
 
 

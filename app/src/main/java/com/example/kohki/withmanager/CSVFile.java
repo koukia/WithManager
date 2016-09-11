@@ -22,9 +22,11 @@ public class CSVFile {
         int point, sum, now_our = 1, now_ene = 1;
         try{
             String csvLine;
+            reader.readLine();
             while((csvLine = reader.readLine()) != null){
                 String[] row = csvLine.split(",");
-                point = Integer.parseInt(row[1]);
+                if(!row[3].equals("0")) continue;
+                point = Integer.parseInt(row[2]);
                 String mark;
 
                 switch(point){
@@ -45,17 +47,19 @@ public class CSVFile {
                         resultList.add(obj);
                         now_our++;
                     }
-                    row[1] = now_our + mark;
+                    row[2] = now_our + mark;
                     now_our++;
-                }else if(row[1].equals("1")){
+
+                }else if(row[0].equals("1")){
                     sum = now_ene + point - 1;
                     while(now_ene < sum){
                         String[] obj = {"1", "", "" + now_ene};
                         resultList.add(obj);
                         now_ene++;
                     }
-                    row[1] = now_ene + mark;
+                    row[2] = now_ene + mark;
                     now_ene++;
+
                 }
 
                 resultList.add(row);
