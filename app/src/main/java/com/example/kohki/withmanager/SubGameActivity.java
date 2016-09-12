@@ -197,10 +197,11 @@ public class SubGameActivity extends AppCompatActivity {
                 mGameTimer.cancel();
                 is_playing = false;
 
+                writer.append("0");
                 writer.close();
+
                 startActivity(itt_result);
 
-                writer.append("0");
                 return true;
         }
         return false;

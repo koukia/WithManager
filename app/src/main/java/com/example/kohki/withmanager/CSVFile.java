@@ -25,6 +25,7 @@ public class CSVFile {
             reader.readLine();
             while((csvLine = reader.readLine()) != null){
                 String[] row = csvLine.split(",");
+                System.out.println(csvLine);
                 if(!row[3].equals("0")) continue;
                 point = Integer.parseInt(row[2]);
                 String mark;

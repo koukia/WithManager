@@ -7,10 +7,12 @@
     android:weightSum="1"
     >
 
+
     <View
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="0.598"
+        android:layout_weight="0.002"
+        android:background="#000000"
         />
 
     <ListView
@@ -20,16 +22,8 @@
         android:id="@+id/listView_a"
         android:divider = "#000000"
         android:dividerHeight="2sp"
-
-
         />
 
-    <View
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="0.002"
-        android:background="#000000"
-        />
     <ListView
         android:layout_width="0dp"
         android:layout_height="fill_parent"
