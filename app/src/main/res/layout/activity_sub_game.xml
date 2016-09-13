@@ -88,15 +88,6 @@
                 android:background="#ffffff"
                 android:textColor="#000000" />
         </LinearLayout>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="time"
-            android:id="@+id/game_timer"
-            android:layout_gravity="right|top"
-            android:textSize="24dp"
-            android:background="#ffffff"
-            android:textColor="#000000" />
 
         <RelativeLayout
             android:layout_width="wrap_content"
@@ -104,48 +95,6 @@
             android:layout_gravity="center"
             android:id="@+id/image_layout"
             android:gravity="center_vertical|center_horizontal">
-
-            <ImageView
-                android:layout_width="300dp"
-                android:layout_height="300dp"
-                android:id="@+id/play_and_stop_image"
-                android:layout_gravity="center"
-                android:gravity=""
-                android:visibility="visible"
-                android:src="@android:drawable/ic_media_play"
-                android:alpha="0"
-                android:background="#ff0505"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true"
-                android:layout_marginRight="67dp"
-                android:layout_marginEnd="67dp" />
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="スティール"
-                android:id="@+id/steal"
-                android:enabled="true"
-                android:clickable="false"
-                android:textColor="#0033ff"
-                android:layout_gravity="right|center_vertical"
-                android:layout_marginTop="60dp"
-                android:layout_alignParentTop="true"
-                android:layout_alignLeft="@+id/play_and_stop_image"
-                android:layout_alignStart="@+id/play_and_stop_image" />
-
-            <Button
-                android:text="Undo"
-                android:id="@+id/miss_undo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:enabled="true"
-                android:clickable="false"
-                android:textColor="#0033ff"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true" />
 
         </RelativeLayout>
 
@@ -183,6 +132,31 @@
                 />
 
         </LinearLayout>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="スティール"
+            android:id="@+id/steal"
+            android:enabled="true"
+            android:clickable="false"
+            android:textColor="#0033ff"
+            android:layout_gravity="left|top"
+            android:layout_marginTop="60dp"
+            android:layout_alignParentTop="true" />
+
+        <Button
+            android:text="Undo"
+            android:id="@+id/miss_undo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:enabled="true"
+            android:clickable="false"
+            android:textColor="#0033ff"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_gravity="left|bottom" />
         />
     </FrameLayout>
 

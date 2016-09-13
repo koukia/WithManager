@@ -29,8 +29,8 @@ public class Result_game extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_result_game);
 
-        listView_our = (ListView) findViewById(R.id.listView_a);
-        listView_ene = (ListView) findViewById(R.id.listView_b);
+        listView_our = (ListView) findViewById(R.id.listView_our);
+        listView_ene = (ListView) findViewById(R.id.listView_ene);
 
         adpt_our = new ItemArrayAdapter(getApplicationContext(), R.layout.item_rusult);
         adpt_ene = new ItemArrayAdapter(getApplicationContext(), R.layout.item_rusult);
@@ -63,7 +63,6 @@ public class Result_game extends AppCompatActivity {
                     scoreData[2] = tmp;
                     adpt_ene.add(scoreData);
                 }
- //           }
         }
 
             alert = new AlertDialog.Builder(this);

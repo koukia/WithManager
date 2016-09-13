@@ -19,7 +19,7 @@
         android:layout_width="0dp"
         android:layout_height="fill_parent"
         android:layout_weight="0.2"
-        android:id="@+id/listView_a"
+        android:id="@+id/listView_our"
         android:divider = "#000000"
         android:dividerHeight="2sp"
         />
@@ -29,7 +29,7 @@
         android:layout_height="fill_parent"
         android:layout_weight="0.2"
         android:layout_gravity="left"
-        android:id="@+id/listView_b"
+        android:id="@+id/listView_ene"
         android:divider = "#000000"
         android:dividerHeight="2sp"
         />

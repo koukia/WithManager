@@ -68,35 +68,10 @@ public class SubGameActivity extends AppCompatActivity {
         writer = new PrintWriter(new OutputStreamWriter(outputStream));
 
 
-        //ゲームタイマー
-        TextView tv_timer = (TextView) findViewById(R.id.game_timer);
-        mGameTimer = new GameTimer(1 * 60 * 1000, 1000, tv_timer, context);//(8 minutes, 1 second, - )
-
         //試合開始とストップ
         is_playing = false;
 
-        final RelativeLayout mRL = (RelativeLayout) findViewById(R.id.image_layout);
-        final OverlayContent ol_playing = new OverlayContent(this);
 
-        ol_playing.setOnClickListener(
-                new View.OnClickListener() {
-                    public void onClick(View v) {
-                        if (is_playing) {
-                            ol_playing.setVisibility(ol_playing.VISIBLE);
-                            mGameTimer.cancel();
-                            is_playing = false;
-                            //        Toast.makeText(context, "is_playing true", Toast.LENGTH_SHORT).show();
-                        } else {
-                            ol_playing.setVisibility(ol_playing.INVISIBLE);
-                            mGameTimer.start();
-                            is_playing = true;
-                            //         Toast.makeText(context, "is_playing false", Toast.LENGTH_SHORT).show();
-                        }
-
-                    }
-                }
-        );
-        mRL.addView(ol_playing);
 
         //Player set
         String[] members1 = {"4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15"};
@@ -194,9 +169,6 @@ public class SubGameActivity extends AppCompatActivity {
             case R.id.finish:
                 Intent itt_result = new Intent(context, Result_game.class);
 
-                mGameTimer.cancel();
-                is_playing = false;
-
                 writer.append("0");
                 writer.close();
 
@@ -246,10 +218,6 @@ public class SubGameActivity extends AppCompatActivity {
                 Toast.makeText(context,"選手を選択してください",Toast.LENGTH_SHORT).show();
                 break;
         }
-
-        for(String hoge : results){ //resultsに追加された結果を表示する
-            System.out.println(hoge);
-        }System.out.println();
 
     }
     public void undo(String who_team, int point){
