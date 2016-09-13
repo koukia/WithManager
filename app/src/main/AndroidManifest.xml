@@ -30,10 +30,6 @@
             android:label="@string/title_activity_player" />
         <activity android:name=".NewPlayer" />
         <activity android:name=".SelectSynchro" />
-        <activity
-            android:name=".Title"
-            android:label="@string/title_activity_title"
-            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".Synchro" />
         <activity
             android:name=".DeviceListActivity"

@@ -164,6 +164,6 @@
         android:layout_width="50dp"
         android:layout_height="wrap_content"
         android:id="@+id/enemies_team_list"
-        android:listSelector="@drawable/p2listselector" />
+        android:listSelector="@drawable/p2_listselector" />
 
 </LinearLayout>
