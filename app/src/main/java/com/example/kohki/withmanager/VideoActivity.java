@@ -111,18 +111,7 @@ public class VideoActivity extends Activity {
             }
         });
 
-        //for sub surface
-        findViewById(R.id.btn_play).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mRecorder.editedMovies.size() > 0) {
-                    replay(mRecorder.editedMovies.get(mRecorder.editedMovies.size() - 1).toString());
 
-                } else {
-                    Toast.makeText(context, "再生する動画がない", Toast.LENGTH_LONG).show();
-                }
-            }
-        });
 
         //試合開始とストップ
         is_playing = false;
@@ -154,7 +143,6 @@ public class VideoActivity extends Activity {
         Team mTeam2 = new Team(context, (ListView) findViewById(R.id.opposing_team_list));
         mEventLogger = new EventLogger(context,(ListView) findViewById(R.id.event_log));
 
-        /* イベントリスナー*/
         findViewById(R.id.shoot_success_2p).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -167,12 +155,25 @@ public class VideoActivity extends Activity {
                 recordEvent(3,1,"shoot");//1:point,2:is success?,3:event name
             }
         });
+        findViewById(R.id.shoot_failed_2p).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                recordEvent(2,0,"shoot");//1:point,2:is success?,3:event name
+            }
+        });
+        findViewById(R.id.shoot_failed_3p).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                recordEvent(3,0,"shoot");//1:point,2:is success?,3:event name
+            }
+        });
         findViewById(R.id.foul).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 recordEvent(0,1,"foul");
             }
         });
+
     }
     public boolean replay(String movie_name){
         mOverLaySurfaceView.setVisibility(SurfaceView.VISIBLE);

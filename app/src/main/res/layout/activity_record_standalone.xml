@@ -44,8 +44,8 @@
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="right"
-                android:layout_gravity="center_horizontal|bottom">
+                android:layout_gravity="center_horizontal|bottom"
+                android:gravity="right">
 
                 <Button
                     android:layout_width="wrap_content"
@@ -64,11 +64,7 @@
                     android:text="ストップ"
                     android:id="@+id/btn_stop" />
 
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="プレビュー再生"
-                    android:id="@+id/btn_play" />
+
             </LinearLayout>
 
             <LinearLayout
@@ -135,25 +131,25 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_gravity="center_vertical|right">
+                android:layout_gravity="center_vertical|left">
+
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="シュート2P"
+                    android:text="2P(成功)"
                     android:id="@+id/shoot_success_2p"
                     android:enabled="true"
                     android:clickable="false"
-                    android:textColor="#0033ff"
-                    android:layout_gravity="right|center_vertical" />
+                    android:textColor="#0033ff" />
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="シュート3P"
-                    android:id="@+id/shoot_success_3p"
+                    android:text="2P(失敗)"
+                    android:id="@+id/shoot_failed_2p"
                     android:enabled="true"
                     android:clickable="false"
-                    android:textColor="#0033ff"
-                    android:layout_gravity="right|center_vertical" />
+                    android:textColor="#0033ff" />
+
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -162,9 +158,36 @@
                     android:enabled="true"
                     android:clickable="false"
                     android:textColor="#0033ff"
-                    android:layout_gravity="right|center_vertical" />
+                    />
 
             </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_gravity="center_vertical|right">
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="3P(成功)"
+                    android:id="@+id/shoot_success_3p"
+                    android:enabled="true"
+                    android:clickable="false"
+                    android:textColor="#0033ff"
+                    />
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="3P(失敗)"
+                    android:id="@+id/shoot_failed_3p"
+                    android:enabled="true"
+                    android:clickable="false"
+                    android:textColor="#0033ff"
+                    />
+            </LinearLayout>
+
         </FrameLayout>>
 
         <ListView
