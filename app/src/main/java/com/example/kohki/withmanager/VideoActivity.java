@@ -11,6 +11,7 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -49,6 +50,10 @@ public class VideoActivity extends Activity {
     //[0] is team.-1:? 0:myteam 1:enemyteam
     //[1] is number, -1 is ? 4...
 
+
+    private Button btn_start;
+    private Button btn_stop;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,19 +81,28 @@ public class VideoActivity extends Activity {
         }
 
         //Start button
-        findViewById(R.id.btn_start).setOnClickListener(new View.OnClickListener() {
+        btn_start = (Button)findViewById(R.id.btn_start);
+
+        btn_start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mRecorder != null)
+                if (mRecorder != null) {
+                    is_playing = true;
+                    btn_start.setVisibility(View.INVISIBLE);
+                    btn_stop.setVisibility(View.VISIBLE);
                     mRecorder.start();
+                }
             }
         });
 
         //Recording stop
-        findViewById(R.id.btn_stop).setOnClickListener(new View.OnClickListener() {
+        btn_stop = (Button)findViewById(R.id.btn_stop);
+        btn_stop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 is_playing = false;
+                btn_start.setVisibility(View.VISIBLE);
+                btn_stop.setVisibility(View.INVISIBLE);
                 mRecorder.stop();
 /*              画像visible
                 final RelativeLayout mRL = (RelativeLayout) findViewById(R.id.image_layout);
@@ -110,11 +124,6 @@ public class VideoActivity extends Activity {
 */
             }
         });
-
-
-
-        //試合開始とストップ
-        is_playing = false;
 
         /*録画開始・中断ボタン
         final RelativeLayout mRL = (RelativeLayout) findViewById(R.id.image_layout);
@@ -196,6 +205,7 @@ public class VideoActivity extends Activity {
         return true;
     }
     public void recordEvent(int point, int is_success,String event_name) {
+        if(!is_playing) return ;
         //TODO:録画中でないとエラー
         String file_name = "no file";
         //   if(mRecorder.mCamera != null) {
