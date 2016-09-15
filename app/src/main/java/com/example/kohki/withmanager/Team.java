@@ -36,11 +36,11 @@ public class Team {
 
                 switch (id_name){
                     case "our_team_list":
-                        Toast.makeText(context_, item+"@"+id_name , Toast.LENGTH_SHORT).show();
+                    //    Toast.makeText(context_, item+"@"+id_name , Toast.LENGTH_SHORT).show();
                         VideoActivity.who_is_acter[0] = 0;
                         break;
                     case "opposing_team_list":
-                        Toast.makeText(context_, item+"@"+id_name , Toast.LENGTH_SHORT).show();
+                    //    Toast.makeText(context_, item+"@"+id_name , Toast.LENGTH_SHORT).show();
                         VideoActivity.who_is_acter[0] = 1;
                         break;
                     default:
