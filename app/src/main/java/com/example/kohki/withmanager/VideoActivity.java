@@ -6,12 +6,14 @@ import android.graphics.PixelFormat;
 import android.hardware.Camera;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -20,6 +22,7 @@ import android.widget.Toast;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
 
 /**
  * Created by Kohki on 2016/06/28.
@@ -42,7 +45,8 @@ public class VideoActivity extends Activity {
     public static SurfaceHolder mOverLayHolder;
     public static PreviewSurfaceViewCallback mPreviewCallback;
 
-    private boolean  is_playing;
+    private boolean is_playing;
+    private boolean is_scoresheetview;
 
     private EventLogger mEventLogger;
 
@@ -50,9 +54,12 @@ public class VideoActivity extends Activity {
     //[0] is team.-1:? 0:myteam 1:enemyteam
     //[1] is number, -1 is ? 4...
 
-
     private Button btn_start;
     private Button btn_stop;
+
+    ListView listView_our, listView_opt;
+    ItemArrayAdapter adpt_our, adpt_opt;
+    ScoreDataGenerater cScoreData;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -72,6 +79,8 @@ public class VideoActivity extends Activity {
         mPreviewCallback = new PreviewSurfaceViewCallback(context);
         mOverLayHolder.addCallback(mPreviewCallback);
         mOverLaySurfaceView.setVisibility(SurfaceView.INVISIBLE);
+
+        cScoreData = new ScoreDataGenerater(context);
 
         try {
             File dir_save = new File(sava_dir);
@@ -104,49 +113,10 @@ public class VideoActivity extends Activity {
                 btn_start.setVisibility(View.VISIBLE);
                 btn_stop.setVisibility(View.INVISIBLE);
                 mRecorder.stop();
-/*              画像visible
-                final RelativeLayout mRL = (RelativeLayout) findViewById(R.id.image_layout);
-                final OverlayContent ol_playing = new OverlayContent(context);
-
-                ol_playing.setOnClickListener(
-                        new View.OnClickListener() {
-                            public void onClick(View v) {
-                                if (!is_playing) {
-                            //        ol_playing.setVisibility(ol_playing.INVISIBLE);
-                                    is_playing = true;
-                                    mRecorder.start();
-                                }
-                            }
-                        }
-                );
-                mRL.addView(ol_playing);
-                mOverLaySurfaceView.setVisibility(SurfaceView.INVISIBLE);
-*/
             }
         });
 
-        /*録画開始・中断ボタン
-        final RelativeLayout mRL = (RelativeLayout) findViewById(R.id.image_layout);
-        final OverlayContent ol_playing = new OverlayContent(this);
 
-        ol_playing.setOnClickListener(
-                new View.OnClickListener() {
-                    public void onClick(View v) {
-                        if (is_playing) {
-                            ol_playing.setVisibility(ol_playing.VISIBLE);
-                            is_playing = false;
-                    //        Toast.makeText(context, "is_playing true", Toast.LENGTH_SHORT).show();
-                        } else {
-                            ol_playing.setVisibility(ol_playing.INVISIBLE);
-                            is_playing = true;
-                   //         Toast.makeText(context, "is_playing false", Toast.LENGTH_SHORT).show();
-                        }
-                        mRecorder.start();
-                    }
-                }
-        );
-        mRL.addView(ol_playing);
-        */
 
         Team mTeam1 = new Team(context, (ListView) findViewById(R.id.our_team_list));
         Team mTeam2 = new Team(context, (ListView) findViewById(R.id.opposing_team_list));
@@ -183,7 +153,61 @@ public class VideoActivity extends Activity {
             }
         });
 
+        is_scoresheetview = false;
+        findViewById(R.id.chenge_scoresheet_and_eventlog).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                LinearLayout menu = (LinearLayout) findViewById(R.id.menu);
+                if(!is_scoresheetview) {
+                    LinearLayout eventlog = (LinearLayout) findViewById(R.id.menu_log);
+                    menu.removeView(eventlog);
+                    getLayoutInflater().inflate(R.layout.score_sheet, menu);
+
+                    setScoresheet();
+                    is_scoresheetview = true;
+                }else{
+                    LinearLayout scoresheet = (LinearLayout) findViewById(R.id.scoresheet);
+                    menu.removeView(scoresheet);
+                    getLayoutInflater().inflate(R.layout.event_log, menu);
+                    mEventLogger = new EventLogger(context,(ListView) findViewById(R.id.event_log));
+                    is_scoresheetview = false;
+                }
+            }
+        });
     }
+    private void setScoresheet(){
+
+        //スコアシートのリストビュー
+        listView_our = (ListView) findViewById(R.id.listView_our);
+        listView_opt = (ListView) findViewById(R.id.listView_opt);
+        //リストに追加するためのアダプタ
+        adpt_our = new ItemArrayAdapter(getApplicationContext(), R.layout.item_rusult);
+        adpt_opt = new ItemArrayAdapter(getApplicationContext(), R.layout.item_rusult);
+
+
+        Parcelable state_our = listView_our.onSaveInstanceState();
+        Parcelable state_opt = listView_opt.onSaveInstanceState();
+
+        listView_our.setAdapter(adpt_our);
+        listView_our.onRestoreInstanceState(state_our);
+        listView_opt.setAdapter(adpt_opt);
+        listView_opt.onRestoreInstanceState(state_opt);
+
+
+        List<String[]> scoreList = cScoreData.getScoreData();
+        for (String[] scoreData : scoreList) {
+            if (scoreData[0].equals("0")) {
+                adpt_our.add(scoreData);
+
+            } else if (scoreData[0].equals("1")) {
+                String tmp = scoreData[1];
+                scoreData[1] = scoreData[2];
+                scoreData[2] = tmp;
+                adpt_opt.add(scoreData);
+            }
+        }
+    }
+
     public boolean replay(String movie_name){
         mOverLaySurfaceView.setVisibility(SurfaceView.VISIBLE);
         try {
@@ -213,7 +237,7 @@ public class VideoActivity extends Activity {
         file_name = mRecorder.save();
         mRecorder.start();
         //   }
-        if (event_name == "shoot" && is_success == 1) {
+        if (event_name.equals("shoot") && is_success == 1) {
             final TextView tv_our_score = (TextView)findViewById(R.id.our_score);
             int our_score = Integer.parseInt(tv_our_score.getText().toString());
 
@@ -239,7 +263,7 @@ public class VideoActivity extends Activity {
                     break;
             }
         }
-        mEventLogger.addEvent(who_is_acter[0],who_is_acter[1],point,is_success,event_name,file_name);
+        mEventLogger.addEvent(who_is_acter[0], who_is_acter[1], point,is_success, event_name, file_name);
 
     }
 

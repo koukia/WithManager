@@ -203,7 +203,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_weight="80">
+        android:layout_weight="80"
+        android:id="@+id/menu">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -216,19 +217,28 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/setting" />
             <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/chenge_scoresheet_and_eventlog" />
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:id="@+id/chenge_scoresheet_and_eventlog"
+                android:src="@drawable/icon_change"
+                android:scaleType="centerCrop" />
             <ImageButton
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:id="@+id/save_or_delete" />
         </LinearLayout>
-        <ListView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/event_log"
-            android:listSelector="@drawable/eventlog_selector" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/menu_log"
+            android:weightSum="10">
+
+            <ListView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/event_log"
+                android:listSelector="@drawable/eventlog_selector" />
+        </LinearLayout>
     </LinearLayout>
 
 </LinearLayout>
