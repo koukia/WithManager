@@ -1,2 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
-<items version="2" />
+<items version="2" >
+
+    <item
+        jar="/home/kohki/repositories/procon27/916/WithManager/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
+        jumboMode="true"
+        revision="24.0.1"
+        sha1="834066699c5e8a5361f3de2b250a91d95f84b8d6">
+        <dex dex="/home/kohki/repositories/procon27/916/WithManager/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run-bootstrap_d11cf598cddd7ddbfc59489ae0e67a40ce40d24b/classes.dex" />
+    </item>
+    <item
+        jar="/home/kohki/repositories/procon27/916/WithManager/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
+        jumboMode="true"
+        revision="24.0.1"
+        sha1="2dc51b9a71213a0bc43eb51b275847b6cc4cae8c">
+        <dex dex="/home/kohki/repositories/procon27/916/WithManager/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run_e164930c8a0cc171ebc06569161dbb9f3f2aaa7b/classes.dex" />
+    </item>
+    <item
+        jar="/home/kohki/repositories/procon27/916/WithManager/app/libs/isoparser-1.1.9.jar"
+        jumboMode="true"
+        revision="24.0.1"
+        sha1="a6a2d252e574b8f942298fbb560b7e14b9d46d8a">
+        <dex dex="/home/kohki/repositories/procon27/916/WithManager/app/build/intermediates/transforms/dex/debug/folders/1000/2/isoparser-1.1.9_1c645824c78a94573e72b1f1513b735fb937916a/classes.dex" />
+    </item>
+    <item
+        jar="/home/kohki/repositories/procon27/916/WithManager/app/build/intermediates/exploded-aar/com.android.support/design/23.1.0/jars/classes.jar"
+        jumboMode="true"
+        revision="24.0.1"
+        sha1="19026d31f5d3ae868db81319671a642be5fbba08">
+        <dex dex="/home/kohki/repositories/procon27/916/WithManager/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-design-23.1.0_ae6bce2c3cb45a5b56daa9b26c48f5abaa14a0ae/classes.dex" />
+    </item>
+    <item
+        jar="/home/kohki/repositories/procon27/916/WithManager/app/build/intermediates/exploded-aar/com.android.support/recyclerview-v7/23.1.0/jars/classes.jar"
+        jumboMode="true"
+        revision="24.0.1"
+        sha1="3f151e49c316a5ab2c065969a3b3b55ef9b393fc">
+        <dex dex="/home/kohki/repositories/procon27/916/WithManager/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-recyclerview-v7-23.1.0_94cc4a0f8658734a022253e3052d109cb542be4a/classes.dex" />
+    </item>
+    <item
+        jar="/home/kohki/.gradle/caches/modules-2/files-2.1/com.android.support/support-annotations/24.1.1/3af19f153122737b372622fa6c81dd11a1c6b999/support-annotations-24.1.1.jar"
+        jumboMode="true"
+        revision="24.0.1"
+        sha1="3af19f153122737b372622fa6c81dd11a1c6b999">
+        <dex dex="/home/kohki/repositories/procon27/916/WithManager/app/build/intermediates/transforms/dex/debug/folders/1000/10/support-annotations-24.1.1_3be131344c42f73b5a95068aefd473562b905a92/classes.dex" />
+    </item>
+    <item
+        jar="/home/kohki/repositories/procon27/916/WithManager/app/build/intermediates/exploded-aar/com.android.support/support-v4/24.1.1/jars/classes.jar"
+        jumboMode="true"
+        revision="24.0.1"
+        sha1="6d7d803871e3203465f71a163e7af104f807b446">
+        <dex dex="/home/kohki/repositories/procon27/916/WithManager/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-v4-24.1.1_79e68700c8533c9beb813465ce963ef9dc714a87/classes.dex" />
+    </item>
+    <item
+        jar="/home/kohki/repositories/procon27/916/WithManager/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/24.1.1/jars/classes.jar"
+        jumboMode="true"
+        revision="24.0.1"
+        sha1="1256c10604bb098490eab070d76754ac5ceab35c">
+        <dex dex="/home/kohki/repositories/procon27/916/WithManager/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-appcompat-v7-24.1.1_c91346089c005e83b2d4a7accdf7c55eafbb39aa/classes.dex" />
+    </item>
+    <item
+        jar="/home/kohki/repositories/procon27/916/WithManager/app/build/intermediates/exploded-aar/com.android.support/animated-vector-drawable/24.1.1/jars/classes.jar"
+        jumboMode="true"
+        revision="24.0.1"
+        sha1="c936c1bd42f0c018c18920c7bec619ef056b24f8">
+        <dex dex="/home/kohki/repositories/procon27/916/WithManager/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-animated-vector-drawable-24.1.1_a01faacff571273977d279376bd26a0cf8148028/classes.dex" />
+    </item>
+    <item
+        jar="/home/kohki/repositories/procon27/916/WithManager/app/build/intermediates/exploded-aar/com.android.support/support-v4/24.1.1/jars/libs/internal_impl-24.1.1.jar"
+        jumboMode="true"
+        revision="24.0.1"
+        sha1="f78c2f395cb096f9dc1dc07e729922b8fcd3c4f5">
+        <dex dex="/home/kohki/repositories/procon27/916/WithManager/app/build/intermediates/transforms/dex/debug/folders/1000/10/internal_impl-24.1.1_4d68c20315506716b1aed3d0de120ef8db95ed3e/classes.dex" />
+    </item>
+    <item
+        jar="/home/kohki/repositories/procon27/916/WithManager/app/build/intermediates/exploded-aar/com.android.support/support-vector-drawable/24.1.1/jars/classes.jar"
+        jumboMode="true"
+        revision="24.0.1"
+        sha1="f62e763609f65e47dc6c498760a4accf02776788">
+        <dex dex="/home/kohki/repositories/procon27/916/WithManager/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-vector-drawable-24.1.1_a5eb928508ea5f70e17e1e21d880d7dc322835ec/classes.dex" />
+    </item>
+
+</items>

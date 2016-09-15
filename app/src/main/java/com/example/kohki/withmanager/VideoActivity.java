@@ -125,13 +125,15 @@ public class VideoActivity extends Activity {
         findViewById(R.id.shoot_success_2p).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                recordEvent(2,1,"shoot");//1:point,2:is success?,3:event name
+                if(is_scoresheetview)
+                    recordEvent(2,1,"shoot");//1:point,2:is success?,3:event name
             }
         });
         findViewById(R.id.shoot_success_3p).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                recordEvent(3,1,"shoot");//1:point,2:is success?,3:event name
+                if(is_scoresheetview)
+                    recordEvent(3,1,"shoot");//1:point,2:is success?,3:event name
             }
         });
         findViewById(R.id.shoot_failed_2p).setOnClickListener(new View.OnClickListener() {
