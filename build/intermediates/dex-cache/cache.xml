@@ -5,7 +5,7 @@
         jar="/Users/Haruka/Desktop/WithManager-master/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
         jumboMode="true"
         revision="24.0.1"
-        sha1="7bd81164f797516405bcda9031677bf8e5b2ac43">
+        sha1="df826cb78e0eed4a974bcc6c922db2bde9894416">
         <dex dex="/Users/Haruka/Desktop/WithManager-master/app/build/intermediates/pre-dexed/debug/instant-run_332178293bea8e188232e3fa62169665f0e94740.jar" />
     </item>
     <item
@@ -26,7 +26,7 @@
         jar="/Users/Haruka/Desktop/WithManager-master/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
         jumboMode="true"
         revision="24.0.1"
-        sha1="ed2b3a77708d13d1895e8b969de1c5ac410ce08d">
+        sha1="a5d5aa1042a0e3696a6f3b7d84f6dfcde9068001">
         <dex dex="/Users/Haruka/Desktop/WithManager-master/app/build/intermediates/pre-dexed/debug/instant-run-bootstrap_76efe1ba074d1b0023459f2b60045282b86d3661.jar" />
     </item>
     <item

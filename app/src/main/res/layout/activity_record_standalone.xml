@@ -139,8 +139,17 @@
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="シュート"
-                    android:id="@+id/shoot_success"
+                    android:text="シュート2P"
+                    android:id="@+id/shoot_success_2p"
+                    android:enabled="true"
+                    android:clickable="false"
+                    android:textColor="#0033ff"
+                    android:layout_gravity="right|center_vertical" />
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="シュート3P"
+                    android:id="@+id/shoot_success_3p"
                     android:enabled="true"
                     android:clickable="false"
                     android:textColor="#0033ff"
@@ -162,6 +171,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/opposing_team_list"
+            android:listSelector="@drawable/p2_listselector"
             android:layout_weight="45"
             android:background="#ffffff"
             android:textFilterEnabled="false" />

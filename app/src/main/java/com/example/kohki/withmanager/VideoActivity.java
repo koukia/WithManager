@@ -1,9 +1,5 @@
 package com.example.kohki.withmanager;
 
-/**
- * Created by Kohki on 2016/06/30.
- */
-
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.PixelFormat;
@@ -159,10 +155,16 @@ public class VideoActivity extends Activity {
         mEventLogger = new EventLogger(context,(ListView) findViewById(R.id.event_log));
 
         /* イベントリスナー*/
-        findViewById(R.id.shoot_success).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.shoot_success_2p).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 recordEvent(2,1,"shoot");//1:point,2:is success?,3:event name
+            }
+        });
+        findViewById(R.id.shoot_success_3p).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                recordEvent(3,1,"shoot");//1:point,2:is success?,3:event name
             }
         });
         findViewById(R.id.foul).setOnClickListener(new View.OnClickListener() {
@@ -210,12 +212,12 @@ public class VideoActivity extends Activity {
             switch (who_is_acter[0]) {
                 case 0:
                     int our_point = our_score + point;
-                    tv_our_score.setText(our_point+"");//intをsetText()すると落ちる
+                    tv_our_score.setText(Integer.toString(our_point));//intをsetText()すると落ちる
                     //    Toast.makeText(context,"味方チーム"+ who_is_acter[1]+"番 得点！",Toast.LENGTH_SHORT).show();
                     break;
                 case 1:
                     int opp_point = opp_score + point;
-                    tv_opp_score.setText(opp_point+"");
+                    tv_opp_score.setText(Integer.toString(opp_point));
                     //    Toast.makeText(context,"敵チーム"+who_is_acter[1]+"番 得点！",Toast.LENGTH_SHORT).show();
                     break;
                 case -1:
