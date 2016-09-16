@@ -46,8 +46,6 @@ public class SubGameActivity extends AppCompatActivity {
     boolean fragUndo;
     String undoTeam;
 
-    //試合タイマー
-    private GameTimer mGameTimer;
     private boolean  is_playing;
 
     private String[] event_who = {"", ""};
