@@ -15,7 +15,7 @@ public class Team {
     private Context context_;
     private static ListView team_lv;
     private String[] members =
-            {"4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15"};
+            {"?","4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15"};
 
     public Team(Context context, ListView team_list) {
         this.context_ = context;
@@ -36,11 +36,11 @@ public class Team {
 
                 switch (id_name){
                     case "our_team_list":
-                        Toast.makeText(context_, item+"@"+id_name , Toast.LENGTH_SHORT).show();
+                    //    Toast.makeText(context_, item+"@"+id_name , Toast.LENGTH_SHORT).show();
                         VideoActivity.who_is_acter[0] = 0;
                         break;
                     case "opposing_team_list":
-                        Toast.makeText(context_, item+"@"+id_name , Toast.LENGTH_SHORT).show();
+                    //    Toast.makeText(context_, item+"@"+id_name , Toast.LENGTH_SHORT).show();
                         VideoActivity.who_is_acter[0] = 1;
                         break;
                     default:
@@ -48,7 +48,10 @@ public class Team {
                         VideoActivity.who_is_acter[0] = -1;
                         break;
                 }
-                VideoActivity.who_is_acter[1] = Integer.parseInt(item);
+                if(item.equals("?"))
+                    VideoActivity.who_is_acter[1] = 0;
+                else
+                    VideoActivity.who_is_acter[1] = Integer.parseInt(item);
             }
         });
     }

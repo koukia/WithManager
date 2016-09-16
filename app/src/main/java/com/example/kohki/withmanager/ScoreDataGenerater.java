@@ -22,8 +22,8 @@ public class ScoreDataGenerater {
         mDbHelper = new EventDbHelper(context);
         db = mDbHelper.getWritableDatabase();
         l_scoredata = new ArrayList<>();
-        now_our = 0;
-        now_opt = 0;
+        now_our = 1;
+        now_opt = 1;
     }
     public List getScoreData() {
 
@@ -86,7 +86,7 @@ public class ScoreDataGenerater {
                 mark = " ";
         }
         if(row[0].equals("0")){
-            sum = now_our + point;
+            sum = now_our + point -1;
             while(now_our < sum){
                 String[] obj = {"0", "", Integer.toString(now_our)};
                 l_scoredata.add(obj);
@@ -96,7 +96,7 @@ public class ScoreDataGenerater {
             now_our++;
 
         }else if(row[0].equals("1")){
-            sum = now_opt + point;
+            sum = now_opt + point -1;
             while(now_opt < sum){
                 String[] obj = {"1", "", Integer.toString(now_opt)};
                 l_scoredata.add(obj);

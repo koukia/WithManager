@@ -57,9 +57,6 @@ public class VideoActivity extends Activity {
     private Button btn_start;
     private Button btn_stop;
 
-    ListView listView_our, listView_opt;
-    ItemArrayAdapter adpt_our, adpt_opt;
-    ScoreDataGenerater cScoreData;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -79,8 +76,6 @@ public class VideoActivity extends Activity {
         mPreviewCallback = new PreviewSurfaceViewCallback(context);
         mOverLayHolder.addCallback(mPreviewCallback);
         mOverLaySurfaceView.setVisibility(SurfaceView.INVISIBLE);
-
-        cScoreData = new ScoreDataGenerater(context);
 
         try {
             File dir_save = new File(sava_dir);
@@ -126,12 +121,16 @@ public class VideoActivity extends Activity {
             @Override
             public void onClick(View v) {
                 recordEvent(2,1,"shoot");//1:point,2:is success?,3:event name
+                if(is_scoresheetview)
+                    setScoresheet();
             }
         });
         findViewById(R.id.shoot_success_3p).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 recordEvent(3,1,"shoot");//1:point,2:is success?,3:event name
+                if(is_scoresheetview)
+                    setScoresheet();
             }
         });
         findViewById(R.id.shoot_failed_2p).setOnClickListener(new View.OnClickListener() {
@@ -176,6 +175,8 @@ public class VideoActivity extends Activity {
         });
     }
     private void setScoresheet(){
+        ListView listView_our, listView_opt;
+        ItemArrayAdapter adpt_our, adpt_opt;
 
         //スコアシートのリストビュー
         listView_our = (ListView) findViewById(R.id.listView_our);
@@ -193,7 +194,7 @@ public class VideoActivity extends Activity {
         listView_opt.setAdapter(adpt_opt);
         listView_opt.onRestoreInstanceState(state_opt);
 
-
+        ScoreDataGenerater cScoreData = new ScoreDataGenerater(context);
         List<String[]> scoreList = cScoreData.getScoreData();
         for (String[] scoreData : scoreList) {
             if (scoreData[0].equals("0")) {
