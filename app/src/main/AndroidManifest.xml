@@ -38,6 +38,8 @@
             android:theme="@android:style/Theme.DeviceDefault.Light.Dialog" />
         <activity android:name=".SubGameActivity" />
         <activity android:name=".Result_game" />
+        <activity android:name=".Webview"></activity>
+        <activity android:name=".Status"></activity>
     </application>
 
 </manifest>
