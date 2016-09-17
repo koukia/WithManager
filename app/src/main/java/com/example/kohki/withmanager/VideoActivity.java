@@ -50,7 +50,7 @@ public class VideoActivity extends Activity {
 
     private EventLogger mEventLogger;
 
-    public static int[] who_is_acter = {-1,-1};
+    public static int[] who_is_actor = {-1,-1};
     //[0] is team.-1:? 0:myteam 1:enemyteam
     //[1] is number, -1 is ? 4...
 
@@ -86,7 +86,6 @@ public class VideoActivity extends Activity {
 
         //Start button
         btn_start = (Button)findViewById(R.id.btn_start);
-
         btn_start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -245,7 +244,7 @@ public class VideoActivity extends Activity {
             final TextView tv_opp_score = (TextView)findViewById(R.id.opposing_score);
             int opp_score = Integer.parseInt(tv_opp_score.getText().toString());
 
-            switch (who_is_acter[0]) {
+            switch (Team.who_is_actor[0]) {
                 case 0:
                     int our_point = our_score + point;
                     tv_our_score.setText(Integer.toString(our_point));//intをsetText()すると落ちる
@@ -258,13 +257,13 @@ public class VideoActivity extends Activity {
                     break;
                 case -1:
                     Toast.makeText(context, "(score)team isnt be selected", Toast.LENGTH_SHORT).show();
-                    break;
+                    return ;
                 default:
                     Toast.makeText(context, "(score)team cant be specified", Toast.LENGTH_SHORT).show();
-                    break;
+                    return ;
             }
         }
-        mEventLogger.addEvent(who_is_acter[0], who_is_acter[1], point,is_success, event_name, file_name);
+        mEventLogger.addEvent(Team.who_is_actor[0], Team.who_is_actor[1], point,is_success, event_name, file_name);
 
     }
 

@@ -16,11 +16,13 @@ public class Team {
     private static ListView team_lv;
     private String[] members =
             {"?","4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15"};
+    public static int who_is_actor[] = {-1, -1};
 
     public Team(Context context, ListView team_list) {
         this.context_ = context;
 
         team_lv = team_list;
+
 
         ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(context_,
                 android.R.layout.simple_list_item_1, members);
@@ -37,21 +39,26 @@ public class Team {
                 switch (id_name){
                     case "our_team_list":
                     //    Toast.makeText(context_, item+"@"+id_name , Toast.LENGTH_SHORT).show();
-                        VideoActivity.who_is_acter[0] = 0;
+                    //    VideoActivity.who_is_acter[0] = 0;
+                        who_is_actor[0] = 0;
                         break;
                     case "opposing_team_list":
                     //    Toast.makeText(context_, item+"@"+id_name , Toast.LENGTH_SHORT).show();
-                        VideoActivity.who_is_acter[0] = 1;
+                    //    VideoActivity.who_is_acter[0] = 1;
+                        who_is_actor[0] = 1;
                         break;
                     default:
                         Toast.makeText(context_, "e:"+item+"@"+id_name , Toast.LENGTH_SHORT).show();
-                        VideoActivity.who_is_acter[0] = -1;
+                     //   VideoActivity.who_is_acter[0] = -1;
+                        who_is_actor[0] = -1;
                         break;
                 }
                 if(item.equals("?"))
-                    VideoActivity.who_is_acter[1] = 0;
+                //   VideoActivity.who_is_acter[1] = 0;
+                    who_is_actor[1] = 0;
                 else
-                    VideoActivity.who_is_acter[1] = Integer.parseInt(item);
+                //    VideoActivity.who_is_acter[1] = Integer.parseInt(item);
+                    who_is_actor[1] = Integer.parseInt(item);
             }
         });
     }
