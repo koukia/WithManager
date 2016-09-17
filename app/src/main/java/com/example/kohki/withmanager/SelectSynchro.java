@@ -25,6 +25,14 @@ public class SelectSynchro extends AppCompatActivity {
 
         btnSynchro = (Button)findViewById(R.id.synchro);
         btnSynchro.setOnClickListener(mBtnSynchroClicked);
+
+        findViewById(R.id.btn_test).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent itt_test = new Intent(getApplication(), TestBluetooth.class);
+                startActivity(itt_test);
+            }
+        });
     }
 
     public final View.OnClickListener mBtnSelectClicked = new View.OnClickListener(){

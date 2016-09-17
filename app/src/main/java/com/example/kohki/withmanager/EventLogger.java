@@ -105,7 +105,7 @@ public class EventLogger {
             default:
                 break;
         }
-        Toast.makeText(context, log,Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, log, Toast.LENGTH_SHORT).show();
 
         /* DB */
         ContentValues values = new ContentValues();

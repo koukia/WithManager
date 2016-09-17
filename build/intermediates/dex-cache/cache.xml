@@ -1,12 +1,2 @@
 <?xml version="1.0" encoding="utf-8"?>
-<items version="2" >
-
-    <item
-        jar="/Users/Haruka/Desktop/WithManager/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
-        jumboMode="true"
-        revision="24.0.1"
-        sha1="088385f41c9bc94f62567eccfec5cd7745c35ebf">
-        <dex dex="/Users/Haruka/Desktop/WithManager/app/build/intermediates/pre-dexed/debug/instant-run-bootstrap_c059a6cfd34312eaad0c9596ca2dfe6e244dd403.jar" />
-    </item>
-
-</items>
+<items version="2" />

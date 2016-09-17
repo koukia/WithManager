@@ -150,6 +150,8 @@ public class VideoRecorder implements SurfaceHolder.Callback {
     }
 
     public String save() {
+        if(!(originMovies.size() > 0)) return "";
+
         VideoEdit mVideoEdit = new VideoEdit();
         File origin_file = originMovies.get(originMovies.size() - 1);
         String[] arr_origin_filename = origin_file.getAbsoluteFile().toString().split("/");

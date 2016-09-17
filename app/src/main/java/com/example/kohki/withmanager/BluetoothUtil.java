@@ -1,9 +1,9 @@
 package com.example.kohki.withmanager;
 
-import java.util.Set;
-
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+
+import java.util.Set;
 
 public class BluetoothUtil {
     //Bluetoothアダプター取得

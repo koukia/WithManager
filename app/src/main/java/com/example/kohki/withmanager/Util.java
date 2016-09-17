@@ -1,11 +1,11 @@
 package com.example.kohki.withmanager;
 
-import java.util.Locale;
-
 import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
+
+import java.util.Locale;
 
 public class Util {
     /***************************
