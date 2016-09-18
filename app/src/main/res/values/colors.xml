@@ -9,4 +9,8 @@
     <color name="colorYellow">#ffff00</color>
     <color name="col">#000000</color>
     <color name="colWhite">#ffffff</color>
+    <color name="colorLightGreen">#B4F9D0</color>
+
+    <color name="colorText">#4059FA</color>
+    <color name="colorDrawerHeader">#FFFE86</color>
 </resources>

@@ -9,6 +9,8 @@
     <string name="title_activity_navi">Navi</string>
     <string name="title_activity_title">Title</string>
 
+
+
     <string-array name="ARRAY_STR">
         <item>体力</item>
         <item>シュート力</item>

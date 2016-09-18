@@ -41,15 +41,7 @@ public class Status extends AppCompatActivity {
         chart.setRotationEnabled(false);
         chart.invalidate();
         chart.getYAxis().setDrawLabels(false);
-        Button button = (Button)findViewById(R.id.button);
 
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplication(), Webview.class);
-                startActivity(intent);
-            }
-        });
 
     }
 }

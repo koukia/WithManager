@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/menu_grade1"
+            android:icon="@android:drawable/ic_menu_myplaces"
+            android:title="First Grade" />
+        <item
+            android:id="@+id/menu_grade2"
+            android:icon="@android:drawable/ic_menu_myplaces"
+            android:title="Second Grade" />
+        <item
+            android:id="@+id/menu_grade3"
+            android:icon="@android:drawable/ic_menu_myplaces"
+            android:title="Third Grade" />
+    </group>
+    <item
+        android:title="Detail">
+        <menu>
+            <item
+                android:id="@+id/review_page"
+                android:icon="@android:drawable/ic_menu_save"
+                android:title="レビュー" />
+            <item
+                android:id="@+id/add_player"
+                android:icon="@android:drawable/ic_menu_add"
+                android:title="add_player" />
+        </menu>
+    </item>
+</menu>

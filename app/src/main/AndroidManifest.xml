@@ -27,7 +27,9 @@
             android:screenOrientation="landscape" />
         <activity
             android:name=".Player"
-            android:label="@string/title_activity_player" />
+            android:label="選手一覧"
+            android:theme="@style/NavigationDrawerTheme"
+            />
         <activity android:name=".NewPlayer" />
         <activity android:name=".SelectSynchro" />
         <activity android:name=".Synchro" />
