@@ -3,8 +3,7 @@ package com.example.kohki.withmanager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
-import android.widget.Button;
+import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.RadarChart;
 import com.github.mikephil.charting.data.Entry;
@@ -21,6 +20,12 @@ public class Status extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_status);
+
+        Intent intent = getIntent();
+        String name = intent.getStringExtra("name");
+
+        TextView textView = (TextView) findViewById(R.id.textView6);
+        textView.setText(name);
 
         final RadarChart chart = (RadarChart) findViewById(R.id.chart);
 
