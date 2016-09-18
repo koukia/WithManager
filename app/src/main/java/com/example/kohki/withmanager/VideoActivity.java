@@ -172,6 +172,12 @@ public class VideoActivity extends Activity {
                 }
             }
         });
+        initList();
+
+    }
+    private void initList(){
+
+
     }
     private void setScoresheet(){
         ListView listView_our, listView_opt;
@@ -264,6 +270,7 @@ public class VideoActivity extends Activity {
             }
         }
         mEventLogger.addEvent(Team.who_is_actor[0], Team.who_is_actor[1], point,is_success, event_name, file_name);
+        Team.resetWhoIsAct();
 
     }
 

@@ -62,4 +62,8 @@ public class Team {
             }
         });
     }
+    public static void resetWhoIsAct(){
+        who_is_actor[0] = -1;
+        who_is_actor[1] = -1;
+    }
 }
