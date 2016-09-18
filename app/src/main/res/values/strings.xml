@@ -9,7 +9,32 @@
     <string name="title_activity_navi">Navi</string>
     <string name="title_activity_title">Title</string>
 
+    <string-array name="grade1">
+        <item>阿南一郎</item>
+        <item>阿南二郎</item>
+        <item>阿南三郎</item>
+        <item>阿南四郎</item>
+        <item>阿南五郎</item>
+        <item>阿南六郎</item>
+    </string-array>
 
+    <string-array name="grade2">
+        <item>徳島一郎</item>
+        <item>徳島二郎</item>
+        <item>徳島三郎</item>
+        <item>徳島四郎</item>
+        <item>徳島五郎</item>
+        <item>徳島六郎</item>
+    </string-array>
+
+    <string-array name="grade3">
+        <item>日本一郎</item>
+        <item>日本二郎</item>
+        <item>日本三郎</item>
+        <item>日本四郎</item>
+        <item>日本五郎</item>
+        <item>日本六郎</item>
+    </string-array>
 
     <string-array name="ARRAY_STR">
         <item>体力</item>
