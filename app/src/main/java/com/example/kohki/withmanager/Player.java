@@ -8,31 +8,19 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 
 public class Player extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
     TextView textView;
     Button btnNewPlayer;
-    Button btnPlayerDetail;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    ListView player;
+    ArrayAdapter<String> playerName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,15 +28,19 @@ public class Player extends AppCompatActivity implements NavigationView.OnNaviga
         setContentView(R.layout.activity_player);
 
 
-        btnPlayerDetail = (Button)findViewById(R.id.player);
-        btnPlayerDetail.setOnClickListener(new View.OnClickListener(){
+        player= (ListView) findViewById(R.id.players);
+        playerName = new ArrayAdapter<String>(this,android.R.layout.simple_expandable_list_item_1, getResources().getStringArray(R.array.grade1));
+        player.setAdapter(playerName);
+
+        player.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onClick(View view){
-                Intent itt_player = new Intent(getApplication(), Status.class);
-                startActivity(itt_player);
+            public void onItemClick(AdapterView parent, View view, int position, long id) {
+                String item = (String) player.getItemAtPosition(position);
+                Intent intent = new Intent(getApplication(), Status.class);
+                intent.putExtra("name", item);
+                startActivity(intent);
             }
         });
-        btnPlayerDetail.setVisibility(View.INVISIBLE);
 
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -66,20 +58,6 @@ public class Player extends AppCompatActivity implements NavigationView.OnNaviga
         //NavigationView Listener
         NavigationView navigationView = (NavigationView)findViewById(R.id.navigationView);
         navigationView.setNavigationItemSelectedListener(this);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     }
     /* オプションメニューの表示、ボタンがタップされた時のリスナー
@@ -115,16 +93,20 @@ public class Player extends AppCompatActivity implements NavigationView.OnNaviga
     public boolean onNavigationItemSelected(MenuItem item){
         int id = item.getItemId();
         switch(id){
-            case R.id.menu_grade1: //First Gradeが押された時
-                btnPlayerDetail.setVisibility(View.VISIBLE);
+
+           case R.id.menu_grade1: //First Gradeが押された時
+                playerName = new ArrayAdapter<String>(this,android.R.layout.simple_expandable_list_item_1, getResources().getStringArray(R.array.grade1));
+                player.setAdapter(playerName);
                 break;
 
             case R.id.menu_grade2:  //Second Gradeが押された時
-                btnPlayerDetail.setVisibility(View.INVISIBLE);
+                playerName = new ArrayAdapter<String>(this,android.R.layout.simple_expandable_list_item_1, getResources().getStringArray(R.array.grade2));
+                player.setAdapter(playerName);
                 break;
 
             case R.id.menu_grade3: //Third Gradeが押された時
-                btnPlayerDetail.setVisibility(View.INVISIBLE);
+                playerName = new ArrayAdapter<String>(this,android.R.layout.simple_expandable_list_item_1, getResources().getStringArray(R.array.grade3));
+                player.setAdapter(playerName);
                 break;
 
             case R.id.review_page:
