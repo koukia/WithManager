@@ -20,8 +20,19 @@ public class Player extends AppCompatActivity implements NavigationView.OnNaviga
     Button btnNewPlayer;
     Button btnPlayerDetail;
 
-    private ActionBarDrawerToggle mDrowerToggle;
-    private DrawerLayout mDrawer;
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +66,21 @@ public class Player extends AppCompatActivity implements NavigationView.OnNaviga
         //NavigationView Listener
         NavigationView navigationView = (NavigationView)findViewById(R.id.navigationView);
         navigationView.setNavigationItemSelectedListener(this);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
     /* オプションメニューの表示、ボタンがタップされた時のリスナー
     @Override
@@ -89,15 +115,15 @@ public class Player extends AppCompatActivity implements NavigationView.OnNaviga
     public boolean onNavigationItemSelected(MenuItem item){
         int id = item.getItemId();
         switch(id){
-            case R.id.menu_grade1:
+            case R.id.menu_grade1: //First Gradeが押された時
                 btnPlayerDetail.setVisibility(View.VISIBLE);
                 break;
 
-            case R.id.menu_grade2:
+            case R.id.menu_grade2:  //Second Gradeが押された時
                 btnPlayerDetail.setVisibility(View.INVISIBLE);
                 break;
 
-            case R.id.menu_grade3:
+            case R.id.menu_grade3: //Third Gradeが押された時
                 btnPlayerDetail.setVisibility(View.INVISIBLE);
                 break;
 
