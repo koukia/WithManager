@@ -172,11 +172,6 @@ public class VideoActivity extends Activity {
                 }
             }
         });
-        initList();
-
-    }
-    private void initList(){
-
 
     }
     private void setScoresheet(){
@@ -269,7 +264,7 @@ public class VideoActivity extends Activity {
                     return ;
             }
         }
-        mEventLogger.addEvent(Team.who_is_actor[0], Team.who_is_actor[1], point,is_success, event_name, file_name);
+        mEventLogger.addEvent(Team.who_is_actor[0], Team.who_is_actor[1], point, is_success, event_name, file_name);
         Team.resetWhoIsAct();
 
     }

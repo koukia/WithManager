@@ -39,7 +39,7 @@ public class EventLogger {
         lv_event_list = event_list ;
         setDB();
     // DB reset *****  If you delete here comment to reset DB, Commentout here !!
-    //    mDbHelper.onUpgrade(db,EventDbHelper.DATABASE_VERSION, EventDbHelper.DATABASE_VERSION);
+    //    mDbHelper.onUpgrade(db, EventDbHelper.DATABASE_VERSION, EventDbHelper.DATABASE_VERSION);
 
         updateEventLog();
         event_list.setOnItemClickListener(new EventLogListItemClickListener());
@@ -107,7 +107,7 @@ public class EventLogger {
         }
         Toast.makeText(context, log, Toast.LENGTH_SHORT).show();
 
-        /* DB */
+        /* DB insert*/
         ContentValues values = new ContentValues();
         values.put(EventContract.Event.COL_TEAM,       team);
         values.put(EventContract.Event.COL_NUM,        number);

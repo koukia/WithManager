@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.kohki.withmanager">
+    package="com.example.kohki.withmanager" >
 
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
@@ -14,8 +14,8 @@
         android:icon="@drawable/withmg_icon2"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-        <activity android:name=".HomeActivity">
+        android:theme="@style/AppTheme" >
+        <activity android:name=".HomeActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -28,8 +28,7 @@
         <activity
             android:name=".Player"
             android:label="選手一覧"
-            android:theme="@style/NavigationDrawerTheme"
-            />
+            android:theme="@style/NavigationDrawerTheme" />
         <activity android:name=".NewPlayer" />
         <activity android:name=".SelectSynchro" />
         <activity android:name=".Synchro" />
@@ -43,7 +42,8 @@
         <activity android:name=".Webview" />
         <activity android:name=".Status" />
         <activity android:name=".TestBluetooth" />
-        <activity android:name=".SynchroVideoActivity"></activity>
+        <activity android:name=".SynchroVideoActivity" />
+
     </application>
 
 </manifest>

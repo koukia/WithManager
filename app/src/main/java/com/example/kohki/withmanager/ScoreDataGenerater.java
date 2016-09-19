@@ -35,7 +35,6 @@ public class ScoreDataGenerater {
                     null, null, null, null, null, null, null);
 
             int rowcount = c.getCount();
-            StringBuffer sb = new StringBuffer();
             c.moveToFirst();
 
             for (int i = 0; i < rowcount; i++) {

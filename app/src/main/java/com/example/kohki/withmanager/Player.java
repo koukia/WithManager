@@ -1,6 +1,7 @@
 package com.example.kohki.withmanager;
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteCursor;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -16,32 +17,39 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 public class Player extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
     TextView textView;
     Button btnNewPlayer;
     ListView player;
     ArrayAdapter<String> playerName;
 
+    private PlayerDBManager mPlayerManage;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player);
 
+        // new add
+        mPlayerManage = new PlayerDBManager(this);
+        mPlayerManage.addPlayer("平田遼", 1, "S", "ここ");   // addPlayer()の追加テスト
 
-        player= (ListView) findViewById(R.id.players);
-        playerName = new ArrayAdapter<String>(this,android.R.layout.simple_expandable_list_item_1, getResources().getStringArray(R.array.grade1));
-        player.setAdapter(playerName);
 
+        player = (ListView) findViewById(R.id.players);
         player.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView parent, View view, int position, long id) {
-                String item = (String) player.getItemAtPosition(position);
+                String name = (String) player.getItemAtPosition(position);
                 Intent intent = new Intent(getApplication(), Status.class);
-                intent.putExtra("name", item);
+                intent.putExtra("name", name);
                 startActivity(intent);
             }
         });
 
+
+        // ナビーゲーションドロワーの設定
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -60,52 +68,42 @@ public class Player extends AppCompatActivity implements NavigationView.OnNaviga
         navigationView.setNavigationItemSelectedListener(this);
 
     }
-    /* オプションメニューの表示、ボタンがタップされた時のリスナー
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu){
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_player, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item){
-        int id =  item.getItemId();
-
-        switch(id){
-            case R.id.first:
-                textView.setText("pushed First");
-                break;
-
-            case R.id.second:
-                textView.setText("pushed Second");
-                break;
-
-            case R.id.third:
-                textView.setText("pushed Third");
-                break;
-        }
-        return super.onOptionsItemSelected(item);
-    }*/
-
 
     //ナビゲーションドロワーのボタンが押された時の処理
     @Override
     public boolean onNavigationItemSelected(MenuItem item){
         int id = item.getItemId();
+
         switch(id){
 
            case R.id.menu_grade1: //First Gradeが押された時
-                playerName = new ArrayAdapter<String>(this,android.R.layout.simple_expandable_list_item_1, getResources().getStringArray(R.array.grade1));
+//                playerName = new ArrayAdapter<String>(this,android.R.layout.simple_expandable_list_item_1,
+//                                                        getResources().getStringArray(R.array.grade1));
+
+               playerName = new ArrayAdapter<String>(this,android.R.layout.simple_expandable_list_item_1,
+                       mPlayerManage.getPlayers(1));
+
+
                 player.setAdapter(playerName);
                 break;
 
             case R.id.menu_grade2:  //Second Gradeが押された時
-                playerName = new ArrayAdapter<String>(this,android.R.layout.simple_expandable_list_item_1, getResources().getStringArray(R.array.grade2));
+//                playerName = new ArrayAdapter<String>(this,android.R.layout.simple_expandable_list_item_1,
+//                                                        getResources().getStringArray(R.array.grade2));
+
+                playerName = new ArrayAdapter<String>(this,android.R.layout.simple_expandable_list_item_1,
+                        mPlayerManage.getPlayers(2));
+
                 player.setAdapter(playerName);
                 break;
 
             case R.id.menu_grade3: //Third Gradeが押された時
-                playerName = new ArrayAdapter<String>(this,android.R.layout.simple_expandable_list_item_1, getResources().getStringArray(R.array.grade3));
+//                playerName = new ArrayAdapter<String>(this,android.R.layout.simple_expandable_list_item_1,
+//                                                        getResources().getStringArray(R.array.grade1));
+
+                playerName = new ArrayAdapter<String>(this,android.R.layout.simple_expandable_list_item_1,
+                        mPlayerManage.getPlayers(3));
+
                 player.setAdapter(playerName);
                 break;
 
@@ -123,4 +121,5 @@ public class Player extends AppCompatActivity implements NavigationView.OnNaviga
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
 }

@@ -315,6 +315,7 @@ public class TestBluetooth extends AppCompatActivity {
                     @Override
                     public void run(){
                         NumDialog(t);
+
                     }
                 });
                 break;
