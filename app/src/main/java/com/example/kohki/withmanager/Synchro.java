@@ -38,19 +38,7 @@ public class Synchro extends AppCompatActivity {
         btnStart = (Button)findViewById(R.id.btn_synchro_start);
         btnStart.setOnClickListener(btn_startClicked);
 
-        /*
-        boolean btEnable = Bt.isEnabled();
 
-        if(btEnable){
-        }else{
-            Intent btOn = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivityForResult(btOn, REQUEST_ENABLE_BLUETHOOTH);
-            Toast.makeText(this, "Bluetoothをオンにしました", Toast.LENGTH_SHORT).show();
-        }
-
-        btnStart = (Button)findViewById(R.id.btn_synchro_start);
-        btnStart.setOnClickListener(btn_startClicked);
-*/
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
@@ -111,7 +99,6 @@ public class Synchro extends AppCompatActivity {
         @Override
         public void onClick(View view) {
             Intent itt_start;
-//          Intent itt_start = new Intent(getApplication(), );
             if (Bt.isEnabled() && isMain) {
                 System.out.println("Bluetoothがオン、メインで動きます");
                 itt_start = new Intent(getApplication(), SynchroVideoActivity.class);

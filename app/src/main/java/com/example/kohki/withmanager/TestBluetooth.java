@@ -78,7 +78,7 @@ public class TestBluetooth extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                startsendConnect();
+                startSendConnect();
             }
         });
 
@@ -130,7 +130,7 @@ public class TestBluetooth extends AppCompatActivity {
             }
         });
     }
-    private void startsendConnect() {
+    private void startSendConnect() {
         bluetoothStatus = BluetoothStatus.CONNECTING;
 
         bc = new BluetoothConnection();
@@ -304,6 +304,7 @@ public class TestBluetooth extends AppCompatActivity {
         }
     };
     private void bluetoothReceive(){
+        System.out.println("呼び出されました");
         int i;
         int[] j = new int[6];
         int x = 0;
@@ -323,9 +324,7 @@ public class TestBluetooth extends AppCompatActivity {
             x++;
         }
     }
-    public void show(){
 
-    }
     /*
     private void startInside(){
         GrobalData gd = Util.getSharedVariable(this);

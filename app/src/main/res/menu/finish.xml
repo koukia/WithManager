@@ -7,4 +7,18 @@
         android:title="リザルト"
         app:showAsAction="ifRoom"
         />
+    <item
+        android:id="@+id/connect"
+        android:title="接続"
+        app:showAsAction="ifRoom"
+        />
+    <item
+        android:id="@+id/server"
+        android:title="受付"
+        />
+    <item
+        android:id="@+id/guest"
+        android:title="呼出"
+        />
+
 </menu>
