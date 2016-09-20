@@ -9,8 +9,8 @@ import android.database.sqlite.SQLiteOpenHelper;
  */
 public class PlayerDBHelper extends SQLiteOpenHelper {
 
-    private static final String TEXT_TYPE = "TEXT";
-    private static final String INT_TYPE  = "INTEGER";
+    private static final String TEXT_TYPE = " TEXT";
+    private static final String INT_TYPE  = " INTEGER";
     private static final String COMMA_SEP = ",";
 
     //-------------------------

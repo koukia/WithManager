@@ -34,7 +34,6 @@ public class Player extends AppCompatActivity implements NavigationView.OnNaviga
 
         // new add
         mPlayerManage = new PlayerDBManager(this);
-        mPlayerManage.addPlayer("平田遼", 1, "S", "ここ");   // addPlayer()の追加テスト
 
 
         player = (ListView) findViewById(R.id.players);

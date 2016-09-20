@@ -19,28 +19,23 @@ public class PlayerDBManager {
     // DB
     private PlayerDBHelper mPlayerDBHelper;
     private SQLiteDatabase db;
-    ListView lv_player_list;
-    private static Context context;
+    private Context context;
 
-    public PlayerDBManager(Context context ){//ListView lv_player_list){
+
+    public PlayerDBManager(Context context ){
         this.context = context;
-        //this.lv_player_list = lv_player_list;
         setDB();
 
+        //テーブル作成,初期化 一回実行したら onUpgrade() でリセットできる
+        //mPlayerDBHelper.onCreate(db);
         // DB reset *****  If you delete here comment to reset DB, Commentout here !!
-        //mDBHelper.onUpgrade(db, PlayerDBHelper.DATABASE_VERSION, PlayerDBHelper.DATABASE_VERSION);
+        //mPlayerDBHelper.onUpgrade(db, PlayerDBHelper.DATABASE_VERSION, PlayerDBHelper.DATABASE_VERSION);
 
-        //updatePlayerDB();
-        //lv_player_list.setOnItemClickListener(new PlayerListItemClickListener());
     }
 
     private void setDB(){
         mPlayerDBHelper = new PlayerDBHelper(context);
         db = mPlayerDBHelper.getWritableDatabase();
-
-        //テーブル作成,初期化 一回実行したら onUpgrade() でリセットできる
-//        mPlayerDBHelper.onCreate(db);
-//        mPlayerDBHelper.onUpgrade(db, PlayerDBHelper.DATABASE_VERSION, PlayerDBHelper.DATABASE_VERSION);
     }
 
     public void addPlayer(String name, int grade, String cls, String position){
@@ -76,17 +71,23 @@ public class PlayerDBManager {
 
         try {
             SQLiteCursor c = (SQLiteCursor)db.query(
-                    true, PlayerContract.Player.TABLE_NAME,
-                    null, null, null, null, null, null, null);
+                    PlayerContract.Player.TABLE_NAME, new String[] {PlayerContract.Player.COL_NAME},
+                    PlayerContract.Player.COL_GRADE + " = ?", new String[] {Integer.toString(grade)},
+                    null, null, null);
 
             int rowCount = c.getCount();
             c.moveToFirst();
 
-            for(int i = 0; i < rowCount; i++) {
+            for(int i = 0; i < rowCount; i++){
+                name = c.getString(0);
+                players.add(name);
+                c.moveToNext();
+            }
+            /*for(int i = 0; i < rowCount; i++) {
                 if(c.getInt(c.getColumnIndex(PlayerContract.Player.COL_GRADE)) == grade)
                     players.add(c.getString(c.getColumnIndex(PlayerContract.Player.COL_NAME)));
-
-            }
+                c.moveToNext();
+            }*/
 
         }catch(Exception e){
             System.out.println(e);
@@ -94,18 +95,52 @@ public class PlayerDBManager {
         if(players.size() == 0)System.out.println("空だよ");
         return players;
     }
+    public int[] getStatus(String playerName){
+        int status[] = new int[6];
+        try{
+            SQLiteCursor c = (SQLiteCursor) db.query(
+                    PlayerContract.Player.TABLE_NAME,
+                    new String[] {
+                            PlayerContract.Player.COL_SHOOT,         PlayerContract.Player.COL_JUMP,
+                            PlayerContract.Player.COL_JUDGEMENT,     PlayerContract.Player.COL_STAMINA,
+                            PlayerContract.Player.COL_INSTANTANEOUS, PlayerContract.Player.COL_STAMINA
+                    },
+                    PlayerContract.Player.COL_NAME + " = ?", new String[] {playerName},
+                    null, null, null, null);
 
-    static class PlayerListItemClickListener implements ListView.OnItemClickListener {
+            c.moveToFirst();
+            for(int i = 0; i < status.length; i++){
+                status[i] = c.getInt(i);
+                System.out.println(c.getInt(i));
+            }
 
-        public PlayerListItemClickListener() {
+        }catch(Exception e) {
+            return status;
         }
-
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) { //リストに選手の一覧が出るので、選択された選手でアレします
-            ListView listView = (ListView)parent;
-            String player_name = (String) listView.getItemAtPosition(position); // リストからタップされた選手の名前を取得
-
-        }
+        return status;
     }
+    public String[] getDetail(String playerName){
+        String[] detail = new String[3];
 
+        try {
+            SQLiteCursor c = (SQLiteCursor) db.query(
+                    PlayerContract.Player.TABLE_NAME,
+                    new String[]{
+                            PlayerContract.Player.COL_GRADE,
+                            PlayerContract.Player.COL_CLASS,
+                            PlayerContract.Player.COL_POSITOIN
+                    },
+                    PlayerContract.Player.COL_NAME + " = ?", new String[]{playerName},
+                    null, null, null, null);
+
+            c.moveToFirst();
+            for (int i = 0; i < detail.length; i++) {
+                detail[i] = c.getString(i);
+                System.out.println(c.getString(i));
+            }
+        }catch(Exception e){
+            return detail;
+        }
+        return detail;
+    }
 }

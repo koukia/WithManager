@@ -40,7 +40,10 @@
         <activity android:name=".SubGameActivity" />
         <activity android:name=".Result_game" />
         <activity android:name=".Webview" />
-        <activity android:name=".Status" />
+        <activity
+            android:name=".Status"
+            android:label="ステータス"
+            />
         <activity android:name=".TestBluetooth" />
         <activity android:name=".SynchroVideoActivity" />
 

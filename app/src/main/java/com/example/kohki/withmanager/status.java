@@ -14,7 +14,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Status extends AppCompatActivity {
-
+    private PlayerDBManager mPlayerDBManager;
+    private int[] status = new int[6];
+    private String[] detail = new String[3];
+    TextView textView_name;
+    TextView textView_class;
+    TextView textView_position;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,16 +27,25 @@ public class Status extends AppCompatActivity {
         setContentView(R.layout.activity_status);
 
         Intent intent = getIntent();
-        String name = intent.getStringExtra("name");
+        String playerName = intent.getStringExtra("name");
+        mPlayerDBManager = new PlayerDBManager(this);
+        status = mPlayerDBManager.getStatus(playerName);
+        detail = mPlayerDBManager.getDetail(playerName); // 0:学年, 1:クラス, 2:ポジション
 
-        TextView textView = (TextView) findViewById(R.id.textView6);
-        textView.setText(name);
+        textView_name = (TextView)findViewById(R.id.player_name);
+        textView_name.setText(playerName);
 
+        textView_class = (TextView)findViewById(R.id.player_class);
+        textView_class.setText(detail[0] + "-" + detail[1]);
+
+        textView_position = (TextView)findViewById(R.id.position);
+        textView_position.setText(detail[2]);
+
+        //レーダーチャート作成
         final RadarChart chart = (RadarChart) findViewById(R.id.chart);
-
         ArrayList<Entry> entries = new ArrayList<Entry>();
-        int[] own = getResources().getIntArray(R.array.ARRAY_INT);
-        for(int i=0; i<own.length; i++) entries.add(new Entry(own[i], i));
+
+        for(int i = 0; i < status.length; i++) entries.add(new Entry(status[i], i));
 
         RadarDataSet dataSet1 = new RadarDataSet(entries, "能力値");
 
