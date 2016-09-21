@@ -5,6 +5,7 @@
     android:layout_height="fill_parent"
     android:weightSum="100"
     android:layout_weight="100">
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -58,7 +59,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/our_team_list"
-            android:listSelector="@drawable/p1_listselector"
+            android:listSelector="@drawable/p2_listselector"
             android:layout_weight="45"
             android:background="#ffffff" />
 
@@ -253,9 +254,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/opposing_team_list"
-            android:listSelector="@drawable/p2_listselector"
+            android:listSelector="@drawable/p1_listselector"
             android:layout_weight="45"
-            android:background="#ffffff"
+            android:background="#0000FF"
             android:textFilterEnabled="false" />
     </LinearLayout>
 
