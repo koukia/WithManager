@@ -2,6 +2,7 @@ package com.example.kohki.withmanager;
 
 import android.app.Activity;
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.PixelFormat;
 import android.hardware.Camera;
 import android.media.MediaPlayer;
@@ -30,6 +31,10 @@ import java.util.List;
 public class VideoActivity extends Activity {
     private SurfaceHolder surfaceHolder;
     private SurfaceView surfaceView;
+
+    //to reset DB when start Activity
+    private EventDbHelper mDbHelper;
+    private SQLiteDatabase db;
 
     private Camera mCamera;
     private final static String TAG = "VideoActivity";
@@ -65,6 +70,10 @@ public class VideoActivity extends Activity {
 
         context = this;
 
+
+        mDbHelper = new EventDbHelper(context);
+        db = mDbHelper.getWritableDatabase();
+        mDbHelper.onUpgrade(db, EventDbHelper.DATABASE_VERSION, EventDbHelper.DATABASE_VERSION);
 
         //main surfaceview
         SurfaceView main_surface = (SurfaceView) findViewById(R.id.main_surface);

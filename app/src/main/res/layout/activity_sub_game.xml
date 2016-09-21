@@ -106,16 +106,23 @@
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="2Pシュート"
+                android:text="2P(成功)"
                 android:id="@+id/shoot_success_2p"
                 android:enabled="true"
                 android:clickable="false"
                 android:textColor="#0033ff" />
-
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="3Pシュート"
+                android:text="2P(失敗)"
+                android:id="@+id/shoot_failed_2p"
+                android:enabled="true"
+                android:clickable="false"
+                android:textColor="#0033ff" />
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="3P(成功)"
                 android:id="@+id/shoot_success_3p"
                 android:enabled="true"
                 android:clickable="false"
@@ -124,26 +131,41 @@
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="フリースロー"
-                android:id="@+id/shoot_succes_free"
+                android:text="3P(失敗)"
+                android:id="@+id/shoot_failed_3p"
                 android:enabled="true"
                 android:clickable="false"
                 android:textColor="#0033ff"
                 />
 
         </LinearLayout>
-
-        <Button
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="スティール"
-            android:id="@+id/steal"
-            android:enabled="true"
-            android:clickable="false"
-            android:textColor="#0033ff"
-            android:layout_gravity="left|top"
-            android:layout_marginTop="60dp"
-            android:layout_alignParentTop="true" />
+            android:orientation="vertical"
+            android:layout_gravity="center_vertical|left">
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1P(成功)"
+                android:id="@+id/shoot_succes_free"
+                android:enabled="true"
+                android:clickable="false"
+                android:textColor="#0033ff"
+                />
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1P(失敗)"
+                android:id="@+id/shoot_failed_free"
+                android:enabled="true"
+                android:clickable="false"
+                android:textColor="#0033ff"
+                />
+
+
+        </LinearLayout>
 
         <Button
             android:text="Undo"

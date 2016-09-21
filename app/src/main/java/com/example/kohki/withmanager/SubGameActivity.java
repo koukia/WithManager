@@ -46,7 +46,7 @@ public class SubGameActivity extends AppCompatActivity {
     private Context context;
     private int movie_time = 5000;
     private String[] event_who = {"", ""};
-    private byte[] buf = new byte[4];
+    private byte[] buf = new byte[5];
 
     private OutputStream outputStream;
     private PrintWriter writer;
@@ -102,7 +102,7 @@ public class SubGameActivity extends AppCompatActivity {
 
 
         //Player set
-        String[] members1 = {"4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15"};
+        String[] members1 = {"4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18"};
         lv_players1 = (ListView) findViewById(R.id.our_team_list);
         ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(this,
                 android.R.layout.simple_list_item_1, members1);
@@ -114,12 +114,12 @@ public class SubGameActivity extends AppCompatActivity {
                 ListView listView = (ListView) parent;
                 String item = (String) listView.getItemAtPosition(position);
                 //Toast.makeText(getApplicationContext(), item + " clicked",Toast.LENGTH_LONG).show();
-                event_who[0] = "p1";
+                event_who[0] = "p0";
                 event_who[1] = item;
             }
         });
 
-        String[] members2 = {"4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15"};
+        String[] members2 = {"4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18"};
         lv_players2 = (ListView) findViewById(R.id.enemies_team_list);
         ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(this,
                 android.R.layout.simple_list_item_1, members2);
@@ -131,7 +131,7 @@ public class SubGameActivity extends AppCompatActivity {
                 ListView listView = (ListView) parent;
                 String item = (String) listView.getItemAtPosition(position);
                 //Toast.makeText(getApplicationContext(), item + " clicked",Toast.LENGTH_LONG).show();
-                event_who[0] = "p2";
+                event_who[0] = "p1";
                 event_who[1] = item;
             }
         });
@@ -140,23 +140,47 @@ public class SubGameActivity extends AppCompatActivity {
             @Override
             public void onClick(View v){
                 point = 1;
-                recordScore(event_who[0], event_who[1], point);
+                recordScore(event_who[0], event_who[1], point, 1);
             }
         });
+        findViewById(R.id.shoot_failed_free).setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                point = 0;
+                recordScore(event_who[0], event_who[1], point, 0);
+            }
+        });
+
         findViewById(R.id.shoot_success_2p).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 point = 2;
-                recordScore(event_who[0], event_who[1], point);
+                recordScore(event_who[0], event_who[1], point, 1);
             }
         });
+        findViewById(R.id.shoot_failed_2p).setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                point = 0;
+                recordScore(event_who[0], event_who[1], point, 0);
+            }
+        });
+
         findViewById(R.id.shoot_success_3p).setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
                 point = 3;
-                recordScore(event_who[0], event_who[1], point);
+                recordScore(event_who[0], event_who[1], point, 1);
             }
         });
+        findViewById(R.id.shoot_failed_3p).setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                point = 0;
+                recordScore(event_who[0], event_who[1], point, 0);
+            }
+        });
+
         findViewById(R.id.miss_undo).setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
@@ -164,23 +188,7 @@ public class SubGameActivity extends AppCompatActivity {
                     undo(undoTeam, -point);
             }
         });
-        findViewById(R.id.steal).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-                switch (event_who[0]){
-                    case "p1":
-                        Toast.makeText(context,"味方チーム"+event_who[1]+"番 スティール！",Toast.LENGTH_SHORT).show();
-                        break;
-                    case "p2":
-                        Toast.makeText(context,"敵チーム"+event_who[1]+"番 スティール！",Toast.LENGTH_SHORT).show();
-                        break;
-                    default:
-                        Toast.makeText(context,"選手を選択してください",Toast.LENGTH_SHORT).show();
-                        break;
-                }
-            }
-        });
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
@@ -218,7 +226,7 @@ public class SubGameActivity extends AppCompatActivity {
     }
 
     ArrayList<String> results = new ArrayList<String>(); //スコア等の結果を打ち込む
-    private void recordScore(String who_team, String who_num, int point){
+    private void recordScore(String who_team, String who_num, int point, int is_success){
         if(bluetoothStatus != BluetoothStatus.CONNECTED) return ;
 
         TextView tv_our_score = (TextView)findViewById(R.id.our_score);
@@ -230,7 +238,8 @@ public class SubGameActivity extends AppCompatActivity {
         buf[0] = Byte.parseByte(who_team.substring(1));
         buf[1] = Byte.parseByte(who_num);
         buf[2] = Byte.parseByte(Integer.toString(point));
-        buf[3] = 111;
+        buf[3] = Byte.parseByte(Integer.toString(is_success));
+        buf[4] = 111;
         bc.writeObject(buf);
 
 
@@ -238,7 +247,7 @@ public class SubGameActivity extends AppCompatActivity {
         String result;
         switch (who_team){
 
-            case "p1":
+            case "p0":
                 int our_point = our_score + point;
                 tv_our_score.setText(our_point+"");
 
@@ -248,7 +257,7 @@ public class SubGameActivity extends AppCompatActivity {
 //                writer.append(0 + "," + who_num + "," + point + "\n");
                 writer.append(0 + "," + who_num + "," + point + ",");
                 break;
-            case "p2":
+            case "p1":
                 int ene_point = enemies_score + point;
                 tv_enemies_score.setText(ene_point+"");
 
@@ -461,45 +470,25 @@ public class SubGameActivity extends AppCompatActivity {
     }
 
     public void bluetoothRecordScore(int[] param){
-        //param[0] = チーム, param[1] = 背番号, param[2] = ポイント
+        //param[0] = チーム, param[1] = 背番号, param[2] = イベントID : スティール->1, リバウンド->2, ファウル->3
+        String log = "";
+        if(param[0] == 0)       log = "阿南高専チーム ";
+        else if(param[0] == 1)  log = "敵チーム ";
 
-        TextView tv_our_score = (TextView)findViewById(R.id.our_score);
-        int our_score = Integer.parseInt(tv_our_score.getText().toString());
-        TextView tv_enemies_score = (TextView)findViewById(R.id.enemies_score);
-        int enemies_score = Integer.parseInt(tv_enemies_score.getText().toString());
-
-        String who_team = "p" + param[0];
-        int who_num = param[1];
-        int point = param[2];
-
-        writer.append("0\n");
-        String result;
-        switch (who_team){
-
-            case "p1":
-                int our_point = our_score + point;
-                tv_our_score.setText(our_point+"");
-
-                result = "阿南高専チーム "+ who_num + "番 得点(" + point + "点)！"; results.add(result); fragUndo = true; undoTeam = "p1";
-                Toast.makeText(context, result, Toast.LENGTH_SHORT).show();
-
-//                writer.append(0 + "," + who_num + "," + point + "\n");
-                writer.append(0 + "," + who_num + "," + point + ",");
+        System.out.println(param[2]);
+        log += param[1] + "番";
+        switch(param[2]){
+            case 1:
+                log += "スティール";
                 break;
-            case "p2":
-                int ene_point = enemies_score + point;
-                tv_enemies_score.setText(ene_point+"");
-
-                result = "敵チーム "+who_num + "番 得点(" + point + "点)！"; results.add(result); fragUndo = true; undoTeam = "p2";
-                Toast.makeText(context, result ,Toast.LENGTH_SHORT).show();
-
-//                writer.append(1 + "," + who_num + "," + point + "\n");
-                writer.append(1 + "," + who_num + "," + point + ",");
+            case 2:
+                log += "リバウンド";
                 break;
-            default:
-                Toast.makeText(context,"選手を選択してください",Toast.LENGTH_SHORT).show();
+            case 3:
+                log += "ファウル";
                 break;
         }
+        Toast.makeText(this, log, Toast.LENGTH_SHORT).show();
     }
 
     private void showErrorDialog(String message){

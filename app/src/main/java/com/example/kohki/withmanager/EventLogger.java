@@ -102,6 +102,13 @@ public class EventLogger {
                 break;
             case "traveling":
                 log = team+"チーム"+number+"番"+"\nE:"+event_name+"\nMovie:"+movie_name;
+                break;
+            case "steal":
+                log = team+"チーム"+number+"番"+"\nE:"+event_name+"\nMovie:"+movie_name;
+                break;
+            case "rebound":
+                log = team+"チーム"+number+"番"+"\nE:"+event_name+"\nMovie:"+movie_name;
+                break;
             default:
                 break;
         }

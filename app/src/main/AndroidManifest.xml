@@ -37,7 +37,10 @@
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/app_name"
             android:theme="@android:style/Theme.DeviceDefault.Light.Dialog" />
-        <activity android:name=".SubGameActivity" />
+        <activity
+            android:name=".SubGameActivity"
+            android:screenOrientation="landscape"
+            />
         <activity android:name=".Result_game" />
         <activity android:name=".Webview" />
         <activity
@@ -45,7 +48,10 @@
             android:label="ステータス"
             />
         <activity android:name=".TestBluetooth" />
-        <activity android:name=".SynchroVideoActivity" />
+        <activity
+            android:name=".SynchroVideoActivity"
+            android:screenOrientation="landscape"
+            />
 
     </application>
 

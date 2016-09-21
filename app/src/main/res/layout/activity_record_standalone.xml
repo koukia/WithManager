@@ -5,6 +5,47 @@
     android:layout_height="fill_parent"
     android:weightSum="100"
     android:layout_weight="100">
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_weight="80"
+        android:id="@+id/menu">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="left"
+            android:gravity="right"
+            android:weightSum="100">
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/setting" />
+            <ImageButton
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:id="@+id/chenge_scoresheet_and_eventlog"
+                android:src="@drawable/icon_change"
+                android:scaleType="centerCrop" />
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/save_or_delete" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/menu_log"
+            android:weightSum="10">
+
+            <ListView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/event_log"
+                android:listSelector="@drawable/eventlog_selector" />
+        </LinearLayout>
+    </LinearLayout>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:orientation="horizontal"
@@ -136,20 +177,21 @@
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="2P(成功)"
-                    android:id="@+id/shoot_success_2p"
+                    android:text="1P(成功)"
+                    android:id="@+id/shoot_success_1p"
                     android:enabled="true"
                     android:clickable="false"
-                    android:textColor="#0033ff" />
+                    android:textColor="#0033ff"
+                    />
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="2P(失敗)"
-                    android:id="@+id/shoot_failed_2p"
+                    android:text="1P(失敗)"
+                    android:id="@+id/shoot_failed_1p"
                     android:enabled="true"
                     android:clickable="false"
-                    android:textColor="#0033ff" />
-
+                    android:textColor="#0033ff"
+                    />
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -189,21 +231,20 @@
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="1P(成功)"
-                    android:id="@+id/shoot_success_1p"
+                    android:text="2P(成功)"
+                    android:id="@+id/shoot_success_2p"
                     android:enabled="true"
                     android:clickable="false"
-                    android:textColor="#0033ff"
-                    />
+                    android:textColor="#0033ff" />
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="1P(失敗)"
-                    android:id="@+id/shoot_failed_1p"
+                    android:text="2P(失敗)"
+                    android:id="@+id/shoot_failed_2p"
                     android:enabled="true"
                     android:clickable="false"
-                    android:textColor="#0033ff"
-                    />
+                    android:textColor="#0033ff" />
+
             </LinearLayout>
 
         </FrameLayout>>
@@ -216,47 +257,6 @@
             android:layout_weight="45"
             android:background="#ffffff"
             android:textFilterEnabled="false" />
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_weight="80"
-        android:id="@+id/menu">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_gravity="left"
-            android:gravity="right"
-            android:weightSum="100">
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/setting" />
-            <ImageButton
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:id="@+id/chenge_scoresheet_and_eventlog"
-                android:src="@drawable/icon_change"
-                android:scaleType="centerCrop" />
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/save_or_delete" />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/menu_log"
-            android:weightSum="10">
-
-            <ListView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/event_log"
-                android:listSelector="@drawable/eventlog_selector" />
-        </LinearLayout>
     </LinearLayout>
 
 </LinearLayout>
