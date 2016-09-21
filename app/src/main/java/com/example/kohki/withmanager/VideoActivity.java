@@ -65,6 +65,7 @@ public class VideoActivity extends Activity {
 
         context = this;
 
+
         //main surfaceview
         SurfaceView main_surface = (SurfaceView) findViewById(R.id.main_surface);
         mRecorder = new VideoRecorder(this, movie_time, sava_dir, main_surface, getResources());
@@ -116,6 +117,14 @@ public class VideoActivity extends Activity {
         Team mTeam2 = new Team(context, (ListView) findViewById(R.id.opposing_team_list));
         mEventLogger = new EventLogger(context,(ListView) findViewById(R.id.event_log));
 
+        findViewById(R.id.shoot_success_1p).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                recordEvent(1,1,"shoot");//1:point,2:is success?,3:event name
+                if(is_scoresheetview)
+                    setScoresheet();
+            }
+        });
         findViewById(R.id.shoot_success_2p).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -130,6 +139,12 @@ public class VideoActivity extends Activity {
                 recordEvent(3,1,"shoot");//1:point,2:is success?,3:event name
                 if(is_scoresheetview)
                     setScoresheet();
+            }
+        });
+        findViewById(R.id.shoot_failed_1p).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                recordEvent(1,0,"shoot");//1:point,2:is success?,3:event name
             }
         });
         findViewById(R.id.shoot_failed_2p).setOnClickListener(new View.OnClickListener() {

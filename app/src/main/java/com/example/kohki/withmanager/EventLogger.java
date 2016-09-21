@@ -39,7 +39,7 @@ public class EventLogger {
         lv_event_list = event_list ;
         setDB();
     // DB reset *****  If you delete here comment to reset DB, Commentout here !!
-    //    mDbHelper.onUpgrade(db, EventDbHelper.DATABASE_VERSION, EventDbHelper.DATABASE_VERSION);
+        //mDbHelper.onUpgrade(db, EventDbHelper.DATABASE_VERSION, EventDbHelper.DATABASE_VERSION);
 
         updateEventLog();
         event_list.setOnItemClickListener(new EventLogListItemClickListener());
