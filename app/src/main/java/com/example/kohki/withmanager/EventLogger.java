@@ -6,6 +6,7 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteCursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.media.MediaPlayer;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.SurfaceView;
 import android.view.View;
@@ -70,19 +71,35 @@ public class EventLogger {
             String[] items = item.split(",");
             String movie_name = items[items.length-1];
             Toast.makeText(context,movie_name+"を再生",Toast.LENGTH_SHORT).show();
-            VideoActivity.mOverLaySurfaceView.setVisibility(SurfaceView.VISIBLE);
-            try {
-                if (VideoActivity.mPreviewCallback.mMediaPlayer != null) {
-                    VideoActivity.mPreviewCallback.mMediaPlayer.release();
-                    VideoActivity.mPreviewCallback.mMediaPlayer = null;
-                }
-                VideoActivity.mPreviewCallback.palyVideo(movie_name);
-                VideoActivity.mPreviewCallback.mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                    @Override
-                    public void onCompletion(MediaPlayer mp) {
-                        VideoActivity.mOverLaySurfaceView.setVisibility(SurfaceView.INVISIBLE);
+
+            try { //スタンドアローンかBluetooth通信中か
+                if(VideoActivity.mOverLaySurfaceView != null) {
+                    VideoActivity.mOverLaySurfaceView.setVisibility(SurfaceView.VISIBLE);
+                    if (VideoActivity.mPreviewCallback.mMediaPlayer != null) {
+                        VideoActivity.mPreviewCallback.mMediaPlayer.release();
+                        VideoActivity.mPreviewCallback.mMediaPlayer = null;
                     }
-                });
+                    VideoActivity.mPreviewCallback.palyVideo(movie_name);
+                    VideoActivity.mPreviewCallback.mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                        @Override
+                        public void onCompletion(MediaPlayer mp) {
+                            VideoActivity.mOverLaySurfaceView.setVisibility(SurfaceView.INVISIBLE);
+                        }
+                    });
+                }else if(SynchroVideoActivity.mOverLaySurfaceView != null){
+                    SynchroVideoActivity.mOverLaySurfaceView.setVisibility(SurfaceView.VISIBLE);
+                    if (SynchroVideoActivity.mPreviewCallback.mMediaPlayer != null) {
+                        SynchroVideoActivity.mPreviewCallback.mMediaPlayer.release();
+                        SynchroVideoActivity.mPreviewCallback.mMediaPlayer = null;
+                    }
+                    SynchroVideoActivity.mPreviewCallback.palyVideo(movie_name);
+                    SynchroVideoActivity.mPreviewCallback.mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                        @Override
+                        public void onCompletion(MediaPlayer mp) {
+                            SynchroVideoActivity.mOverLaySurfaceView.setVisibility(SurfaceView.INVISIBLE);
+                        }
+                    });
+                }
             } catch (NullPointerException e) {
                 Toast.makeText(context, "ぬるぽ", Toast.LENGTH_LONG).show();
                 return false;

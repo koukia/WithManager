@@ -3,6 +3,7 @@ package com.example.kohki.withmanager;
 import android.app.Activity;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.hardware.Camera;
 import android.media.MediaPlayer;
@@ -43,6 +44,8 @@ public class VideoActivity extends Activity {
 
     //    private String sava_path  = "/storage/emulated/legacy/WithManager/";
     private String sava_dir = "sdcard/WithManager/";
+    private int shoot_point;
+    private int is_success; //True:1, False:0
 
     private VideoRecorder mRecorder = null;
 
@@ -61,7 +64,16 @@ public class VideoActivity extends Activity {
 
     private Button btn_start;
     private Button btn_stop;
+    private Button shoot_success1p;
+    private Button shoot_success2p;
+    private Button shoot_success3p;
+    private Button shoot_failed1p;
+    private Button shoot_failed2p;
+    private Button shoot_failed3p;
+    private Button foul;
 
+    ListView our_team;
+    ListView opt_team;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -122,56 +134,103 @@ public class VideoActivity extends Activity {
 
 
 
-        Team mTeam1 = new Team(context, (ListView) findViewById(R.id.our_team_list));
-        Team mTeam2 = new Team(context, (ListView) findViewById(R.id.opposing_team_list));
+        //Team mTeam1 = new Team(context, (ListView) findViewById(R.id.our_team_list));
+        //Team mTeam2 = new Team(context, (ListView) findViewById(R.id.opposing_team_list));
         mEventLogger = new EventLogger(context,(ListView) findViewById(R.id.event_log));
 
-        findViewById(R.id.shoot_success_1p).setOnClickListener(new View.OnClickListener() {
+        our_team = (ListView)findViewById(R.id.our_team_list);
+        ArrayAdapter<String> adapter_our = new ArrayAdapter<String>(context,
+                android.R.layout.simple_list_item_1, Team.members);
+        our_team.setAdapter(adapter_our);
+
+        opt_team = (ListView)findViewById(R.id.opposing_team_list);
+        ArrayAdapter<String> adapter_opp = new ArrayAdapter<String>(context,
+                android.R.layout.simple_list_item_1, Team.members);
+        opt_team.setAdapter(adapter_opp);
+
+        our_team.setOnItemClickListener(adptSelectListener);
+        opt_team.setOnItemClickListener(adptSelectListener);
+
+
+        shoot_success1p = (Button)findViewById(R.id.shoot_success_1p);
+        shoot_success1p.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                recordEvent(1,1,"shoot");//1:point,2:is success?,3:event name
-                if(is_scoresheetview)
-                    setScoresheet();
+                Toast.makeText(context, "1P成功", Toast.LENGTH_SHORT).show();
+                //recordEvent(1,1,"shoot");//1:point,2:is success?,3:event name
+                Team.event_name = "shoot";
+                shoot_point = 1;
+                is_success  = 1;
+
             }
         });
-        findViewById(R.id.shoot_success_2p).setOnClickListener(new View.OnClickListener() {
+        shoot_success2p = (Button)findViewById(R.id.shoot_success_2p);
+        shoot_success2p.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                recordEvent(2,1,"shoot");//1:point,2:is success?,3:event name
-                if(is_scoresheetview)
-                    setScoresheet();
+                Toast.makeText(context, "2P成功", Toast.LENGTH_SHORT).show();
+                //recordEvent(2,1,"shoot");//1:point,2:is success?,3:event name
+                Team.event_name = "shoot";
+                shoot_point = 2;
+                is_success  = 1;
+
+
             }
         });
-        findViewById(R.id.shoot_success_3p).setOnClickListener(new View.OnClickListener() {
+        shoot_success3p = (Button)findViewById(R.id.shoot_success_3p);
+        shoot_success3p.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                recordEvent(3,1,"shoot");//1:point,2:is success?,3:event name
-                if(is_scoresheetview)
-                    setScoresheet();
+                Toast.makeText(context, "3P成功", Toast.LENGTH_SHORT).show();
+                //recordEvent(3,1,"shoot");//1:point,2:is success?,3:event name
+                Team.event_name = "shoot";
+                shoot_point = 3;
+                is_success  = 1;
+
             }
         });
-        findViewById(R.id.shoot_failed_1p).setOnClickListener(new View.OnClickListener() {
+        shoot_failed1p = (Button)findViewById(R.id.shoot_failed_1p);
+        shoot_failed1p.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                recordEvent(1,0,"shoot");//1:point,2:is success?,3:event name
+                Toast.makeText(context, "1P失敗", Toast.LENGTH_SHORT).show();
+                //recordEvent(1,0,"shoot");//1:point,2:is success?,3:event name
+                Team.event_name = "shoot";
+                shoot_point = 1;
+                is_success  = 0;
             }
         });
-        findViewById(R.id.shoot_failed_2p).setOnClickListener(new View.OnClickListener() {
+        shoot_failed2p = (Button)findViewById(R.id.shoot_failed_2p);
+        shoot_failed2p.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                recordEvent(2,0,"shoot");//1:point,2:is success?,3:event name
+                Toast.makeText(context, "2P失敗", Toast.LENGTH_SHORT).show();
+                //recordEvent(2,0,"shoot");//1:point,2:is success?,3:event name
+                Team.event_name = "shoot";
+                shoot_point = 2;
+                is_success  = 0;
             }
         });
-        findViewById(R.id.shoot_failed_3p).setOnClickListener(new View.OnClickListener() {
+        shoot_failed3p = (Button)findViewById(R.id.shoot_failed_3p);
+        shoot_failed3p.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                recordEvent(3,0,"shoot");//1:point,2:is success?,3:event name
+                Toast.makeText(context, "3P失敗", Toast.LENGTH_SHORT).show();
+                //recordEvent(3,0,"shoot");//1:point,2:is success?,3:event name
+                Team.event_name = "shoot";
+                shoot_point = 3;
+                is_success  = 0;
             }
         });
-        findViewById(R.id.foul).setOnClickListener(new View.OnClickListener() {
+        foul = (Button)findViewById(R.id.foul);
+        foul.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                recordEvent(0,1,"foul");
+                Toast.makeText(context, "ファウル", Toast.LENGTH_SHORT).show();
+                //recordEvent(0,1,"foul");
+                Team.event_name = "foul";
+                shoot_point = 0;
+                is_success  = 1;
             }
         });
 
@@ -280,16 +339,18 @@ public class VideoActivity extends Activity {
                     tv_opp_score.setText(Integer.toString(opp_point));
                     //    Toast.makeText(context,"敵チーム"+who_is_acter[1]+"番 得点！",Toast.LENGTH_SHORT).show();
                     break;
-                case -1:
+                /*case -1:
                     Toast.makeText(context, "(score)team isnt be selected", Toast.LENGTH_SHORT).show();
                     return ;
                 default:
                     Toast.makeText(context, "(score)team cant be specified", Toast.LENGTH_SHORT).show();
-                    return ;
+                    return ; */
             }
         }
         mEventLogger.addEvent(Team.who_is_actor[0], Team.who_is_actor[1], point, is_success, event_name, file_name);
         Team.resetWhoIsAct();
+        if(is_scoresheetview)
+            setScoresheet();
 
     }
 
@@ -299,16 +360,50 @@ public class VideoActivity extends Activity {
             return diff;
         }
     }
-
     @Override
     public void onResume(){ //アクティビティ再び表示されたとき
         mRecorder.resume();
         super.onResume();
     }
-
     @Override
     protected void onPause() { //別アクティビティ起動時
         mRecorder.pause();
         super.onPause();
     }
+
+    private AdapterView.OnItemClickListener adptSelectListener = new AdapterView.OnItemClickListener(){
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            ListView listView = (ListView) parent;
+            String item = (String) listView.getItemAtPosition(position);
+
+            String id_name = context.getResources().getResourceEntryName(listView.getId());
+
+            switch (id_name){
+                case "our_team_list":
+                    //    Toast.makeText(context_, item+"@"+id_name , Toast.LENGTH_SHORT).show();
+                    //    VideoActivity.who_is_acter[0] = 0;
+                    Team.who_is_actor[0] = 0;
+                    break;
+                case "opposing_team_list":
+                    //    Toast.makeText(context_, item+"@"+id_name , Toast.LENGTH_SHORT).show();
+                    //    VideoActivity.who_is_acter[0] = 1;
+                    Team.who_is_actor[0] = 1;
+                    break;
+                default:
+                    Toast.makeText(context, "e:"+item+"@"+id_name , Toast.LENGTH_SHORT).show();
+                    //   VideoActivity.who_is_acter[0] = -1;
+                    Team.who_is_actor[0] = -1;
+                    break;
+            }
+            if(item.equals("?"))
+                //   VideoActivity.who_is_acter[1] = 0;
+                Team.who_is_actor[1] = 0;
+            else
+                //    VideoActivity.who_is_acter[1] = Integer.parseInt(item);
+                Team.who_is_actor[1] = Integer.parseInt(item);
+
+            if(Team.event_name != null) recordEvent(shoot_point, is_success, Team.event_name);
+        }
+    };
 }

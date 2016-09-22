@@ -54,12 +54,12 @@ public class Synchro extends AppCompatActivity {
 
         switch(id){
             case R.id.main_terminal:
-                Toast.makeText(this, "メインで同期します", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "動画撮影で同期します", Toast.LENGTH_SHORT).show();
                 isMain = true; isSub = false;
                 return true;
 
             case R.id.sub_terminal:
-                Toast.makeText(this, "サブで同期します", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "スコアラーで同期します", Toast.LENGTH_SHORT).show();
                 isSub = true; isMain = false;
                 return true;
 
@@ -109,7 +109,7 @@ public class Synchro extends AppCompatActivity {
                 itt_start = new Intent(getApplication(), SubGameActivity.class); //サブ用のアクティビティ
                 startActivity(itt_start);
             }else{
-                Toast.makeText(Synchro.this, "Bluetoothがオンになっていないか\nメイン/サブが選択されていません", Toast.LENGTH_SHORT).show();
+                Toast.makeText(Synchro.this, "Main/Subが選択されていません", Toast.LENGTH_SHORT).show();
             }
         }
     };

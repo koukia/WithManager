@@ -7,6 +7,7 @@ import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.PixelFormat;
 import android.hardware.Camera;
 import android.media.MediaPlayer;
@@ -33,6 +34,10 @@ public class SynchroVideoActivity extends Activity {
     private static final Handler handler = new Handler();
     private SurfaceHolder surfaceHolder;
     private SurfaceView surfaceView;
+
+    //to reset DB when start Activity
+    private EventDbHelper mDbHelper;
+    private SQLiteDatabase db;
 
     private Camera mCamera;
     private final static String TAG = "SynchroVideoActivity";
@@ -102,6 +107,10 @@ public class SynchroVideoActivity extends Activity {
         mPreviewCallback = new PreviewSurfaceViewCallback(context);
         mOverLayHolder.addCallback(mPreviewCallback);
         mOverLaySurfaceView.setVisibility(SurfaceView.INVISIBLE);
+
+        mDbHelper = new EventDbHelper(context);
+        db = mDbHelper.getWritableDatabase();
+        mDbHelper.onUpgrade(db, EventDbHelper.DATABASE_VERSION, EventDbHelper.DATABASE_VERSION);
 
         try {
             File dir_save = new File(sava_dir);
@@ -244,8 +253,10 @@ public class SynchroVideoActivity extends Activity {
         return true;
     }
     public void recordEvent(int point, int is_success, String event_name) {
-        if(!is_playing) return ;
-        //TODO:録画中でないとエラー
+        if(!is_playing || !(bluetoothStatus == BluetoothStatus.CONNECTED)) return ;
+        //録画中でないとエラー
+        //Bluetooth接続していない状態で実行できない
+
         String file_name = "no file";
         //   if(mRecorder.mCamera != null) {
         mRecorder.stop();
