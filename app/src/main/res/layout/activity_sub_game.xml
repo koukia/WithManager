@@ -8,7 +8,9 @@
         android:layout_width="50dp"
         android:layout_height="wrap_content"
         android:id="@+id/our_team_list"
-        android:listSelector="@drawable/p1_listselector" />
+        android:listSelector="@drawable/p2_listselector"
+        android:background="#ffffff"
+        />
 
     <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:orientation="vertical"
@@ -186,6 +188,8 @@
         android:layout_width="50dp"
         android:layout_height="wrap_content"
         android:id="@+id/enemies_team_list"
-        android:listSelector="@drawable/p2_listselector" />
+        android:listSelector="@drawable/p1_listselector"
+        android:background="#0033ff"
+        />
 
 </LinearLayout>

@@ -51,7 +51,8 @@ public class SubGameActivity extends AppCompatActivity {
     private OutputStream outputStream;
     private PrintWriter writer;
     private String ene_team = "";
-    int point;
+    int shoot_point;
+    int is_success;
     boolean fragUndo;
     String undoTeam;
 
@@ -62,7 +63,6 @@ public class SubGameActivity extends AppCompatActivity {
     private BluetoothStatus bluetoothStatus;
     private BluetoothAdapter ba;
     private BluetoothConnection bc;
-
     private enum BluetoothStatus{
         ERROR("Bluetooth接続に失敗しました"),
         CONNECTING("Bluetooth接続 : 接続中"),
@@ -114,8 +114,9 @@ public class SubGameActivity extends AppCompatActivity {
                 ListView listView = (ListView) parent;
                 String item = (String) listView.getItemAtPosition(position);
                 //Toast.makeText(getApplicationContext(), item + " clicked",Toast.LENGTH_LONG).show();
-                event_who[0] = "p0";
+                event_who[0] = "0";
                 event_who[1] = item;
+                recordScore("0", item, shoot_point, is_success);
             }
         });
 
@@ -131,64 +132,76 @@ public class SubGameActivity extends AppCompatActivity {
                 ListView listView = (ListView) parent;
                 String item = (String) listView.getItemAtPosition(position);
                 //Toast.makeText(getApplicationContext(), item + " clicked",Toast.LENGTH_LONG).show();
-                event_who[0] = "p1";
+                event_who[0] = "1";
                 event_who[1] = item;
+                recordScore("1", item, shoot_point, is_success);
             }
         });
 
         findViewById(R.id.shoot_succes_free).setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                point = 1;
-                recordScore(event_who[0], event_who[1], point, 1);
+                shoot_point = 1;
+                is_success = 1;
+                Toast.makeText(context, "1P成功", Toast.LENGTH_SHORT).show();
+                //recordScore(event_who[0], event_who[1], shoot_point, 1);
             }
         });
         findViewById(R.id.shoot_failed_free).setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                point = 0;
-                recordScore(event_who[0], event_who[1], point, 0);
+                shoot_point = 0;
+                is_success = 0;
+                Toast.makeText(context, "1P失敗", Toast.LENGTH_SHORT).show();
+                //recordScore(event_who[0], event_who[1], shoot_point, 0);
             }
         });
 
         findViewById(R.id.shoot_success_2p).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                point = 2;
-                recordScore(event_who[0], event_who[1], point, 1);
+                shoot_point = 2;
+                is_success = 1;
+                Toast.makeText(context, "2P成功", Toast.LENGTH_SHORT).show();
+                //recordScore(event_who[0], event_who[1], shoot_point, 1);
             }
         });
         findViewById(R.id.shoot_failed_2p).setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                point = 0;
-                recordScore(event_who[0], event_who[1], point, 0);
+                shoot_point = 0;
+                is_success = 0;
+                Toast.makeText(context, "2P失敗", Toast.LENGTH_SHORT).show();
+                //recordScore(event_who[0], event_who[1], shoot_point, 0);
             }
         });
 
         findViewById(R.id.shoot_success_3p).setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                point = 3;
-                recordScore(event_who[0], event_who[1], point, 1);
+                shoot_point = 3;
+                is_success = 1;
+                Toast.makeText(context, "3P成功", Toast.LENGTH_SHORT).show();
+                //recordScore(event_who[0], event_who[1], shoot_point, 1);
             }
         });
         findViewById(R.id.shoot_failed_3p).setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                point = 0;
-                recordScore(event_who[0], event_who[1], point, 0);
+                shoot_point = 0;
+                is_success = 0;
+                Toast.makeText(context, "3P失敗", Toast.LENGTH_SHORT).show();
+                //recordScore(event_who[0], event_who[1], shoot_point, 0);
             }
         });
 
         findViewById(R.id.miss_undo).setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                if(fragUndo)
-                    undo(undoTeam, -point);
+                if(fragUndo);
+                    //undo(undoTeam, -shoot_point);
             }
         });
-
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
@@ -215,7 +228,8 @@ public class SubGameActivity extends AppCompatActivity {
                 return true;
 
             case R.id.server :
-                startConnect();
+                //startConnect();
+                startSendConnect();
                 return true;
 
             case R.id.guest:
@@ -235,7 +249,7 @@ public class SubGameActivity extends AppCompatActivity {
         int enemies_score = Integer.parseInt(tv_enemies_score.getText().toString());
 
         //Bluetooth通信用のbyte配列
-        buf[0] = Byte.parseByte(who_team.substring(1));
+        buf[0] = Byte.parseByte(who_team);
         buf[1] = Byte.parseByte(who_num);
         buf[2] = Byte.parseByte(Integer.toString(point));
         buf[3] = Byte.parseByte(Integer.toString(is_success));
@@ -247,7 +261,7 @@ public class SubGameActivity extends AppCompatActivity {
         String result;
         switch (who_team){
 
-            case "p0":
+            case "0":
                 int our_point = our_score + point;
                 tv_our_score.setText(our_point+"");
 
@@ -257,7 +271,7 @@ public class SubGameActivity extends AppCompatActivity {
 //                writer.append(0 + "," + who_num + "," + point + "\n");
                 writer.append(0 + "," + who_num + "," + point + ",");
                 break;
-            case "p1":
+            case "1":
                 int ene_point = enemies_score + point;
                 tv_enemies_score.setText(ene_point+"");
 
@@ -367,6 +381,10 @@ public class SubGameActivity extends AppCompatActivity {
 
     }
     private void startSendConnect(){
+        if(targetDevice == null){
+            Toast.makeText(this, "接続するデバイスを選択してください", Toast.LENGTH_SHORT).show();
+            return ;
+        }
         bluetoothStatus = BluetoothStatus.CONNECTING;
 
         bc = new BluetoothConnection();

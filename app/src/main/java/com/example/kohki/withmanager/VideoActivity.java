@@ -156,81 +156,91 @@ public class VideoActivity extends Activity {
         shoot_success1p.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context, "1P成功", Toast.LENGTH_SHORT).show();
-                //recordEvent(1,1,"shoot");//1:point,2:is success?,3:event name
-                Team.event_name = "shoot";
-                shoot_point = 1;
-                is_success  = 1;
-
+                if(is_playing) {
+                    Toast.makeText(context, "1P成功", Toast.LENGTH_SHORT).show();
+                    //recordEvent(1,1,"shoot");//1:point,2:is success?,3:event name
+                    Team.event_name = "shoot";
+                    shoot_point = 1;
+                    is_success = 1;
+                }
             }
         });
         shoot_success2p = (Button)findViewById(R.id.shoot_success_2p);
         shoot_success2p.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context, "2P成功", Toast.LENGTH_SHORT).show();
-                //recordEvent(2,1,"shoot");//1:point,2:is success?,3:event name
-                Team.event_name = "shoot";
-                shoot_point = 2;
-                is_success  = 1;
-
-
+                if(is_playing) {
+                    Toast.makeText(context, "2P成功", Toast.LENGTH_SHORT).show();
+                    //recordEvent(2,1,"shoot");//1:point,2:is success?,3:event name
+                    Team.event_name = "shoot";
+                    shoot_point = 2;
+                    is_success = 1;
+                }
             }
         });
         shoot_success3p = (Button)findViewById(R.id.shoot_success_3p);
         shoot_success3p.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context, "3P成功", Toast.LENGTH_SHORT).show();
-                //recordEvent(3,1,"shoot");//1:point,2:is success?,3:event name
-                Team.event_name = "shoot";
-                shoot_point = 3;
-                is_success  = 1;
-
+                if(is_playing) {
+                    Toast.makeText(context, "3P成功", Toast.LENGTH_SHORT).show();
+                    //recordEvent(3,1,"shoot");//1:point,2:is success?,3:event name
+                    Team.event_name = "shoot";
+                    shoot_point = 3;
+                    is_success = 1;
+                }
             }
         });
         shoot_failed1p = (Button)findViewById(R.id.shoot_failed_1p);
         shoot_failed1p.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context, "1P失敗", Toast.LENGTH_SHORT).show();
-                //recordEvent(1,0,"shoot");//1:point,2:is success?,3:event name
-                Team.event_name = "shoot";
-                shoot_point = 1;
-                is_success  = 0;
+                if(is_playing) {
+                    Toast.makeText(context, "1P失敗", Toast.LENGTH_SHORT).show();
+                    //recordEvent(1,0,"shoot");//1:point,2:is success?,3:event name
+                    Team.event_name = "shoot";
+                    shoot_point = 1;
+                    is_success = 0;
+                }
             }
         });
         shoot_failed2p = (Button)findViewById(R.id.shoot_failed_2p);
         shoot_failed2p.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context, "2P失敗", Toast.LENGTH_SHORT).show();
-                //recordEvent(2,0,"shoot");//1:point,2:is success?,3:event name
-                Team.event_name = "shoot";
-                shoot_point = 2;
-                is_success  = 0;
+                if(is_playing) {
+                    Toast.makeText(context, "2P失敗", Toast.LENGTH_SHORT).show();
+                    //recordEvent(2,0,"shoot");//1:point,2:is success?,3:event name
+                    Team.event_name = "shoot";
+                    shoot_point = 2;
+                    is_success = 0;
+                }
             }
         });
         shoot_failed3p = (Button)findViewById(R.id.shoot_failed_3p);
         shoot_failed3p.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context, "3P失敗", Toast.LENGTH_SHORT).show();
-                //recordEvent(3,0,"shoot");//1:point,2:is success?,3:event name
-                Team.event_name = "shoot";
-                shoot_point = 3;
-                is_success  = 0;
+                if(is_playing) {
+                    Toast.makeText(context, "3P失敗", Toast.LENGTH_SHORT).show();
+                    //recordEvent(3,0,"shoot");//1:point,2:is success?,3:event name
+                    Team.event_name = "shoot";
+                    shoot_point = 3;
+                    is_success = 0;
+                }
             }
         });
         foul = (Button)findViewById(R.id.foul);
         foul.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context, "ファウル", Toast.LENGTH_SHORT).show();
-                //recordEvent(0,1,"foul");
-                Team.event_name = "foul";
-                shoot_point = 0;
-                is_success  = 1;
+                if(is_playing) {
+                    Toast.makeText(context, "ファウル", Toast.LENGTH_SHORT).show();
+                    //recordEvent(0,1,"foul");
+                    Team.event_name = "foul";
+                    shoot_point = 0;
+                    is_success = 1;
+                }
             }
         });
 
