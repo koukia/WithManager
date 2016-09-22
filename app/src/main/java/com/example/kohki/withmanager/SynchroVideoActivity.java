@@ -63,7 +63,7 @@ public class SynchroVideoActivity extends Activity {
 
         //main surfaceview
         SurfaceView main_surface = (SurfaceView) findViewById(R.id.main_surface);
-        mRecorder = new VideoRecorder(this, movie_time, sava_dir, main_surface, getResources());
+        mRecorder = new VideoRecorder(this, sava_dir, main_surface, getResources());
 
         //sub surfaceview
         mOverLaySurfaceView = (SurfaceView) findViewById(R.id.sub_surface);

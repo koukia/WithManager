@@ -69,10 +69,9 @@ public class VideoActivity extends Activity {
         setContentView(R.layout.activity_record_standalone);
 
         context = this;
-
         //main surfaceview
         SurfaceView main_surface = (SurfaceView) findViewById(R.id.main_surface);
-        mRecorder = new VideoRecorder(context, movie_time, sava_dir, main_surface, getResources());
+        mRecorder = new VideoRecorder(context, sava_dir, main_surface, getResources());
 
         //sub surfaceview
         mOverLaySurfaceView = (SurfaceView) findViewById(R.id.sub_surface);
@@ -293,6 +292,7 @@ public class VideoActivity extends Activity {
     @Override
     public void onResume(){ //アクティビティ再び表示されたとき
         super.onResume();
+
         mRecorder.resume();
 
         Team mTeam1 = new Team(context, (ListView) findViewById(R.id.our_team_list),      our_member_num);
