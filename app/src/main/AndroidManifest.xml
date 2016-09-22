@@ -43,6 +43,9 @@
         <activity android:name=".Status" />
         <activity android:name=".TestBluetooth" />
         <activity android:name=".SynchroVideoActivity" />
+        <activity
+            android:screenOrientation="landscape"
+            android:name=".SettingOfGame" />
 
     </application>
 

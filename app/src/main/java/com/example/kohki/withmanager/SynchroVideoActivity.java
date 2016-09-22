@@ -51,6 +51,8 @@ public class SynchroVideoActivity extends Activity {
     private Button btn_start;
     private Button btn_stop;
 
+    public static int our_member_num = 18;
+    public static int opp_member_num = 18;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -106,8 +108,8 @@ public class SynchroVideoActivity extends Activity {
 
 
 
-        Team mTeam1 = new Team(context, (ListView) findViewById(R.id.our_team_list));
-        Team mTeam2 = new Team(context, (ListView) findViewById(R.id.opposing_team_list));
+        Team mTeam1 = new Team(context, (ListView) findViewById(R.id.our_team_list), our_member_num);
+        Team mTeam2 = new Team(context, (ListView) findViewById(R.id.opposing_team_list), opp_member_num);
         mEventLogger = new EventLogger(context,(ListView) findViewById(R.id.event_log));
 
         findViewById(R.id.shoot_success_2p).setOnClickListener(new View.OnClickListener() {

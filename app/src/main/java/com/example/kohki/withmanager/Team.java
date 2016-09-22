@@ -7,6 +7,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 /**
  * Created by kohki on 16/09/02.
  */
@@ -14,19 +16,21 @@ public class Team {
     public String[] event_who = {"", ""};
     private Context context_;
     private static ListView team_lv;
-    private String[] members =
-            {"?","4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15"};
-    public static int who_is_actor[] = {-1, -1};
+    public static ArrayList<String> members;
+    public static int who_is_actor[] = {0, 0};
 
-    public Team(Context context, ListView team_list) {
+    public Team(Context context, ListView team_list, int mem_num) {
         this.context_ = context;
 
         team_lv = team_list;
-
-
-        ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(context_,
+        members = new ArrayList<>();
+        members.add("?");
+        for(int i = 4; i <= mem_num; i++){
+            members.add(i+"");
+        }
+        ArrayAdapter<String> adapter_teamlist = new ArrayAdapter<String>(context_,
                 android.R.layout.simple_list_item_1, members);
-        team_lv.setAdapter(adapter1);
+        team_lv.setAdapter(adapter_teamlist);
 
         team_lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -35,6 +39,7 @@ public class Team {
                 String item = (String) listView.getItemAtPosition(position);
 
                 String id_name = context_.getResources().getResourceEntryName(listView.getId());
+                view.setBackgroundColor(0x550055);
 
                 switch (id_name){
                     case "our_team_list":

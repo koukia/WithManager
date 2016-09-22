@@ -2,11 +2,13 @@ package com.example.kohki.withmanager;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.PixelFormat;
 import android.hardware.Camera;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -20,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
+import java.io.InterruptedIOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -34,7 +37,7 @@ public class VideoActivity extends Activity {
     private Camera mCamera;
     private final static String TAG = "VideoActivity";
     private Context context;
-    private int movie_time = 5000;
+    public static int movie_time = 5000;
 
     //    private String sava_path  = "/storage/emulated/legacy/WithManager/";
     private String sava_dir = "sdcard/WithManager/";
@@ -57,6 +60,8 @@ public class VideoActivity extends Activity {
     private Button btn_start;
     private Button btn_stop;
 
+    public static int our_member_num = 18;
+    public static int opp_member_num = 18;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -67,7 +72,7 @@ public class VideoActivity extends Activity {
 
         //main surfaceview
         SurfaceView main_surface = (SurfaceView) findViewById(R.id.main_surface);
-        mRecorder = new VideoRecorder(this, movie_time, sava_dir, main_surface, getResources());
+        mRecorder = new VideoRecorder(context, movie_time, sava_dir, main_surface, getResources());
 
         //sub surfaceview
         mOverLaySurfaceView = (SurfaceView) findViewById(R.id.sub_surface);
@@ -85,7 +90,7 @@ public class VideoActivity extends Activity {
         }
 
         //Start button
-        btn_start = (Button)findViewById(R.id.btn_start);
+        btn_start = (Button) findViewById(R.id.btn_start);
         btn_start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -99,7 +104,7 @@ public class VideoActivity extends Activity {
         });
 
         //Recording stop
-        btn_stop = (Button)findViewById(R.id.btn_stop);
+        btn_stop = (Button) findViewById(R.id.btn_stop);
         btn_stop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -112,68 +117,77 @@ public class VideoActivity extends Activity {
 
 
 
-        Team mTeam1 = new Team(context, (ListView) findViewById(R.id.our_team_list));
-        Team mTeam2 = new Team(context, (ListView) findViewById(R.id.opposing_team_list));
-        mEventLogger = new EventLogger(context,(ListView) findViewById(R.id.event_log));
+        mEventLogger = new EventLogger(context, (ListView) findViewById(R.id.event_log));
 
         findViewById(R.id.shoot_success_2p).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                recordEvent(2,1,"shoot");//1:point,2:is success?,3:event name
-                if(is_scoresheetview)
+                recordEvent(2, 1, "shoot");//1:point,2:is success?,3:event name
+                if (is_scoresheetview)
                     setScoresheet();
             }
         });
         findViewById(R.id.shoot_success_3p).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                recordEvent(3,1,"shoot");//1:point,2:is success?,3:event name
-                if(is_scoresheetview)
+                recordEvent(3, 1, "shoot");//1:point,2:is success?,3:event name
+                if (is_scoresheetview)
                     setScoresheet();
             }
         });
         findViewById(R.id.shoot_failed_2p).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                recordEvent(2,0,"shoot");//1:point,2:is success?,3:event name
+                recordEvent(2, 0, "shoot");//1:point,2:is success?,3:event name
             }
         });
         findViewById(R.id.shoot_failed_3p).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                recordEvent(3,0,"shoot");//1:point,2:is success?,3:event name
+                recordEvent(3, 0, "shoot");//1:point,2:is success?,3:event name
             }
         });
         findViewById(R.id.foul).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                recordEvent(0,1,"foul");
+                recordEvent(0, 1, "foul");
             }
         });
 
         is_scoresheetview = false;
-        findViewById(R.id.chenge_scoresheet_and_eventlog).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.btn_chenge_scoresheet_and_eventlog).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 LinearLayout menu = (LinearLayout) findViewById(R.id.menu);
-                if(!is_scoresheetview) {
+                if (!is_scoresheetview) {
                     LinearLayout eventlog = (LinearLayout) findViewById(R.id.menu_log);
                     menu.removeView(eventlog);
                     getLayoutInflater().inflate(R.layout.score_sheet, menu);
 
                     setScoresheet();
                     is_scoresheetview = true;
-                }else{
+                } else {
                     LinearLayout scoresheet = (LinearLayout) findViewById(R.id.scoresheet);
                     menu.removeView(scoresheet);
                     getLayoutInflater().inflate(R.layout.event_log, menu);
-                    mEventLogger = new EventLogger(context,(ListView) findViewById(R.id.event_log));
+                    mEventLogger = new EventLogger(context, (ListView) findViewById(R.id.event_log));
                     is_scoresheetview = false;
                 }
             }
         });
-
+        findViewById(R.id.btn_setting).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    Intent itt_setting = new Intent(context, SettingOfGame.class);
+                    startActivity(itt_setting);
+                }catch (Exception e) {
+                    Log.v("IntentErr:", e.getMessage() + "," + e);
+                }
+            }
+        });
     }
+
     private void setScoresheet(){
         ListView listView_our, listView_opt;
         ItemArrayAdapter adpt_our, adpt_opt;
@@ -278,8 +292,11 @@ public class VideoActivity extends Activity {
 
     @Override
     public void onResume(){ //アクティビティ再び表示されたとき
-        mRecorder.resume();
         super.onResume();
+        mRecorder.resume();
+
+        Team mTeam1 = new Team(context, (ListView) findViewById(R.id.our_team_list),      our_member_num);
+        Team mTeam2 = new Team(context, (ListView) findViewById(R.id.opposing_team_list), opp_member_num);
     }
 
     @Override

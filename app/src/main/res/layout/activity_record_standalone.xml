@@ -18,14 +18,60 @@
             android:layout_height="wrap_content"
             android:id="@+id/our_team_list"
             android:listSelector="@drawable/p1_listselector"
-            android:layout_weight="45"
+            android:layout_weight="30"
             android:background="#ffffff" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_weight="25"
+            android:id="@+id/menu">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_gravity="left"
+                android:gravity="right"
+                android:weightSum="100">
+                <ImageButton
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:id="@+id/btn_setting"
+                    android:src="@mipmap/ic_launcher"
+                    android:cropToPadding="false"
+                    android:contextClickable="false"
+                    android:scaleType="fitXY" />
+                <ImageButton
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:id="@+id/btn_chenge_scoresheet_and_eventlog"
+                    android:src="@drawable/icon_change"
+                    android:scaleType="centerCrop" />
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/btn_save_or_delete" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/menu_log"
+                android:weightSum="10">
+
+                <ListView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/event_log"
+                    android:listSelector="@drawable/eventlog_selector" />
+            </LinearLayout>
+        </LinearLayout>
 
         <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="10">
+            android:layout_weight="15">
 
             <SurfaceView
                 android:id="@+id/sub_surface"
@@ -131,7 +177,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_gravity="center_vertical|left">
+                android:layout_gravity="center_vertical|bottom|right">
 
                 <Button
                     android:layout_width="wrap_content"
@@ -166,7 +212,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_gravity="center_vertical|right">
+                android:layout_gravity="top|center_vertical|right">
 
                 <Button
                     android:layout_width="wrap_content"
@@ -195,50 +241,9 @@
             android:layout_height="wrap_content"
             android:id="@+id/opposing_team_list"
             android:listSelector="@drawable/p2_listselector"
-            android:layout_weight="45"
+            android:layout_weight="30"
             android:background="#ffffff"
             android:textFilterEnabled="false" />
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_weight="80"
-        android:id="@+id/menu">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_gravity="left"
-            android:gravity="right"
-            android:weightSum="100">
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/setting" />
-            <ImageButton
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:id="@+id/chenge_scoresheet_and_eventlog"
-                android:src="@drawable/icon_change"
-                android:scaleType="centerCrop" />
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/save_or_delete" />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/menu_log"
-            android:weightSum="10">
-
-            <ListView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/event_log"
-                android:listSelector="@drawable/eventlog_selector" />
-        </LinearLayout>
     </LinearLayout>
 
 </LinearLayout>
