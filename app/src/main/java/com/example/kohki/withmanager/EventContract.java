@@ -17,6 +17,11 @@ public final class EventContract {
         public static final String COL_SUCCESS = "is_success";
         public static final String COL_EVENT   = "event";
         public static final String COL_MOVIE_NAME  = "movie_name";
+        public static final String COL_DATETIME = "datetime";
         public static final String COLUMN_NAME_NULLABLE = null;
+    }
+    public static abstract class Game implements BaseColumns{
+        public static final String TABLE_NAME = "games";
+        public static final String COL_DATE = "datetime";
     }
 }

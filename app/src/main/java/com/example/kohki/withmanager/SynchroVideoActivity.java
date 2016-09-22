@@ -29,7 +29,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 public class SynchroVideoActivity extends Activity {
@@ -68,6 +70,8 @@ public class SynchroVideoActivity extends Activity {
 
     private Button btn_start;
     private Button btn_stop;
+    private String dateTime;
+    private SimpleDateFormat sdf;
 
     private Button btnBluetoothSettiong;
     private BluetoothUtil bu;
@@ -99,6 +103,7 @@ public class SynchroVideoActivity extends Activity {
 
         context = this;
         buf = new byte[4]; buf[3] = 111;
+        sdf = new SimpleDateFormat();
 
         //main surfaceview
         SurfaceView main_surface = (SurfaceView) findViewById(R.id.main_surface);
@@ -129,6 +134,10 @@ public class SynchroVideoActivity extends Activity {
             @Override
             public void onClick(View v) {
                 if (mRecorder != null) {
+                    Date date = new Date();
+                    dateTime = sdf.format(date);
+                    System.out.println(dateTime);
+                    mEventLogger.addGameTime(dateTime);
                     is_playing = true;
                     btn_start.setVisibility(View.INVISIBLE);
                     btn_stop.setVisibility(View.VISIBLE);
@@ -193,7 +202,7 @@ public class SynchroVideoActivity extends Activity {
             @Override
             public void onClick(View v) {
                 buf[2] = 3;
-                Team.event_name = "faul";
+                Team.event_name = "foul";
                 Toast.makeText(context, "ファウル", Toast.LENGTH_SHORT).show();
                 //recordEvent(0,1,"foul");
             }
@@ -319,9 +328,8 @@ public class SynchroVideoActivity extends Activity {
             buf[1] = Byte.parseByte(Integer.toString(Team.who_is_actor[1]));
             bc.writeObject(buf);
         }
-        mEventLogger.addEvent(Team.who_is_actor[0], Team.who_is_actor[1], point , is_success, event_name, file_name);
+        mEventLogger.addEvent(Team.who_is_actor[0], Team.who_is_actor[1], point , is_success, event_name, file_name, dateTime);
         Team.resetWhoIsAct();
-
 
     }
 
@@ -562,7 +570,7 @@ public class SynchroVideoActivity extends Activity {
                 return ;  */
             }
         }
-        mEventLogger.addEvent(team, actor, point, is_success, "shoot", file_name);
+        mEventLogger.addEvent(team, actor, point, is_success, "shoot", file_name, dateTime);
     }
     @Override
     public void onResume(){ //アクティビティ再び表示されたとき

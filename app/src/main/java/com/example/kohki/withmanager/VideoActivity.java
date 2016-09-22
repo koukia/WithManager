@@ -22,8 +22,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -74,6 +76,8 @@ public class VideoActivity extends Activity {
 
     ListView our_team;
     ListView opt_team;
+    SimpleDateFormat sdf;
+    String dateTime;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -86,6 +90,7 @@ public class VideoActivity extends Activity {
         mDbHelper = new EventDbHelper(context);
         db = mDbHelper.getWritableDatabase();
         mDbHelper.onUpgrade(db, EventDbHelper.DATABASE_VERSION, EventDbHelper.DATABASE_VERSION);
+        //mDbHelper.createTableGame(db);
 
         //main surfaceview
         SurfaceView main_surface = (SurfaceView) findViewById(R.id.main_surface);
@@ -106,12 +111,17 @@ public class VideoActivity extends Activity {
             Toast.makeText(context, "e:" + e, Toast.LENGTH_SHORT).show();
         }
 
+        sdf = new SimpleDateFormat("yyyyMMddHHmmss");
         //Start button
         btn_start = (Button)findViewById(R.id.btn_start);
         btn_start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (mRecorder != null) {
+                    Date date = new Date();
+                    dateTime = sdf.format(date);
+                    System.out.println(dateTime);
+                    mEventLogger.addGameTime(dateTime);
                     is_playing = true;
                     btn_start.setVisibility(View.INVISIBLE);
                     btn_stop.setVisibility(View.VISIBLE);
@@ -300,6 +310,7 @@ public class VideoActivity extends Activity {
                 adpt_opt.add(scoreData);
             }
         }
+        //(TextView)findViewById(R.id.name).setBackgroundColor();
     }
 
     public boolean replay(String movie_name){
@@ -357,11 +368,11 @@ public class VideoActivity extends Activity {
                     return ; */
             }
         }
-        mEventLogger.addEvent(Team.who_is_actor[0], Team.who_is_actor[1], point, is_success, event_name, file_name);
+        mEventLogger.addEvent(Team.who_is_actor[0], Team.who_is_actor[1], point, is_success, event_name, file_name, dateTime);
         Team.resetWhoIsAct();
         if(is_scoresheetview)
             setScoresheet();
-
+        mEventLogger.getFoul();
     }
 
     private static class FileSort implements Comparator<File> {

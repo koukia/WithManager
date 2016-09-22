@@ -56,6 +56,8 @@ public class ScoreDataGenerater {
                 //合count data related to scoresheet
                 if(event.equals("shoot") && success == 1){
                     String[] db_row = {team+"", num+"", point+""};
+                    System.out.println(point);
+                    if(point == 3) db_row[1] = "(" + db_row[1] + ")";
                     addRowData(db_row);
                 }
                 //合count data related to foulsheet
@@ -71,18 +73,20 @@ public class ScoreDataGenerater {
     }
     private void addRowData(String[] row){
         int point = Integer.parseInt(row[2]);
-        String mark;
+        String mark_score;
+        String mark_num = "";
 
         switch(point){
             case 1:
-                mark = "・";
+                mark_score = "・";
                 break;
             case 2:
             case 3:
-                mark = "/";
+                mark_score = "/";
+                //mark_num   = ")";
                 break;
             default:
-                mark = " ";
+                mark_score = " ";
         }
         if(row[0].equals("0")){
             sum = now_our + point -1;
@@ -91,7 +95,7 @@ public class ScoreDataGenerater {
                 l_scoredata.add(obj);
                 now_our++;
             }
-            row[2] = now_our + mark;
+            row[2] = now_our + mark_score;
             now_our++;
 
         }else if(row[0].equals("1")){
@@ -101,7 +105,7 @@ public class ScoreDataGenerater {
                 l_scoredata.add(obj);
                 now_opt++;
             }
-            row[2] = now_opt + mark;
+            row[2] = now_opt + mark_score;
             now_opt++;
 
         }

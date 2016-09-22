@@ -21,10 +21,20 @@ public class EventDbHelper extends SQLiteOpenHelper {
                     EventContract.Event.COL_POINT      + INT_TYPE + COMMA_SEP +
                     EventContract.Event.COL_SUCCESS    + INT_TYPE + COMMA_SEP +
                     EventContract.Event.COL_EVENT      + TEXT_TYPE + COMMA_SEP +
-                    EventContract.Event.COL_MOVIE_NAME + TEXT_TYPE + " )";
+                    EventContract.Event.COL_MOVIE_NAME + TEXT_TYPE + COMMA_SEP +
+                    EventContract.Event.COL_DATETIME   + TEXT_TYPE + " )";
 
     private static final String SQL_DELETE_ENTRIES =
             "DROP TABLE IF EXISTS " + EventContract.Event.TABLE_NAME;
+
+
+    //Gameのテーブル作成
+    private static final String SQL_CREATE_GAME =
+            "CREATE TABLE " + EventContract.Game.TABLE_NAME + " (" +
+                    EventContract.Game.COL_DATE + TEXT_TYPE + " )";
+
+    private static final String SQL_DELETE_GAME =
+            "DROP TABLE IF EXIST " + EventContract.Game.TABLE_NAME;
     //---
 
     // If you change the database schema, you must increment the database version.
@@ -48,5 +58,15 @@ public class EventDbHelper extends SQLiteOpenHelper {
 
     public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         onUpgrade(db, oldVersion, newVersion);
+    }
+
+    public void createTableGame(SQLiteDatabase db){
+        System.out.println(SQL_CREATE_GAME);
+        db.execSQL(SQL_CREATE_GAME);
+        System.out.println("テーブルを作りました");
+    }
+    public void upGradeTable(SQLiteDatabase db){
+        db.execSQL(SQL_DELETE_GAME);
+        createTableGame(db);
     }
 }

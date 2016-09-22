@@ -50,11 +50,11 @@ public class SubGameActivity extends AppCompatActivity {
 
     private OutputStream outputStream;
     private PrintWriter writer;
-    private String ene_team = "";
     int shoot_point;
     int is_success;
     boolean fragUndo;
     String undoTeam;
+    private boolean is_selectedEvent;
 
     private boolean  is_playing;
     private Button btnBluetoothSettiong;
@@ -98,6 +98,7 @@ public class SubGameActivity extends AppCompatActivity {
 
         //試合開始とストップ
         is_playing = false;
+        is_selectedEvent = false;
 
 
 
@@ -144,6 +145,7 @@ public class SubGameActivity extends AppCompatActivity {
                 shoot_point = 1;
                 is_success = 1;
                 Toast.makeText(context, "1P成功", Toast.LENGTH_SHORT).show();
+                is_selectedEvent = true;
                 //recordScore(event_who[0], event_who[1], shoot_point, 1);
             }
         });
@@ -153,6 +155,7 @@ public class SubGameActivity extends AppCompatActivity {
                 shoot_point = 0;
                 is_success = 0;
                 Toast.makeText(context, "1P失敗", Toast.LENGTH_SHORT).show();
+                is_selectedEvent = true;
                 //recordScore(event_who[0], event_who[1], shoot_point, 0);
             }
         });
@@ -163,6 +166,7 @@ public class SubGameActivity extends AppCompatActivity {
                 shoot_point = 2;
                 is_success = 1;
                 Toast.makeText(context, "2P成功", Toast.LENGTH_SHORT).show();
+                is_selectedEvent = true;
                 //recordScore(event_who[0], event_who[1], shoot_point, 1);
             }
         });
@@ -172,6 +176,7 @@ public class SubGameActivity extends AppCompatActivity {
                 shoot_point = 0;
                 is_success = 0;
                 Toast.makeText(context, "2P失敗", Toast.LENGTH_SHORT).show();
+                is_selectedEvent = true;
                 //recordScore(event_who[0], event_who[1], shoot_point, 0);
             }
         });
@@ -182,6 +187,7 @@ public class SubGameActivity extends AppCompatActivity {
                 shoot_point = 3;
                 is_success = 1;
                 Toast.makeText(context, "3P成功", Toast.LENGTH_SHORT).show();
+                is_selectedEvent = true;
                 //recordScore(event_who[0], event_who[1], shoot_point, 1);
             }
         });
@@ -191,6 +197,7 @@ public class SubGameActivity extends AppCompatActivity {
                 shoot_point = 0;
                 is_success = 0;
                 Toast.makeText(context, "3P失敗", Toast.LENGTH_SHORT).show();
+                is_selectedEvent = true;
                 //recordScore(event_who[0], event_who[1], shoot_point, 0);
             }
         });
@@ -242,6 +249,7 @@ public class SubGameActivity extends AppCompatActivity {
     ArrayList<String> results = new ArrayList<String>(); //スコア等の結果を打ち込む
     private void recordScore(String who_team, String who_num, int point, int is_success){
         if(bluetoothStatus != BluetoothStatus.CONNECTED) return ;
+        if(!is_selectedEvent) return ;
 
         TextView tv_our_score = (TextView)findViewById(R.id.our_score);
         int our_score = Integer.parseInt(tv_our_score.getText().toString());

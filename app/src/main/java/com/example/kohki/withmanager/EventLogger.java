@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.SurfaceView;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -39,7 +40,7 @@ public class EventLogger {
         this.context = context;
         lv_event_list = event_list ;
         setDB();
-    // DB reset *****  If you delete here comment to reset DB, Commentout here !!
+        // DB reset *****  If you delete here comment to reset DB, Commentout here !!
         //mDbHelper.onUpgrade(db, EventDbHelper.DATABASE_VERSION, EventDbHelper.DATABASE_VERSION);
 
         updateEventLog();
@@ -56,7 +57,7 @@ public class EventLogger {
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             ListView listView = (ListView) parent;
             String item = (String) listView.getItemAtPosition(position);
-        //    Toast.makeText(context,item+"",Toast.LENGTH_SHORT).show();
+            //    Toast.makeText(context,item+"",Toast.LENGTH_SHORT).show();
         }
     }
     static class EventLogListItemLongClickListener  implements ListView.OnItemLongClickListener {
@@ -108,7 +109,7 @@ public class EventLogger {
         }
     }
 
-     public void addEvent(int team, int number, int shoot_point, int is_success, String event_name, String movie_name){
+    public void addEvent(int team, int number, int shoot_point, int is_success, String event_name, String movie_name, String dateTime){
         String log = "addEvent() err";
         switch (event_name){
             case "shoot":
@@ -131,7 +132,7 @@ public class EventLogger {
         }
         Toast.makeText(context, log, Toast.LENGTH_SHORT).show();
 
-        /* DB insert*/
+         /* DB insert*/
         ContentValues values = new ContentValues();
         values.put(EventContract.Event.COL_TEAM,       team);
         values.put(EventContract.Event.COL_NUM,        number);
@@ -139,13 +140,29 @@ public class EventLogger {
         values.put(EventContract.Event.COL_SUCCESS,   is_success );
         values.put(EventContract.Event.COL_EVENT,      event_name);
         values.put(EventContract.Event.COL_MOVIE_NAME, movie_name);
-
+        values.put(EventContract.Event.COL_DATETIME, dateTime);
         long newRowId;
         newRowId = db.insert(
+                //tableName, // テーブルは現在の時刻
                 EventContract.Event.TABLE_NAME,
                 EventContract.Event.COLUMN_NAME_NULLABLE,
                 values);
         updateEventLog();
+        //System.out.println("datetime:" + dateTime);
+    }
+    //Startが押された時に、ゲームの開始時刻を保存しておく
+    public void addGameTime(String dateTime){
+
+        ContentValues values = new ContentValues();
+        values.put(EventContract.Game.COL_DATE, dateTime);
+
+        System.out.println(dateTime + "を追加しま");
+        db.insert(
+                EventContract.Game.TABLE_NAME,
+                null,
+                values
+        );
+        System.out.println("した");
     }
 
     private void setDB(){
@@ -195,10 +212,58 @@ public class EventLogger {
         }
         /**/
 
-     //   ArrayAdapter<String> adapter = new ArrayAdapter<String>(context,
-     //           android.R.layout.simple_list_item_1, event_list);
+        //   ArrayAdapter<String> adapter = new ArrayAdapter<String>(context,
+        //           android.R.layout.simple_list_item_1, event_list);
         lv_event_list.setAdapter(adapter2);
-
     }
 
+    public ArrayList<Integer[]> getFoul(){
+        ArrayList<Integer[]> foulList = new ArrayList<>();
+
+        try {
+            //SQLiteCursor c = (SQLiteCursor)db.rawQuery(sql, null);
+            SQLiteCursor c = (SQLiteCursor) db.query(
+                    EventContract.Event.TABLE_NAME,
+                    new String[] {EventContract.Event.COL_TEAM, EventContract.Event.COL_NUM},
+                    EventContract.Event.COL_EVENT + " = ?", new String[] {"foul"},
+                    null, null, null, null);
+
+            c.moveToFirst();
+            System.out.println(c.getCount());
+            for(int i = 0; i < c.getCount(); i++){
+//                System.out.println(c.getInt(0) + " : " + c.getInt(1));
+                foulList.add(new Integer[] {c.getInt(0), c.getInt(1)}); // 0:TEAM, 1:NUMBER
+                c.moveToNext();
+            }
+
+        }catch(Exception e){
+            Log.e("ERROR", e.toString());
+        }
+        return foulList;
+    }
+
+    //試合を記録しておいて、後で見返す
+    public ArrayList<String> getGames(){
+        ArrayList<String> games = new ArrayList<>();
+
+        try{
+            //SQLiteCursor c = (SQLiteCursor)db.rawQuery(sql, null);
+            SQLiteCursor c = (SQLiteCursor) db.query(
+                    EventContract.Event.TABLE_NAME,
+                    new String[] {EventContract.Event.COL_DATETIME},
+                    null, null,
+                    null, null, null, null);
+
+            c.moveToFirst();
+            System.out.println(c.getCount());
+            for(int i = 0; i < c.getCount(); i++){
+                games.add(c.getString(0));
+                c.moveToNext();
+            }
+
+        }catch(Exception e){
+            Log.e("ERROR", e.toString());
+        }
+        return games;
+    }
 }
