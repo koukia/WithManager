@@ -96,6 +96,9 @@ public class SynchroVideoActivity extends Activity {
         }
     }
 
+    Team mTeam1;
+    Team mTeam2;
+    private ArrayAdapter<String> adptList;
     public static int our_member_num = 18;
     public static int opp_member_num = 18;
 
@@ -161,8 +164,8 @@ public class SynchroVideoActivity extends Activity {
             }
         });
 
-        Team mTeam1 = new Team(context, (ListView) findViewById(R.id.our_team_list), our_member_num);
-        Team mTeam2 = new Team(context, (ListView) findViewById(R.id.opposing_team_list), opp_member_num);
+        mTeam1 = new Team(context, (ListView) findViewById(R.id.our_team_list), our_member_num);
+        mTeam2 = new Team(context, (ListView) findViewById(R.id.opposing_team_list), opp_member_num);
 
         mEventLogger = new EventLogger(context,(ListView) findViewById(R.id.event_log));
 
@@ -176,8 +179,8 @@ public class SynchroVideoActivity extends Activity {
                 android.R.layout.simple_list_item_1, mTeam2.members);
         opt_team.setAdapter(adapter_opp);
 
-        our_team.setOnItemClickListener(adptSelectListener);
-        opt_team.setOnItemClickListener(adptSelectListener);
+        our_team.setOnItemClickListener(adptSelectListener1);
+        opt_team.setOnItemClickListener(adptSelectListener2);
 
 
 
@@ -585,7 +588,8 @@ public class SynchroVideoActivity extends Activity {
         super.onPause();
     }
 
-    private AdapterView.OnItemClickListener adptSelectListener = new AdapterView.OnItemClickListener(){
+
+    private AdapterView.OnItemClickListener adptSelectListener1 = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             ListView listView = (ListView) parent;
@@ -593,7 +597,7 @@ public class SynchroVideoActivity extends Activity {
 
             String id_name = context.getResources().getResourceEntryName(listView.getId());
 
-            switch (id_name){
+            switch (id_name) {
                 case "our_team_list":
                     //    Toast.makeText(context_, item+"@"+id_name , Toast.LENGTH_SHORT).show();
                     //    VideoActivity.who_is_acter[0] = 0;
@@ -605,20 +609,68 @@ public class SynchroVideoActivity extends Activity {
                     Team.who_is_actor[0] = 1;
                     break;
                 default:
-                    Toast.makeText(context, "e:"+item+"@"+id_name , Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "e:" + item + "@" + id_name, Toast.LENGTH_SHORT).show();
                     //   VideoActivity.who_is_acter[0] = -1;
                     Team.who_is_actor[0] = -1;
                     break;
             }
-            if(item.equals("?"))
+            if (item.equals("?"))
                 //   VideoActivity.who_is_acter[1] = 0;
                 Team.who_is_actor[1] = 0;
             else
                 //    VideoActivity.who_is_acter[1] = Integer.parseInt(item);
                 Team.who_is_actor[1] = Integer.parseInt(item);
 
-            if(Team.event_name != null) recordEvent(0, 1, Team.event_name);
+            if (Team.event_name != null) recordEvent(0, 1, Team.event_name);
+
+            if (!item.equals("?")) {
+                adptList = mTeam2.getAdapter(item);
+                adptList.remove(item);
+                adptList.insert(item, 1);
+                listView.setAdapter(adptList);
+            }
         }
     };
+    private AdapterView.OnItemClickListener adptSelectListener2 = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            ListView listView = (ListView) parent;
+            String item = (String) listView.getItemAtPosition(position);
 
+            String id_name = context.getResources().getResourceEntryName(listView.getId());
+
+            switch (id_name) {
+                case "our_team_list":
+                    //    Toast.makeText(context_, item+"@"+id_name , Toast.LENGTH_SHORT).show();
+                    //    VideoActivity.who_is_acter[0] = 0;
+                    Team.who_is_actor[0] = 0;
+                    break;
+                case "opposing_team_list":
+                    //    Toast.makeText(context_, item+"@"+id_name , Toast.LENGTH_SHORT).show();
+                    //    VideoActivity.who_is_acter[0] = 1;
+                    Team.who_is_actor[0] = 1;
+                    break;
+                default:
+                    Toast.makeText(context, "e:" + item + "@" + id_name, Toast.LENGTH_SHORT).show();
+                    //   VideoActivity.who_is_acter[0] = -1;
+                    Team.who_is_actor[0] = -1;
+                    break;
+            }
+            if (item.equals("?"))
+                //   VideoActivity.who_is_acter[1] = 0;
+                Team.who_is_actor[1] = 0;
+            else
+                //    VideoActivity.who_is_acter[1] = Integer.parseInt(item);
+                Team.who_is_actor[1] = Integer.parseInt(item);
+
+            if (Team.event_name != null) recordEvent(0, 1, Team.event_name);
+
+            if (!item.equals("?")) {
+                adptList = mTeam2.getAdapter(item);
+                adptList.remove(item);
+                adptList.insert(item, 1);
+                listView.setAdapter(adptList);
+            }
+        }
+    };
 }

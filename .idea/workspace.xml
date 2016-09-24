@@ -31,8 +31,7 @@
   <component name="ChangeListManager">
     <list default="true" id="5294730f-7dd5-4b50-9834-436cc8fc460e" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/example/kohki/withmanager/VideoActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/kohki/withmanager/VideoActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_game_setting.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_game_setting.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/example/kohki/withmanager/SynchroVideoActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/kohki/withmanager/SynchroVideoActivity.java" />
     </list>
     <ignored path="WithManager.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -57,7 +56,7 @@
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/kohki/withmanager/VideoActivity.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="482" column="30" selection-start-line="482" selection-start-column="30" selection-end-line="482" selection-end-column="30" />
+              <caret line="38" column="42" selection-start-line="38" selection-start-column="4" selection-end-line="38" selection-end-column="42" />
               <folding>
                 <element signature="method#replay#0;class#VideoActivity#0" expanded="false" />
                 <element signature="class#FileSort#0;class#VideoActivity#0" expanded="false" />
@@ -74,60 +73,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="SettingOfGame.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/kohki/withmanager/SettingOfGame.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="24" column="13" selection-start-line="24" selection-start-column="13" selection-end-line="24" selection-end-column="13" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="activity_game_setting.xml" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_game_setting.xml">
-          <provider selected="true" editor-type-id="android-designer">
-            <state />
-          </provider>
-          <provider editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-8.125">
-              <caret line="186" column="24" selection-start-line="186" selection-start-column="24" selection-end-line="186" selection-end-column="24" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="Team.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/kohki/withmanager/Team.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
               <caret line="22" column="42" selection-start-line="22" selection-start-column="42" selection-end-line="22" selection-end-column="42" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="activity_record_standalone.xml" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_record_standalone.xml">
-          <provider editor-type-id="android-designer">
-            <state />
-          </provider>
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-1.981132">
-              <caret line="7" column="0" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="activity_synchro_video.xml" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_synchro_video.xml">
-          <provider editor-type-id="android-designer">
-            <state />
-          </provider>
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-2.8301888">
-              <caret line="46" column="48" selection-start-line="46" selection-start-column="48" selection-end-line="46" selection-end-column="48" />
               <folding />
             </state>
           </provider>
@@ -143,14 +93,25 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="SynchroVideoActivity.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="SynchroVideoActivity.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/kohki/withmanager/SynchroVideoActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="183" column="0" selection-start-line="183" selection-start-column="0" selection-end-line="183" selection-end-column="0" />
+            <state vertical-scroll-proportion="-0.60728747">
+              <caret line="590" column="0" selection-start-line="590" selection-start-column="0" selection-end-line="590" selection-end-column="0" />
               <folding>
-                <element signature="e#7646#8583#0" expanded="true" />
-                <element signature="e#8582#8583#0" expanded="true" />
+                <element signature="class#BluetoothStatus#0;class#SynchroVideoActivity#0" expanded="false" />
+                <element signature="e#7715#8652#0" expanded="true" />
+                <element signature="e#8651#8652#0" expanded="true" />
+                <element signature="method#setScoresheet#0;class#SynchroVideoActivity#0" expanded="false" />
+                <element signature="method#replay#0;class#SynchroVideoActivity#0" expanded="false" />
+                <element signature="method#recordEvent#0;class#SynchroVideoActivity#0" expanded="false" />
+                <element signature="class#FileSort#0;class#SynchroVideoActivity#0" expanded="false" />
+                <element signature="method#showBluetoothSelectDialog#0;class#SynchroVideoActivity#0" expanded="false" />
+                <element signature="method#decideBluetoothDevice#0;class#SynchroVideoActivity#0" expanded="false" />
+                <element signature="method#startConnect#0;class#SynchroVideoActivity#0" expanded="false" />
+                <element signature="method#startSendConnect#0;class#SynchroVideoActivity#0" expanded="false" />
+                <element signature="method#onResume#0;class#SynchroVideoActivity#0" expanded="false" />
+                <element signature="method#onPause#0;class#SynchroVideoActivity#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -1787,9 +1748,9 @@
         <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_sub_game.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/kohki/withmanager/Team.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_synchro_video.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/example/kohki/withmanager/SynchroVideoActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/kohki/withmanager/VideoActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_game_setting.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/kohki/withmanager/SynchroVideoActivity.java" />
       </list>
     </option>
   </component>
@@ -2290,7 +2251,7 @@
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Android Monitor" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.35235733" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Android Monitor" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.35235733" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -2319,7 +2280,7 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="1" />
+      <option name="time" value="4" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -2337,8 +2298,19 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="382" column="5" selection-start-line="382" selection-start-column="5" selection-end-line="382" selection-end-column="5" />
           <folding>
-            <element signature="e#7646#8583#0" expanded="true" />
-            <element signature="e#8582#8583#0" expanded="true" />
+            <element signature="class#BluetoothStatus#0;class#SynchroVideoActivity#0" expanded="false" />
+            <element signature="e#7715#8652#0" expanded="true" />
+            <element signature="e#8651#8652#0" expanded="true" />
+            <element signature="method#setScoresheet#0;class#SynchroVideoActivity#0" expanded="false" />
+            <element signature="method#replay#0;class#SynchroVideoActivity#0" expanded="false" />
+            <element signature="method#recordEvent#0;class#SynchroVideoActivity#0" expanded="false" />
+            <element signature="class#FileSort#0;class#SynchroVideoActivity#0" expanded="false" />
+            <element signature="method#showBluetoothSelectDialog#0;class#SynchroVideoActivity#0" expanded="false" />
+            <element signature="method#decideBluetoothDevice#0;class#SynchroVideoActivity#0" expanded="false" />
+            <element signature="method#startConnect#0;class#SynchroVideoActivity#0" expanded="false" />
+            <element signature="method#startSendConnect#0;class#SynchroVideoActivity#0" expanded="false" />
+            <element signature="method#onResume#0;class#SynchroVideoActivity#0" expanded="false" />
+            <element signature="method#onPause#0;class#SynchroVideoActivity#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -2539,14 +2511,22 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/kohki/withmanager/SynchroVideoActivity.java">
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_game_setting.xml">
+      <provider selected="true" editor-type-id="android-designer">
+        <state />
+      </provider>
+      <provider editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-8.125">
+          <caret line="186" column="24" selection-start-line="186" selection-start-column="24" selection-end-line="186" selection-end-column="24" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/kohki/withmanager/SettingOfGame.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="183" column="0" selection-start-line="183" selection-start-column="0" selection-end-line="183" selection-end-column="0" />
-          <folding>
-            <element signature="e#7646#8583#0" expanded="true" />
-            <element signature="e#8582#8583#0" expanded="true" />
-          </folding>
+        <state vertical-scroll-proportion="0.51619434">
+          <caret line="34" column="0" selection-start-line="34" selection-start-column="0" selection-end-line="34" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -2561,7 +2541,7 @@
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/kohki/withmanager/VideoActivity.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="482" column="30" selection-start-line="482" selection-start-column="30" selection-end-line="482" selection-end-column="30" />
+          <caret line="38" column="42" selection-start-line="38" selection-start-column="4" selection-end-line="38" selection-end-column="42" />
           <folding>
             <element signature="method#replay#0;class#VideoActivity#0" expanded="false" />
             <element signature="class#FileSort#0;class#VideoActivity#0" expanded="false" />
@@ -2577,22 +2557,25 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/kohki/withmanager/SettingOfGame.java">
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/kohki/withmanager/SynchroVideoActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="24" column="13" selection-start-line="24" selection-start-column="13" selection-end-line="24" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_game_setting.xml">
-      <provider selected="true" editor-type-id="android-designer">
-        <state />
-      </provider>
-      <provider editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-8.125">
-          <caret line="186" column="24" selection-start-line="186" selection-start-column="24" selection-end-line="186" selection-end-column="24" />
-          <folding />
+        <state vertical-scroll-proportion="-0.60728747">
+          <caret line="590" column="0" selection-start-line="590" selection-start-column="0" selection-end-line="590" selection-end-column="0" />
+          <folding>
+            <element signature="class#BluetoothStatus#0;class#SynchroVideoActivity#0" expanded="false" />
+            <element signature="e#7715#8652#0" expanded="true" />
+            <element signature="e#8651#8652#0" expanded="true" />
+            <element signature="method#setScoresheet#0;class#SynchroVideoActivity#0" expanded="false" />
+            <element signature="method#replay#0;class#SynchroVideoActivity#0" expanded="false" />
+            <element signature="method#recordEvent#0;class#SynchroVideoActivity#0" expanded="false" />
+            <element signature="class#FileSort#0;class#SynchroVideoActivity#0" expanded="false" />
+            <element signature="method#showBluetoothSelectDialog#0;class#SynchroVideoActivity#0" expanded="false" />
+            <element signature="method#decideBluetoothDevice#0;class#SynchroVideoActivity#0" expanded="false" />
+            <element signature="method#startConnect#0;class#SynchroVideoActivity#0" expanded="false" />
+            <element signature="method#startSendConnect#0;class#SynchroVideoActivity#0" expanded="false" />
+            <element signature="method#onResume#0;class#SynchroVideoActivity#0" expanded="false" />
+            <element signature="method#onPause#0;class#SynchroVideoActivity#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
