@@ -16,7 +16,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
-public class Result_game extends AppCompatActivity {
+public class ResultGame extends AppCompatActivity {
     private final int HOME = 0;
     AlertDialog.Builder alert;
 
@@ -54,27 +54,27 @@ public class Result_game extends AppCompatActivity {
         CSVFile csvFile = new CSVFile(inputStream);
         List<String[]> scoreList = csvFile.read();
         for (String[] scoreData : scoreList) {
-                if (scoreData[0].equals("0")) {
-                    adpt_our.add(scoreData);
+            if (scoreData[0].equals("0")) {
+                adpt_our.add(scoreData);
 
-                } else if (scoreData[0].equals("1")) {
-                    String tmp = scoreData[1];
-                    scoreData[1] = scoreData[2];
-                    scoreData[2] = tmp;
-                    adpt_ene.add(scoreData);
-                }
+            } else if (scoreData[0].equals("1")) {
+                String tmp = scoreData[1];
+                scoreData[1] = scoreData[2];
+                scoreData[2] = tmp;
+                adpt_ene.add(scoreData);
+            }
         }
 
-            alert = new AlertDialog.Builder(this);
-            alert.setTitle("通知");
-            alert.setMessage("ホーム画面に戻ります\nよろしいですか？");
-            alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    Intent itt_home = new Intent(getApplication(), HomeActivity.class);
-                    startActivity(itt_home);
-                }
-            });
+        alert = new AlertDialog.Builder(this);
+        alert.setTitle("通知");
+        alert.setMessage("ホーム画面に戻ります\nよろしいですか？");
+        alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent itt_home = new Intent(getApplication(), HomeActivity.class);
+                startActivity(itt_home);
+            }
+        });
 
     }
     @Override

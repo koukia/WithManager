@@ -271,7 +271,7 @@ public class VideoActivity extends Activity {
             @Override
             public void onClick(View view) {
                 try {
-                    Intent itt_setting = new Intent(context, SettingOfGame.class);
+                    Intent itt_setting = new Intent(context, SettingOfGameActivity.class);
                     startActivity(itt_setting);
                 }catch (Exception e) {
                     Log.v("IntentErr:", e.getMessage() + "," + e);
