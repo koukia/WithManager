@@ -96,6 +96,9 @@ public class SynchroVideoActivity extends Activity {
         }
     }
 
+    public static int our_member_num = 18;
+    public static int opp_member_num = 18;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -107,7 +110,7 @@ public class SynchroVideoActivity extends Activity {
 
         //main surfaceview
         SurfaceView main_surface = (SurfaceView) findViewById(R.id.main_surface);
-        mRecorder = new VideoRecorder(this, movie_time, sava_dir, main_surface, getResources());
+        mRecorder = new VideoRecorder(this, sava_dir, main_surface, getResources());
 
         //sub surfaceview
         mOverLaySurfaceView = (SurfaceView) findViewById(R.id.sub_surface);
@@ -158,10 +161,9 @@ public class SynchroVideoActivity extends Activity {
             }
         });
 
+        Team mTeam1 = new Team(context, (ListView) findViewById(R.id.our_team_list), our_member_num);
+        Team mTeam2 = new Team(context, (ListView) findViewById(R.id.opposing_team_list), opp_member_num);
 
-
-        //Team mTeam1 = new Team(context, (ListView) findViewById(R.id.our_team_list));
-        //Team mTeam2 = new Team(context, (ListView) findViewById(R.id.opposing_team_list));
         mEventLogger = new EventLogger(context,(ListView) findViewById(R.id.event_log));
 
         our_team = (ListView)findViewById(R.id.our_team_list);

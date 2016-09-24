@@ -111,6 +111,7 @@ public class EventLogger {
 
     public void addEvent(int team, int number, int shoot_point, int is_success, String event_name, String movie_name, String dateTime){
         String log = "addEvent() err";
+
         switch (event_name){
             case "shoot":
                 log = team+"チーム"+number+"番"+"\nE:"+shoot_point+"点"+is_success+"\nMovie:"+movie_name;
@@ -150,6 +151,7 @@ public class EventLogger {
         updateEventLog();
         //System.out.println("datetime:" + dateTime);
     }
+
     //Startが押された時に、ゲームの開始時刻を保存しておく
     public void addGameTime(String dateTime){
 

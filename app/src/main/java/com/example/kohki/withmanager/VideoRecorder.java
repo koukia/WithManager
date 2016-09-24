@@ -36,7 +36,7 @@ public class VideoRecorder implements SurfaceHolder.Callback {
     private final static String TAG = "VideoRecorderClass";
     private Context context;
     private boolean is_recording = false;
-    private int movie_period_time;
+
 
     public ArrayList<File> originMovies = new ArrayList<>();
     public ArrayList<File> editedMovies = new ArrayList<>();
@@ -45,9 +45,9 @@ public class VideoRecorder implements SurfaceHolder.Callback {
     private String sava_path;
 
     Resources resources;
-    public VideoRecorder(Context context, int ms, String path, SurfaceView sv, Resources resources){
+    public VideoRecorder(Context context, String path, SurfaceView sv, Resources resources){
         this.context = context;
-        movie_period_time = ms;
+
         sava_path = path;
         surfaceView = sv;
         surfaceHolder = surfaceView.getHolder();
@@ -106,7 +106,7 @@ public class VideoRecorder implements SurfaceHolder.Callback {
             camcorderProfile.videoCodec = MediaRecorder.VideoEncoder.MPEG_4_SP;
             mrec.setProfile(camcorderProfile);
         */
-            // TODO:他端末での対応
+            // TODO:他端末での対応 corresponding each device
             mrec.setAudioSource(MediaRecorder.AudioSource.CAMCORDER);
             mrec.setVideoSource(MediaRecorder.VideoSource.CAMERA);
             CamcorderProfile camcorderProfile = CamcorderProfile.get(CamcorderProfile.QUALITY_480P);
@@ -165,8 +165,8 @@ public class VideoRecorder implements SurfaceHolder.Callback {
         }
         int origin_movie_time = getDuration(origin_file);
         File edit_file = new File(edit_filename); //修正後ファイル
-        if (origin_movie_time > movie_period_time) {
-            int cut_start_time = (origin_movie_time - movie_period_time) / 1000 * 1000 - 500;
+        if (origin_movie_time > VideoActivity.movie_time) {
+            int cut_start_time = (origin_movie_time - VideoActivity.movie_time) / 1000 * 1000 - 500;
             //Toast.makeText(context, "movie_time:" + movie_time + "\ncut_start_time:" + cut_start_time, Toast.LENGTH_LONG).show();
             if (cut_start_time <= 0) {
                 //   Toast.makeText(context, "ノーカット", Toast.LENGTH_LONG).show();
@@ -182,7 +182,7 @@ public class VideoRecorder implements SurfaceHolder.Callback {
             }
             //Toast.makeText(context, edit_file.getAbsolutePath().toString(), Toast.LENGTH_LONG).show();
             // Toast.makeText(context, getDuration(new File(after_edit_file.getAbsolutePath().toString())), Toast.LENGTH_LONG).show();
-        } else if (origin_movie_time < movie_period_time) {
+        } else if (origin_movie_time < VideoActivity.movie_time) {
             //   Toast.makeText(context, "within 5000ms\n"+editedMovies.size(), Toast.LENGTH_SHORT).show();
             if (editedMovies.size() >= 1) { //editedMovies.get(editedMovies.size() - 1).exists()
                 try {

@@ -4,11 +4,13 @@ import android.app.Activity;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
+import android.content.Intent;
 import android.graphics.PixelFormat;
 import android.hardware.Camera;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -17,13 +19,11 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
@@ -42,10 +42,11 @@ public class VideoActivity extends Activity {
     private Camera mCamera;
     private final static String TAG = "VideoActivity";
     private Context context;
-    private int movie_time = 5000;
+    public static int movie_time = 5000;
 
-    //    private String sava_path  = "/storage/emulated/legacy/WithManager/";
-    private String sava_dir = "sdcard/WithManager/";
+    private String sava_dir  = "/storage/emulated/legacy/WithManager/";
+//    private String sava_dir = "sdcard/WithManager/";
+
     private int shoot_point;
     private int is_success; //True:1, False:0
 
@@ -79,6 +80,9 @@ public class VideoActivity extends Activity {
     SimpleDateFormat sdf;
     String dateTime;
 
+    public static int our_member_num = 18;
+    public static int opp_member_num = 18;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,15 +90,15 @@ public class VideoActivity extends Activity {
 
         context = this;
 
-
         mDbHelper = new EventDbHelper(context);
         db = mDbHelper.getWritableDatabase();
         mDbHelper.onUpgrade(db, EventDbHelper.DATABASE_VERSION, EventDbHelper.DATABASE_VERSION);
         //mDbHelper.createTableGame(db);
 
+
         //main surfaceview
         SurfaceView main_surface = (SurfaceView) findViewById(R.id.main_surface);
-        mRecorder = new VideoRecorder(this, movie_time, sava_dir, main_surface, getResources());
+        mRecorder = new VideoRecorder(context, sava_dir, main_surface, getResources());
 
         //sub surfaceview
         mOverLaySurfaceView = (SurfaceView) findViewById(R.id.sub_surface);
@@ -142,27 +146,7 @@ public class VideoActivity extends Activity {
             }
         });
 
-
-
-        //Team mTeam1 = new Team(context, (ListView) findViewById(R.id.our_team_list));
-        //Team mTeam2 = new Team(context, (ListView) findViewById(R.id.opposing_team_list));
-        mEventLogger = new EventLogger(context,(ListView) findViewById(R.id.event_log));
-
-
-        
-        our_team = (ListView)findViewById(R.id.our_team_list);
-        ArrayAdapter<String> adapter_our = new ArrayAdapter<String>(context,
-                android.R.layout.simple_list_item_1, Team.members);
-        our_team.setAdapter(adapter_our);
-
-        opt_team = (ListView)findViewById(R.id.opposing_team_list);
-        ArrayAdapter<String> adapter_opp = new ArrayAdapter<String>(context,
-                android.R.layout.simple_list_item_1, Team.members);
-        opt_team.setAdapter(adapter_opp);
-
-        our_team.setOnItemClickListener(adptSelectListener);
-        opt_team.setOnItemClickListener(adptSelectListener);
-
+        mEventLogger = new EventLogger(context, (ListView) findViewById(R.id.event_log));
 
         shoot_success1p = (Button)findViewById(R.id.shoot_success_1p);
         shoot_success1p.setOnClickListener(new View.OnClickListener() {
@@ -257,28 +241,39 @@ public class VideoActivity extends Activity {
         });
 
         is_scoresheetview = false;
-        findViewById(R.id.chenge_scoresheet_and_eventlog).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.btn_chenge_scoresheet_and_eventlog).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 LinearLayout menu = (LinearLayout) findViewById(R.id.menu);
-                if(!is_scoresheetview) {
+                if (!is_scoresheetview) {
                     LinearLayout eventlog = (LinearLayout) findViewById(R.id.menu_log);
                     menu.removeView(eventlog);
                     getLayoutInflater().inflate(R.layout.score_sheet, menu);
 
                     setScoresheet();
                     is_scoresheetview = true;
-                }else{
+                } else {
                     LinearLayout scoresheet = (LinearLayout) findViewById(R.id.scoresheet);
                     menu.removeView(scoresheet);
                     getLayoutInflater().inflate(R.layout.event_log, menu);
-                    mEventLogger = new EventLogger(context,(ListView) findViewById(R.id.event_log));
+                    mEventLogger = new EventLogger(context, (ListView) findViewById(R.id.event_log));
                     is_scoresheetview = false;
                 }
             }
         });
-
+        findViewById(R.id.btn_setting).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    Intent itt_setting = new Intent(context, SettingOfGame.class);
+                    startActivity(itt_setting);
+                }catch (Exception e) {
+                    Log.v("IntentErr:", e.getMessage() + "," + e);
+                }
+            }
+        });
     }
+
     private void setScoresheet(){
         ListView listView_our, listView_opt;
         ItemArrayAdapter adpt_our, adpt_opt;
@@ -384,9 +379,17 @@ public class VideoActivity extends Activity {
         }
     }
     @Override
-    public void onResume(){ //アクティビティ再び表示されたとき
-        mRecorder.resume();
+    public void onResume(){
         super.onResume();
+        mRecorder.resume();
+
+        our_team = (ListView) findViewById(R.id.our_team_list);
+        Team mTeam1 = new Team(context, our_team, our_member_num);
+        opt_team = (ListView) findViewById(R.id.opposing_team_list);
+        Team mTeam2 = new Team(context, opt_team , opp_member_num);
+
+        our_team.setOnItemClickListener(adptSelectListener);
+        opt_team.setOnItemClickListener(adptSelectListener);
     }
     @Override
     protected void onPause() { //別アクティビティ起動時
