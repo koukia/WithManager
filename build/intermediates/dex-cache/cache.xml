@@ -2,88 +2,74 @@
 <items version="2" >
 
     <item
-        jar="/home/kohki/repositories/Forked/WithManager/app/build/intermediates/exploded-aar/com.android.support/design/24.1.0/jars/classes.jar"
-        jumboMode="true"
-        revision="24.0.1"
-        sha1="8620c018c108eed501bbdb85324b79136373ea44">
-        <dex dex="/home/kohki/repositories/Forked/WithManager/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-design-24.1.0_64b799bd1dce32c0ad5e90bbe49f75a2c16299aa/classes.dex" />
-    </item>
-    <item
-        jar="/home/kohki/.gradle/caches/modules-2/files-2.1/com.github.PhilJay/MPAndroidChart/v2.1.6/b036abbb61656165da99cf44898e4b9123687e65/MPAndroidChart-v2.1.6.jar"
-        jumboMode="true"
-        revision="24.0.1"
-        sha1="b036abbb61656165da99cf44898e4b9123687e65">
-        <dex dex="/home/kohki/repositories/Forked/WithManager/app/build/intermediates/transforms/dex/debug/folders/1000/10/MPAndroidChart-v2.1.6_db044f1707bd5527f6f7bd517b428b02cf9d61a8/classes.dex" />
-    </item>
-    <item
-        jar="/home/kohki/repositories/Forked/WithManager/app/build/intermediates/exploded-aar/com.android.support/support-vector-drawable/24.1.1/jars/classes.jar"
-        jumboMode="true"
-        revision="24.0.1"
-        sha1="f62e763609f65e47dc6c498760a4accf02776788">
-        <dex dex="/home/kohki/repositories/Forked/WithManager/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-vector-drawable-24.1.1_f78522f21f29cdb1a62ed62453a55a7a97583ba2/classes.dex" />
-    </item>
-    <item
-        jar="/home/kohki/.gradle/caches/modules-2/files-2.1/com.android.support/support-annotations/24.1.1/3af19f153122737b372622fa6c81dd11a1c6b999/support-annotations-24.1.1.jar"
-        jumboMode="true"
-        revision="24.0.1"
-        sha1="3af19f153122737b372622fa6c81dd11a1c6b999">
-        <dex dex="/home/kohki/repositories/Forked/WithManager/app/build/intermediates/transforms/dex/debug/folders/1000/10/support-annotations-24.1.1_3be131344c42f73b5a95068aefd473562b905a92/classes.dex" />
-    </item>
-    <item
-        jar="/home/kohki/repositories/Forked/WithManager/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/24.1.1/jars/classes.jar"
-        jumboMode="true"
-        revision="24.0.1"
-        sha1="1256c10604bb098490eab070d76754ac5ceab35c">
-        <dex dex="/home/kohki/repositories/Forked/WithManager/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-appcompat-v7-24.1.1_6bafffc4880d1438dd9359269df2c8666ec64919/classes.dex" />
-    </item>
-    <item
-        jar="/home/kohki/repositories/Forked/WithManager/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
-        jumboMode="true"
-        revision="24.0.1"
-        sha1="160113ad25a7bfdefd4b702cfa81729bc2eb9c4c">
-        <dex dex="/home/kohki/repositories/Forked/WithManager/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run_4719b5dfc0c4af6d82545d6a486dc4d520f2af3a/classes.dex" />
-    </item>
-    <item
         jar="/home/kohki/repositories/Forked/WithManager/app/libs/isoparser-1.1.9.jar"
-        jumboMode="true"
+        jumboMode="false"
         revision="24.0.1"
         sha1="a6a2d252e574b8f942298fbb560b7e14b9d46d8a">
-        <dex dex="/home/kohki/repositories/Forked/WithManager/app/build/intermediates/transforms/dex/debug/folders/1000/2/isoparser-1.1.9_5c2b1f1447394039cb494e0bffed9b96765d7216/classes.dex" />
+        <dex dex="/home/kohki/repositories/Forked/WithManager/app/build/intermediates/pre-dexed/debug/isoparser-1.1.9_5c2b1f1447394039cb494e0bffed9b96765d7216.jar" />
+    </item>
+    <item
+        jar="/home/kohki/repositories/Forked/WithManager/app/build/intermediates/exploded-aar/com.android.support/design/24.1.0/jars/classes.jar"
+        jumboMode="false"
+        revision="24.0.1"
+        sha1="8620c018c108eed501bbdb85324b79136373ea44">
+        <dex dex="/home/kohki/repositories/Forked/WithManager/app/build/intermediates/pre-dexed/debug/com.android.support-design-24.1.0_64b799bd1dce32c0ad5e90bbe49f75a2c16299aa.jar" />
     </item>
     <item
         jar="/home/kohki/repositories/Forked/WithManager/app/build/intermediates/exploded-aar/com.android.support/recyclerview-v7/24.1.0/jars/classes.jar"
-        jumboMode="true"
+        jumboMode="false"
         revision="24.0.1"
         sha1="4157816e81f0820983957687e9a6f4c1cea0f1e5">
-        <dex dex="/home/kohki/repositories/Forked/WithManager/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-recyclerview-v7-24.1.0_db58ce164641078ceb3429a66bebb98e58b75056/classes.dex" />
-    </item>
-    <item
-        jar="/home/kohki/repositories/Forked/WithManager/app/build/intermediates/exploded-aar/com.android.support/support-v4/24.1.1/jars/libs/internal_impl-24.1.1.jar"
-        jumboMode="true"
-        revision="24.0.1"
-        sha1="f78c2f395cb096f9dc1dc07e729922b8fcd3c4f5">
-        <dex dex="/home/kohki/repositories/Forked/WithManager/app/build/intermediates/transforms/dex/debug/folders/1000/10/internal_impl-24.1.1_e5f24376007f9202f4e6b5a673b2526e76d2a1e5/classes.dex" />
+        <dex dex="/home/kohki/repositories/Forked/WithManager/app/build/intermediates/pre-dexed/debug/com.android.support-recyclerview-v7-24.1.0_db58ce164641078ceb3429a66bebb98e58b75056.jar" />
     </item>
     <item
         jar="/home/kohki/repositories/Forked/WithManager/app/build/intermediates/exploded-aar/com.android.support/support-v4/24.1.1/jars/classes.jar"
-        jumboMode="true"
+        jumboMode="false"
         revision="24.0.1"
         sha1="6d7d803871e3203465f71a163e7af104f807b446">
-        <dex dex="/home/kohki/repositories/Forked/WithManager/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-v4-24.1.1_7f6a7638d657454de2dd8059e6d123bbf686d4c8/classes.dex" />
+        <dex dex="/home/kohki/repositories/Forked/WithManager/app/build/intermediates/pre-dexed/debug/com.android.support-support-v4-24.1.1_7f6a7638d657454de2dd8059e6d123bbf686d4c8.jar" />
+    </item>
+    <item
+        jar="/home/kohki/repositories/Forked/WithManager/app/build/intermediates/exploded-aar/com.android.support/support-vector-drawable/24.1.1/jars/classes.jar"
+        jumboMode="false"
+        revision="24.0.1"
+        sha1="f62e763609f65e47dc6c498760a4accf02776788">
+        <dex dex="/home/kohki/repositories/Forked/WithManager/app/build/intermediates/pre-dexed/debug/com.android.support-support-vector-drawable-24.1.1_f78522f21f29cdb1a62ed62453a55a7a97583ba2.jar" />
+    </item>
+    <item
+        jar="/home/kohki/.gradle/caches/modules-2/files-2.1/com.android.support/support-annotations/24.1.1/3af19f153122737b372622fa6c81dd11a1c6b999/support-annotations-24.1.1.jar"
+        jumboMode="false"
+        revision="24.0.1"
+        sha1="3af19f153122737b372622fa6c81dd11a1c6b999">
+        <dex dex="/home/kohki/repositories/Forked/WithManager/app/build/intermediates/pre-dexed/debug/support-annotations-24.1.1_3be131344c42f73b5a95068aefd473562b905a92.jar" />
+    </item>
+    <item
+        jar="/home/kohki/repositories/Forked/WithManager/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/24.1.1/jars/classes.jar"
+        jumboMode="false"
+        revision="24.0.1"
+        sha1="1256c10604bb098490eab070d76754ac5ceab35c">
+        <dex dex="/home/kohki/repositories/Forked/WithManager/app/build/intermediates/pre-dexed/debug/com.android.support-appcompat-v7-24.1.1_6bafffc4880d1438dd9359269df2c8666ec64919.jar" />
+    </item>
+    <item
+        jar="/home/kohki/repositories/Forked/WithManager/app/build/intermediates/exploded-aar/com.android.support/support-v4/24.1.1/jars/libs/internal_impl-24.1.1.jar"
+        jumboMode="false"
+        revision="24.0.1"
+        sha1="f78c2f395cb096f9dc1dc07e729922b8fcd3c4f5">
+        <dex dex="/home/kohki/repositories/Forked/WithManager/app/build/intermediates/pre-dexed/debug/internal_impl-24.1.1_e5f24376007f9202f4e6b5a673b2526e76d2a1e5.jar" />
+    </item>
+    <item
+        jar="/home/kohki/.gradle/caches/modules-2/files-2.1/com.github.PhilJay/MPAndroidChart/v2.1.6/b036abbb61656165da99cf44898e4b9123687e65/MPAndroidChart-v2.1.6.jar"
+        jumboMode="false"
+        revision="24.0.1"
+        sha1="b036abbb61656165da99cf44898e4b9123687e65">
+        <dex dex="/home/kohki/repositories/Forked/WithManager/app/build/intermediates/pre-dexed/debug/MPAndroidChart-v2.1.6_db044f1707bd5527f6f7bd517b428b02cf9d61a8.jar" />
     </item>
     <item
         jar="/home/kohki/repositories/Forked/WithManager/app/build/intermediates/exploded-aar/com.android.support/animated-vector-drawable/24.1.1/jars/classes.jar"
-        jumboMode="true"
+        jumboMode="false"
         revision="24.0.1"
         sha1="c936c1bd42f0c018c18920c7bec619ef056b24f8">
-        <dex dex="/home/kohki/repositories/Forked/WithManager/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-animated-vector-drawable-24.1.1_9bd7a857cbdfeb9698c7118e46948582d7600e86/classes.dex" />
-    </item>
-    <item
-        jar="/home/kohki/repositories/Forked/WithManager/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
-        jumboMode="true"
-        revision="24.0.1"
-        sha1="31a82b04be3548308d0829787e4713ce6bef5667">
-        <dex dex="/home/kohki/repositories/Forked/WithManager/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run-bootstrap_d9b2bcd71f1909ce96fbdf1e3a696b0db130ebc8/classes.dex" />
+        <dex dex="/home/kohki/repositories/Forked/WithManager/app/build/intermediates/pre-dexed/debug/com.android.support-animated-vector-drawable-24.1.1_9bd7a857cbdfeb9698c7118e46948582d7600e86.jar" />
     </item>
 
 </items>

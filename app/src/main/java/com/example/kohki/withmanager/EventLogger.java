@@ -70,19 +70,35 @@ public class EventLogger {
             String[] items = item.split(",");
             String movie_name = items[items.length-1];
             Toast.makeText(context,movie_name+"を再生",Toast.LENGTH_SHORT).show();
-            VideoActivity.mOverLaySurfaceView.setVisibility(SurfaceView.VISIBLE);
-            try {
-                if (VideoActivity.mPreviewCallback.mMediaPlayer != null) {
-                    VideoActivity.mPreviewCallback.mMediaPlayer.release();
-                    VideoActivity.mPreviewCallback.mMediaPlayer = null;
-                }
-                VideoActivity.mPreviewCallback.palyVideo(movie_name);
-                VideoActivity.mPreviewCallback.mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                    @Override
-                    public void onCompletion(MediaPlayer mp) {
-                        VideoActivity.mOverLaySurfaceView.setVisibility(SurfaceView.INVISIBLE);
+
+            try { //スタンドアローンかBluetooth通信中か
+                if(VideoActivity.mOverLaySurfaceView != null) {
+                    VideoActivity.mOverLaySurfaceView.setVisibility(SurfaceView.VISIBLE);
+                    if (VideoActivity.mPreviewCallback.mMediaPlayer != null) {
+                        VideoActivity.mPreviewCallback.mMediaPlayer.release();
+                        VideoActivity.mPreviewCallback.mMediaPlayer = null;
                     }
-                });
+                    VideoActivity.mPreviewCallback.palyVideo(movie_name);
+                    VideoActivity.mPreviewCallback.mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                        @Override
+                        public void onCompletion(MediaPlayer mp) {
+                            VideoActivity.mOverLaySurfaceView.setVisibility(SurfaceView.INVISIBLE);
+                        }
+                    });
+                }else if(SynchroVideoActivity.mOverLaySurfaceView != null){
+                    SynchroVideoActivity.mOverLaySurfaceView.setVisibility(SurfaceView.VISIBLE);
+                    if (SynchroVideoActivity.mPreviewCallback.mMediaPlayer != null) {
+                        SynchroVideoActivity.mPreviewCallback.mMediaPlayer.release();
+                        SynchroVideoActivity.mPreviewCallback.mMediaPlayer = null;
+                    }
+                    SynchroVideoActivity.mPreviewCallback.palyVideo(movie_name);
+                    SynchroVideoActivity.mPreviewCallback.mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                        @Override
+                        public void onCompletion(MediaPlayer mp) {
+                            SynchroVideoActivity.mOverLaySurfaceView.setVisibility(SurfaceView.INVISIBLE);
+                        }
+                    });
+                }
             } catch (NullPointerException e) {
                 Toast.makeText(context, "ぬるぽ", Toast.LENGTH_LONG).show();
                 return false;
@@ -93,19 +109,26 @@ public class EventLogger {
 
      public void addEvent(int team, int number, int shoot_point, int is_success, String event_name, String movie_name){
         String log = "addEvent() err";
-        switch (event_name){
-            case "shoot":
-                log = team+"チーム"+number+"番"+"\nE:"+shoot_point+"点"+is_success+"\nMovie:"+movie_name;
-                break;
-            case "foul":
-                log = team+"チーム"+number+"番"+"\nE:"+event_name+"\nMovie:"+movie_name;
-                break;
-            case "traveling":
-                log = team+"チーム"+number+"番"+"\nE:"+event_name+"\nMovie:"+movie_name;
-            default:
-                break;
-        }
-        Toast.makeText(context, log, Toast.LENGTH_SHORT).show();
+         switch (event_name){
+             case "shoot":
+                 log = team+"チーム"+number+"番"+"\nE:"+shoot_point+"点"+is_success+"\nMovie:"+movie_name;
+                 break;
+             case "foul":
+                 log = team+"チーム"+number+"番"+"\nE:"+event_name+"\nMovie:"+movie_name;
+                 break;
+             case "traveling":
+                 log = team+"チーム"+number+"番"+"\nE:"+event_name+"\nMovie:"+movie_name;
+                 break;
+             case "steal":
+                 log = team+"チーム"+number+"番"+"\nE:"+event_name+"\nMovie:"+movie_name;
+                 break;
+             case "rebound":
+                 log = team+"チーム"+number+"番"+"\nE:"+event_name+"\nMovie:"+movie_name;
+                 break;
+             default:
+                 break;
+         }
+         Toast.makeText(context, log, Toast.LENGTH_SHORT).show();
 
         /* DB insert*/
         ContentValues values = new ContentValues();
@@ -122,6 +145,21 @@ public class EventLogger {
                 EventContract.Event.COLUMN_NAME_NULLABLE,
                 values);
         updateEventLog();
+    }
+
+    //Startが押された時に、ゲームの開始時刻を保存しておく
+    public void addGameTime(String dateTime){
+
+        ContentValues values = new ContentValues();
+        values.put(EventContract.Game.COL_DATE, dateTime);
+
+        System.out.println(dateTime + "を追加しま");
+        db.insert(
+                EventContract.Game.TABLE_NAME,
+                null,
+                values
+        );
+        System.out.println("した");
     }
 
     private void setDB(){

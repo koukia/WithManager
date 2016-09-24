@@ -18,6 +18,7 @@ public class Team {
     private static ListView team_lv;
     public static ArrayList<String> members;
     public static int who_is_actor[] = {0, 0};
+    public static String event_name = null;
 
     public Team(Context context, ListView team_list, int mem_num) {
         this.context_ = context;
@@ -39,7 +40,6 @@ public class Team {
                 String item = (String) listView.getItemAtPosition(position);
 
                 String id_name = context_.getResources().getResourceEntryName(listView.getId());
-                view.setBackgroundColor(0x550055);
 
                 switch (id_name){
                     case "our_team_list":
@@ -70,5 +70,6 @@ public class Team {
     public static void resetWhoIsAct(){
         who_is_actor[0] = -1;
         who_is_actor[1] = -1;
+        event_name = null;
     }
 }

@@ -17,7 +17,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/our_team_list"
-            android:listSelector="@drawable/p1_listselector"
+            android:listSelector="@drawable/p2_listselector"
             android:layout_weight="30"
             android:background="#ffffff" />
 
@@ -177,8 +177,27 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_gravity="center_vertical|bottom|right">
+                android:layout_gravity="center_vertical|right">
 
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="3P(成功)"
+                    android:id="@+id/shoot_success_3p"
+                    android:enabled="true"
+                    android:clickable="false"
+                    android:textColor="#0033ff"
+                    />
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="3P(失敗)"
+                    android:id="@+id/shoot_failed_3p"
+                    android:enabled="true"
+                    android:clickable="false"
+                    android:textColor="#0033ff"
+                    />
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -196,29 +215,19 @@
                     android:clickable="false"
                     android:textColor="#0033ff" />
 
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="ファウル"
-                    android:id="@+id/foul"
-                    android:enabled="true"
-                    android:clickable="false"
-                    android:textColor="#0033ff"
-                    />
-
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_gravity="top|center_vertical|right">
+                android:layout_gravity="left|center_vertical">
 
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="3P(成功)"
-                    android:id="@+id/shoot_success_3p"
+                    android:text="1P(成功)"
+                    android:id="@+id/shoot_success_1p"
                     android:enabled="true"
                     android:clickable="false"
                     android:textColor="#0033ff"
@@ -226,8 +235,17 @@
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="3P(失敗)"
-                    android:id="@+id/shoot_failed_3p"
+                    android:text="1P(失敗)"
+                    android:id="@+id/shoot_failed_1p"
+                    android:enabled="true"
+                    android:clickable="false"
+                    android:textColor="#0033ff"
+                    />
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ファウル"
+                    android:id="@+id/foul"
                     android:enabled="true"
                     android:clickable="false"
                     android:textColor="#0033ff"
@@ -240,9 +258,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/opposing_team_list"
-            android:listSelector="@drawable/p2_listselector"
+            android:listSelector="@drawable/p1_listselector"
             android:layout_weight="30"
-            android:background="#ffffff"
+            android:background="#0000FF"
             android:textFilterEnabled="false" />
     </LinearLayout>
 
