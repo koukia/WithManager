@@ -5,6 +5,12 @@
       <config />
     </shared>
     <layouts>
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/layout/activity_game_setting.xml">
+        <config>
+          <state>Landscape</state>
+          <theme>@style/AppTheme</theme>
+        </config>
+      </layout>
       <layout url="file://$PROJECT_DIR$/app/src/main/res/layout/activity_record_standalone.xml">
         <config>
           <state>Landscape</state>
@@ -30,51 +36,33 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5294730f-7dd5-4b50-9834-436cc8fc460e" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/ico_btn_change_scoresheet.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/ico_btn_minus.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/ico_btn_plus.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/ico_btn_setting.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/ico_foul_black.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/ico_foul_blue.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/ico_foul_green.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/ico_foul_red.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/ico_foul_white.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/ico_foul_yellow.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/ico_rebound_black.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/ico_rebound_blue.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/ico_rebound_green.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/ico_rebound_red.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/ico_rebound_white.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/ico_rebound_yellow.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/ico_shootF_black.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/ico_shootF_blue.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/ico_shootF_green.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/ico_shootF_red.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/ico_shootF_white.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/ico_shootF_yellow.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/ico_shootS_black.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/ico_shootS_blue.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/ico_shootS_green.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/ico_shootS_red.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/ico_shootS_white.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/ico_shootS_yellow.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/ico_steal_black.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/ico_steal_blue.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/ico_steal_green.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/ico_steal_red.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/ico_steal_yellow.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/kohki/withmanager/ResultGame.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/kohki/withmanager/SettingOfGameActivity.java" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/src/main/java/com/example/kohki/withmanager/RecordEvery5s.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/src/main/java/com/example/kohki/withmanager/Result_game.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/src/main/java/com/example/kohki/withmanager/SettingOfGame.java" afterPath="" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/ico_steal_white.png" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/app/src/main/res/drawable/ico_shootF_black.png" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/ico_shoot_failed_black.png" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/app/src/main/res/drawable/ico_shootF_blue.png" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/ico_shoot_failed_blue.png" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/app/src/main/res/drawable/ico_shootF_green.png" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/ico_shoot_failed_green.png" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/app/src/main/res/drawable/ico_shootF_red.png" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/ico_shoot_failed_red.png" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/app/src/main/res/drawable/ico_shootF_white.png" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/ico_shoot_failed_white.png" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/app/src/main/res/drawable/ico_shootF_yellow.png" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/ico_shoot_failed_yellow.png" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/app/src/main/res/drawable/ico_shootS_black.png" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/ico_shoot_success_black.png" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/app/src/main/res/drawable/ico_shootS_blue.png" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/ico_shoot_success_blue.png" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/app/src/main/res/drawable/ico_shootS_green.png" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/ico_shoot_success_green.png" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/app/src/main/res/drawable/ico_shootS_red.png" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/ico_shoot_success_red.png" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/app/src/main/res/drawable/ico_shootS_white.png" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/ico_shoot_success_white.png" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/app/src/main/res/drawable/ico_shootS_yellow.png" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/ico_shoot_success_yellow.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/drawable/ico_btn_change_scoresheet.png" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/ico_btn_change_scoresheet.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/drawable/ico_btn_minus.png" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/ico_btn_minus.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/drawable/ico_btn_plus.png" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/ico_btn_plus.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/drawable/ico_btn_setting.png" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/ico_btn_setting.png" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/app.iml" afterPath="$PROJECT_DIR$/app/app.iml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" afterPath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/example/kohki/withmanager/CardListAdapter.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/kohki/withmanager/CardListAdapter.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/example/kohki/withmanager/EventLogger.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/kohki/withmanager/EventLogger.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/example/kohki/withmanager/SubGameActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/kohki/withmanager/SubGameActivity.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/example/kohki/withmanager/VideoActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/kohki/withmanager/VideoActivity.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_game_setting.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_game_setting.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_record_standalone.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_record_standalone.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/local.properties" afterPath="$PROJECT_DIR$/local.properties" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/dex-cache/cache.xml" afterPath="$PROJECT_DIR$/build/intermediates/dex-cache/cache.xml" />
     </list>
     <ignored path="WithManager.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -95,21 +83,54 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="525">
-      <file leaf-file-name="EventLogger.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/kohki/withmanager/EventLogger.java">
+      <file leaf-file-name="VideoActivity.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/kohki/withmanager/VideoActivity.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="153" column="0" selection-start-line="153" selection-start-column="0" selection-end-line="153" selection-end-column="0" />
+              <caret line="274" column="47" selection-start-line="274" selection-start-column="47" selection-end-line="274" selection-end-column="47" />
+              <folding>
+                <element signature="method#replay#0;class#VideoActivity#0" expanded="false" />
+                <element signature="class#FileSort#0;class#VideoActivity#0" expanded="false" />
+                <element signature="e#15982#16059#0" expanded="false" />
+                <element signature="e#16257#16334#0" expanded="false" />
+                <element signature="e#17892#17969#0" expanded="false" />
+                <element signature="e#18167#18244#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="CardListAdapter.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/kohki/withmanager/CardListAdapter.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="101" column="31" selection-start-line="101" selection-start-column="31" selection-end-line="101" selection-end-column="31" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="CardListAdapter.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/kohki/withmanager/CardListAdapter.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.45839018">
-              <caret line="67" column="21" selection-start-line="67" selection-start-column="21" selection-end-line="67" selection-end-column="21" />
+      <file leaf-file-name="activity_game_setting.xml" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_game_setting.xml">
+          <provider selected="true" editor-type-id="android-designer">
+            <state />
+          </provider>
+          <provider editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-6.4848485">
+              <caret line="195" column="51" selection-start-line="195" selection-start-column="51" selection-end-line="195" selection-end-column="51" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="activity_record_standalone.xml" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_record_standalone.xml">
+          <provider selected="true" editor-type-id="android-designer">
+            <state />
+          </provider>
+          <provider editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="40" column="43" selection-start-line="40" selection-start-column="43" selection-end-line="40" selection-end-column="43" />
               <folding />
             </state>
           </provider>
@@ -1746,26 +1767,27 @@
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/kohki/withmanager/EventContract.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/drawable/p1_listselector.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/kohki/withmanager/VideoRecorder.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/example/kohki/withmanager/EventLogger.java" />
-        <option value="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" />
         <option value="$PROJECT_DIR$/app/app.iml" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_sub_game.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/kohki/withmanager/Team.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_synchro_video.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/example/kohki/withmanager/VideoActivity.java" />
-        <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_game_setting.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/kohki/withmanager/SynchroVideoActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/kohki/withmanager/ResultGame.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/kohki/withmanager/SettingOfGameActivity.java" />
-        <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_record_standalone.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/kohki/withmanager/EventLogger.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/kohki/withmanager/SubGameActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/kohki/withmanager/VideoActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/kohki/withmanager/CardListAdapter.java" />
+        <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_game_setting.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_record_standalone.xml" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="1444" />
-    <option name="y" value="110" />
-    <option name="width" value="1549" />
+    <option name="x" value="2391" />
+    <option name="y" value="114" />
+    <option name="width" value="1140" />
     <option name="height" value="970" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
@@ -1793,7 +1815,17 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scratches" />
+      <pane id="Scope" />
+      <pane id="AndroidView">
+        <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="WithManager" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -1985,17 +2017,7 @@
         </subPane>
       </pane>
       <pane id="PackagesPane" />
-      <pane id="AndroidView">
-        <subPane>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="WithManager" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-      </pane>
-      <pane id="Scope" />
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -2005,8 +2027,10 @@
     <property name="android.project.structure.last.selected" value="app" />
     <property name="android.project.structure.proportion" value="0.15" />
     <property name="device.picker.selection" value="2291a2ef" />
-    <property name="UI_DESIGNER_EDITOR_MODE.UIDesignerToolWindowManager2.WIDTH" value="477" />
+    <property name="UI_DESIGNER_EDITOR_MODE.UIDesignerToolWindowManager2.WIDTH" value="481" />
     <property name="last_opened_file_path" value="$USER_HOME$/WithManager" />
+    <property name="UI_DESIGNER_EDITOR_MODE.PaletteToolWindowManager.WIDTH" value="197" />
+    <property name="UI_DESIGNER_EDITOR_MODE.UIDesignerToolWindowManager2.SHOW" value="true" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -2290,16 +2314,16 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="1444" y="110" width="1549" height="970" extended-state="0" />
+    <frame x="2391" y="114" width="1140" height="970" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3287841" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.13636364" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Build Variants" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Android Monitor" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3522316" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Android Monitor" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.4085603" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -2308,7 +2332,8 @@
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3460297" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.29210526" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3293124" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Android Model" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
@@ -2320,7 +2345,6 @@
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
   <component name="Vcs.Log.UiProperties">
@@ -2341,22 +2365,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/kohki/withmanager/Team.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="22" column="42" selection-start-line="22" selection-start-column="42" selection-end-line="22" selection-end-column="42" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/kohki/withmanager/EventLogger.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="153" column="0" selection-start-line="153" selection-start-column="0" selection-end-line="153" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/kohki/withmanager/SynchroVideoActivity.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -2392,10 +2400,10 @@
           <folding>
             <element signature="method#replay#0;class#VideoActivity#0" expanded="false" />
             <element signature="class#FileSort#0;class#VideoActivity#0" expanded="false" />
-            <element signature="e#15974#16051#0" expanded="false" />
-            <element signature="e#16249#16326#0" expanded="false" />
-            <element signature="e#17884#17961#0" expanded="false" />
-            <element signature="e#18159#18236#0" expanded="false" />
+            <element signature="e#15982#16059#0" expanded="false" />
+            <element signature="e#16257#16334#0" expanded="false" />
+            <element signature="e#17892#17969#0" expanded="false" />
+            <element signature="e#18167#18244#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -2471,10 +2479,10 @@
           <folding>
             <element signature="method#replay#0;class#VideoActivity#0" expanded="false" />
             <element signature="class#FileSort#0;class#VideoActivity#0" expanded="false" />
-            <element signature="e#15974#16051#0" expanded="false" />
-            <element signature="e#16249#16326#0" expanded="false" />
-            <element signature="e#17884#17961#0" expanded="false" />
-            <element signature="e#18159#18236#0" expanded="false" />
+            <element signature="e#15982#16059#0" expanded="false" />
+            <element signature="e#16257#16334#0" expanded="false" />
+            <element signature="e#17892#17969#0" expanded="false" />
+            <element signature="e#18167#18244#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -2517,10 +2525,10 @@
           <folding>
             <element signature="method#replay#0;class#VideoActivity#0" expanded="false" />
             <element signature="class#FileSort#0;class#VideoActivity#0" expanded="false" />
-            <element signature="e#15974#16051#0" expanded="false" />
-            <element signature="e#16249#16326#0" expanded="false" />
-            <element signature="e#17884#17961#0" expanded="false" />
-            <element signature="e#18159#18236#0" expanded="false" />
+            <element signature="e#15982#16059#0" expanded="false" />
+            <element signature="e#16257#16334#0" expanded="false" />
+            <element signature="e#17892#17969#0" expanded="false" />
+            <element signature="e#18167#18244#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -2574,14 +2582,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/AndroidManifest.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="2.6614785">
-          <caret line="57" column="44" selection-start-line="57" selection-start-column="44" selection-end-line="57" selection-end-column="44" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/app.iml">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-1.5886655">
@@ -2618,17 +2618,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-2.8301888">
           <caret line="46" column="48" selection-start-line="46" selection-start-column="48" selection-end-line="46" selection-end-column="48" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_game_setting.xml">
-      <provider selected="true" editor-type-id="android-designer">
-        <state />
-      </provider>
-      <provider editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-8.125">
-          <caret line="186" column="24" selection-start-line="186" selection-start-column="24" selection-end-line="186" selection-end-column="24" />
           <folding />
         </state>
       </provider>
@@ -2747,26 +2736,80 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/adapter_list_item_card.xml">
+      <provider selected="true" editor-type-id="android-designer">
+        <state />
+      </provider>
+      <provider editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/kohki/withmanager/EventLogger.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-7.528487">
+          <caret line="64" column="45" selection-start-line="64" selection-start-column="45" selection-end-line="64" selection-end-column="45" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/kohki/withmanager/SubGameActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="232" column="30" selection-start-line="232" selection-start-column="30" selection-end-line="232" selection-end-column="30" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/AndroidManifest.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="50" column="49" selection-start-line="50" selection-start-column="49" selection-end-line="50" selection-end-column="49" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/kohki/withmanager/SettingOfGameActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.33667335">
-          <caret line="24" column="34" selection-start-line="24" selection-start-column="34" selection-end-line="24" selection-end-column="34" />
+        <state vertical-scroll-proportion="0.048">
+          <caret line="30" column="0" selection-start-line="30" selection-start-column="0" selection-end-line="30" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/kohki/withmanager/VideoActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.48096192">
-          <caret line="51" column="33" selection-start-line="51" selection-start-column="33" selection-end-line="51" selection-end-column="33" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="274" column="47" selection-start-line="274" selection-start-column="47" selection-end-line="274" selection-end-column="47" />
           <folding>
             <element signature="method#replay#0;class#VideoActivity#0" expanded="false" />
             <element signature="class#FileSort#0;class#VideoActivity#0" expanded="false" />
-            <element signature="e#15974#16051#0" expanded="false" />
-            <element signature="e#16249#16326#0" expanded="false" />
-            <element signature="e#17884#17961#0" expanded="false" />
-            <element signature="e#18159#18236#0" expanded="false" />
+            <element signature="e#15982#16059#0" expanded="false" />
+            <element signature="e#16257#16334#0" expanded="false" />
+            <element signature="e#17892#17969#0" expanded="false" />
+            <element signature="e#18167#18244#0" expanded="false" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/kohki/withmanager/CardListAdapter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="101" column="31" selection-start-line="101" selection-start-column="31" selection-end-line="101" selection-end-column="31" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_game_setting.xml">
+      <provider selected="true" editor-type-id="android-designer">
+        <state />
+      </provider>
+      <provider editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-6.4848485">
+          <caret line="195" column="51" selection-start-line="195" selection-start-column="51" selection-end-line="195" selection-end-column="51" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -2775,24 +2818,8 @@
         <state />
       </provider>
       <provider editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-9.454545">
-          <caret line="40" column="43" selection-start-line="40" selection-start-column="43" selection-end-line="40" selection-end-column="43" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/kohki/withmanager/EventLogger.java">
-      <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="153" column="0" selection-start-line="153" selection-start-column="0" selection-end-line="153" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/kohki/withmanager/CardListAdapter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.45839018">
-          <caret line="67" column="21" selection-start-line="67" selection-start-column="21" selection-end-line="67" selection-end-column="21" />
+          <caret line="40" column="43" selection-start-line="40" selection-start-column="43" selection-end-line="40" selection-end-column="43" />
           <folding />
         </state>
       </provider>
