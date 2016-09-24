@@ -113,6 +113,7 @@
                 android:layout_width="45dp"
                 android:layout_height="45dp"
                 android:id="@+id/btn_opposingteam_minus"
+                android:src="@android:drawable/ic_media_rew"
                 android:clickable="true" />
 
             <TextView
@@ -133,6 +134,7 @@
                 android:layout_width="45dp"
                 android:layout_height="45dp"
                 android:id="@+id/btn_opposingteam_plus"
+                android:src="@android:drawable/ic_media_ff"
                 android:clickable="true" />
         </LinearLayout>
 
@@ -165,6 +167,7 @@
                 android:layout_width="45dp"
                 android:layout_height="45dp"
                 android:id="@+id/btn_rec_time_minus"
+                android:src="@android:drawable/ic_media_rew"
                 android:clickable="true" />
 
             <TextView
@@ -185,6 +188,7 @@
                 android:layout_width="45dp"
                 android:layout_height="45dp"
                 android:id="@+id/btn_rec_time_plus"
+                android:src="@android:drawable/ic_media_ff"
                 android:clickable="true" />/>
         </LinearLayout>
 

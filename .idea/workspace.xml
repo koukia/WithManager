@@ -32,6 +32,7 @@
     <list default="true" id="5294730f-7dd5-4b50-9834-436cc8fc460e" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/example/kohki/withmanager/VideoActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/kohki/withmanager/VideoActivity.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_game_setting.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_game_setting.xml" />
     </list>
     <ignored path="WithManager.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -52,23 +53,46 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="525">
-      <file leaf-file-name="VideoActivity.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="VideoActivity.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/kohki/withmanager/VideoActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.51417005">
-              <caret line="438" column="12" selection-start-line="438" selection-start-column="12" selection-end-line="438" selection-end-column="12" />
+            <state vertical-scroll-proportion="0.0">
+              <caret line="482" column="30" selection-start-line="482" selection-start-column="30" selection-end-line="482" selection-end-column="30" />
               <folding>
                 <element signature="method#replay#0;class#VideoActivity#0" expanded="false" />
                 <element signature="class#FileSort#0;class#VideoActivity#0" expanded="false" />
-                <element signature="e#15520#17374#0" expanded="true" />
+                <element signature="e#15520#17362#0" expanded="true" />
                 <element signature="e#15974#16051#0" expanded="false" />
                 <element signature="e#16249#16326#0" expanded="false" />
-                <element signature="e#17373#17374#0" expanded="true" />
-                <element signature="e#17442#19285#0" expanded="true" />
-                <element signature="e#17896#17973#0" expanded="false" />
-                <element signature="e#18171#18248#0" expanded="false" />
-                <element signature="e#19284#19285#0" expanded="true" />
+                <element signature="e#17361#17362#0" expanded="true" />
+                <element signature="e#17430#19273#0" expanded="true" />
+                <element signature="e#17884#17961#0" expanded="false" />
+                <element signature="e#18159#18236#0" expanded="false" />
+                <element signature="e#19272#19273#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="SettingOfGame.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/kohki/withmanager/SettingOfGame.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="24" column="13" selection-start-line="24" selection-start-column="13" selection-end-line="24" selection-end-column="13" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="activity_game_setting.xml" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_game_setting.xml">
+          <provider selected="true" editor-type-id="android-designer">
+            <state />
+          </provider>
+          <provider editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-8.125">
+              <caret line="186" column="24" selection-start-line="186" selection-start-column="24" selection-end-line="186" selection-end-column="24" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -1765,6 +1789,7 @@
         <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_synchro_video.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/kohki/withmanager/SynchroVideoActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/kohki/withmanager/VideoActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_game_setting.xml" />
       </list>
     </option>
   </component>
@@ -2325,14 +2350,14 @@
           <folding>
             <element signature="method#replay#0;class#VideoActivity#0" expanded="false" />
             <element signature="class#FileSort#0;class#VideoActivity#0" expanded="false" />
-            <element signature="e#15520#17374#0" expanded="true" />
+            <element signature="e#15520#17362#0" expanded="true" />
             <element signature="e#15974#16051#0" expanded="false" />
             <element signature="e#16249#16326#0" expanded="false" />
-            <element signature="e#17373#17374#0" expanded="true" />
-            <element signature="e#17442#19285#0" expanded="true" />
-            <element signature="e#17896#17973#0" expanded="false" />
-            <element signature="e#18171#18248#0" expanded="false" />
-            <element signature="e#19284#19285#0" expanded="true" />
+            <element signature="e#17361#17362#0" expanded="true" />
+            <element signature="e#17430#19273#0" expanded="true" />
+            <element signature="e#17884#17961#0" expanded="false" />
+            <element signature="e#18159#18236#0" expanded="false" />
+            <element signature="e#19272#19273#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -2376,14 +2401,14 @@
           <folding>
             <element signature="method#replay#0;class#VideoActivity#0" expanded="false" />
             <element signature="class#FileSort#0;class#VideoActivity#0" expanded="false" />
-            <element signature="e#15520#17374#0" expanded="true" />
+            <element signature="e#15520#17362#0" expanded="true" />
             <element signature="e#15974#16051#0" expanded="false" />
             <element signature="e#16249#16326#0" expanded="false" />
-            <element signature="e#17373#17374#0" expanded="true" />
-            <element signature="e#17442#19285#0" expanded="true" />
-            <element signature="e#17896#17973#0" expanded="false" />
-            <element signature="e#18171#18248#0" expanded="false" />
-            <element signature="e#19284#19285#0" expanded="true" />
+            <element signature="e#17361#17362#0" expanded="true" />
+            <element signature="e#17430#19273#0" expanded="true" />
+            <element signature="e#17884#17961#0" expanded="false" />
+            <element signature="e#18159#18236#0" expanded="false" />
+            <element signature="e#19272#19273#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -2535,20 +2560,39 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/kohki/withmanager/VideoActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.51417005">
-          <caret line="438" column="12" selection-start-line="438" selection-start-column="12" selection-end-line="438" selection-end-column="12" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="482" column="30" selection-start-line="482" selection-start-column="30" selection-end-line="482" selection-end-column="30" />
           <folding>
             <element signature="method#replay#0;class#VideoActivity#0" expanded="false" />
             <element signature="class#FileSort#0;class#VideoActivity#0" expanded="false" />
-            <element signature="e#15520#17374#0" expanded="true" />
+            <element signature="e#15520#17362#0" expanded="true" />
             <element signature="e#15974#16051#0" expanded="false" />
             <element signature="e#16249#16326#0" expanded="false" />
-            <element signature="e#17373#17374#0" expanded="true" />
-            <element signature="e#17442#19285#0" expanded="true" />
-            <element signature="e#17896#17973#0" expanded="false" />
-            <element signature="e#18171#18248#0" expanded="false" />
-            <element signature="e#19284#19285#0" expanded="true" />
+            <element signature="e#17361#17362#0" expanded="true" />
+            <element signature="e#17430#19273#0" expanded="true" />
+            <element signature="e#17884#17961#0" expanded="false" />
+            <element signature="e#18159#18236#0" expanded="false" />
+            <element signature="e#19272#19273#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/kohki/withmanager/SettingOfGame.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="24" column="13" selection-start-line="24" selection-start-column="13" selection-end-line="24" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_game_setting.xml">
+      <provider selected="true" editor-type-id="android-designer">
+        <state />
+      </provider>
+      <provider editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-8.125">
+          <caret line="186" column="24" selection-start-line="186" selection-start-column="24" selection-end-line="186" selection-end-column="24" />
+          <folding />
         </state>
       </provider>
     </entry>
