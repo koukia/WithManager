@@ -436,12 +436,13 @@ public class VideoActivity extends Activity {
                 Team.who_is_actor[1] = Integer.parseInt(item);
 
             if(Team.event_name != null) recordEvent(shoot_point, is_success, Team.event_name);
-
-
-            adptList = mTeam1.getAdapter(item);
-            adptList.remove(item);
-            adptList.insert(item, 1);
-            listView.setAdapter(adptList);
+            
+            if(!item.equals("0")) {
+                adptList = mTeam1.getAdapter(item);
+                adptList.remove(item);
+                adptList.insert(item, 1);
+                listView.setAdapter(adptList);
+            }
         }
     };
     private AdapterView.OnItemClickListener adptSelectListener2 = new AdapterView.OnItemClickListener(){
@@ -479,10 +480,12 @@ public class VideoActivity extends Activity {
             if(Team.event_name != null) recordEvent(shoot_point, is_success, Team.event_name);
 
 
-            adptList = mTeam2.getAdapter(item);
-            adptList.remove(item);
-            adptList.insert(item, 1);
-            listView.setAdapter(adptList);
+            if(!item.equals("0")) {
+                adptList = mTeam2.getAdapter(item);
+                adptList.remove(item);
+                adptList.insert(item, 1);
+                listView.setAdapter(adptList);
+            }
         }
     };
 }

@@ -31,11 +31,7 @@
   <component name="ChangeListManager">
     <list default="true" id="5294730f-7dd5-4b50-9834-436cc8fc460e" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/example/kohki/withmanager/SynchroVideoActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/kohki/withmanager/SynchroVideoActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/example/kohki/withmanager/Team.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/kohki/withmanager/Team.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/example/kohki/withmanager/VideoActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/kohki/withmanager/VideoActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_synchro_video.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_synchro_video.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/dex-cache/cache.xml" afterPath="$PROJECT_DIR$/build/intermediates/dex-cache/cache.xml" />
     </list>
     <ignored path="WithManager.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -56,18 +52,22 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="525">
-      <file leaf-file-name="VideoActivity.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="VideoActivity.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/kohki/withmanager/VideoActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="468" column="17" selection-start-line="468" selection-start-column="17" selection-end-line="468" selection-end-column="17" />
+            <state vertical-scroll-proportion="0.51417005">
+              <caret line="438" column="12" selection-start-line="438" selection-start-column="12" selection-end-line="438" selection-end-column="12" />
               <folding>
                 <element signature="method#replay#0;class#VideoActivity#0" expanded="false" />
                 <element signature="class#FileSort#0;class#VideoActivity#0" expanded="false" />
+                <element signature="e#15520#17374#0" expanded="true" />
                 <element signature="e#15974#16051#0" expanded="false" />
                 <element signature="e#16249#16326#0" expanded="false" />
-                <element signature="e#17819#17896#0" expanded="false" />
-                <element signature="e#18094#18171#0" expanded="false" />
+                <element signature="e#17373#17374#0" expanded="true" />
+                <element signature="e#17442#19285#0" expanded="true" />
+                <element signature="e#17896#17973#0" expanded="false" />
+                <element signature="e#18171#18248#0" expanded="false" />
+                <element signature="e#19284#19285#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -119,11 +119,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="SynchroVideoActivity.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="SynchroVideoActivity.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/kohki/withmanager/SynchroVideoActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.6983806">
-              <caret line="182" column="0" selection-start-line="182" selection-start-column="0" selection-end-line="182" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.0">
+              <caret line="183" column="0" selection-start-line="183" selection-start-column="0" selection-end-line="183" selection-end-column="0" />
               <folding>
                 <element signature="e#7646#8583#0" expanded="true" />
                 <element signature="e#8582#8583#0" expanded="true" />
@@ -1762,9 +1762,9 @@
         <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_record_standalone.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_sub_game.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/kohki/withmanager/Team.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/example/kohki/withmanager/VideoActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_synchro_video.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/kohki/withmanager/SynchroVideoActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/kohki/withmanager/VideoActivity.java" />
       </list>
     </option>
   </component>
@@ -2265,7 +2265,7 @@
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Android Monitor" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.35235733" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Android Monitor" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.35235733" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -2325,10 +2325,14 @@
           <folding>
             <element signature="method#replay#0;class#VideoActivity#0" expanded="false" />
             <element signature="class#FileSort#0;class#VideoActivity#0" expanded="false" />
+            <element signature="e#15520#17374#0" expanded="true" />
             <element signature="e#15974#16051#0" expanded="false" />
             <element signature="e#16249#16326#0" expanded="false" />
-            <element signature="e#17819#17896#0" expanded="false" />
-            <element signature="e#18094#18171#0" expanded="false" />
+            <element signature="e#17373#17374#0" expanded="true" />
+            <element signature="e#17442#19285#0" expanded="true" />
+            <element signature="e#17896#17973#0" expanded="false" />
+            <element signature="e#18171#18248#0" expanded="false" />
+            <element signature="e#19284#19285#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -2372,10 +2376,14 @@
           <folding>
             <element signature="method#replay#0;class#VideoActivity#0" expanded="false" />
             <element signature="class#FileSort#0;class#VideoActivity#0" expanded="false" />
+            <element signature="e#15520#17374#0" expanded="true" />
             <element signature="e#15974#16051#0" expanded="false" />
             <element signature="e#16249#16326#0" expanded="false" />
-            <element signature="e#17819#17896#0" expanded="false" />
-            <element signature="e#18094#18171#0" expanded="false" />
+            <element signature="e#17373#17374#0" expanded="true" />
+            <element signature="e#17442#19285#0" expanded="true" />
+            <element signature="e#17896#17973#0" expanded="false" />
+            <element signature="e#18171#18248#0" expanded="false" />
+            <element signature="e#19284#19285#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -2484,29 +2492,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/kohki/withmanager/Team.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="22" column="42" selection-start-line="22" selection-start-column="42" selection-end-line="22" selection-end-column="42" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/kohki/withmanager/VideoActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="468" column="17" selection-start-line="468" selection-start-column="17" selection-end-line="468" selection-end-column="17" />
-          <folding>
-            <element signature="method#replay#0;class#VideoActivity#0" expanded="false" />
-            <element signature="class#FileSort#0;class#VideoActivity#0" expanded="false" />
-            <element signature="e#15974#16051#0" expanded="false" />
-            <element signature="e#16249#16326#0" expanded="false" />
-            <element signature="e#17819#17896#0" expanded="false" />
-            <element signature="e#18094#18171#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_record_standalone.xml">
       <provider editor-type-id="android-designer">
         <state />
@@ -2531,11 +2516,38 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/kohki/withmanager/SynchroVideoActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.6983806">
-          <caret line="182" column="0" selection-start-line="182" selection-start-column="0" selection-end-line="182" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="183" column="0" selection-start-line="183" selection-start-column="0" selection-end-line="183" selection-end-column="0" />
           <folding>
             <element signature="e#7646#8583#0" expanded="true" />
             <element signature="e#8582#8583#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/kohki/withmanager/Team.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="22" column="42" selection-start-line="22" selection-start-column="42" selection-end-line="22" selection-end-column="42" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/kohki/withmanager/VideoActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.51417005">
+          <caret line="438" column="12" selection-start-line="438" selection-start-column="12" selection-end-line="438" selection-end-column="12" />
+          <folding>
+            <element signature="method#replay#0;class#VideoActivity#0" expanded="false" />
+            <element signature="class#FileSort#0;class#VideoActivity#0" expanded="false" />
+            <element signature="e#15520#17374#0" expanded="true" />
+            <element signature="e#15974#16051#0" expanded="false" />
+            <element signature="e#16249#16326#0" expanded="false" />
+            <element signature="e#17373#17374#0" expanded="true" />
+            <element signature="e#17442#19285#0" expanded="true" />
+            <element signature="e#17896#17973#0" expanded="false" />
+            <element signature="e#18171#18248#0" expanded="false" />
+            <element signature="e#19284#19285#0" expanded="true" />
           </folding>
         </state>
       </provider>
