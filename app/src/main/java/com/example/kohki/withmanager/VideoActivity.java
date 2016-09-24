@@ -24,6 +24,7 @@ import android.widget.Toast;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
@@ -34,6 +35,9 @@ import java.util.List;
 public class VideoActivity extends Activity {
     private SurfaceHolder surfaceHolder;
     private SurfaceView surfaceView;
+
+    private ArrayAdapter<String> adptList;
+
 
     //to reset DB when start Activity
     private EventDbHelper mDbHelper;
@@ -80,6 +84,8 @@ public class VideoActivity extends Activity {
     SimpleDateFormat sdf;
     String dateTime;
 
+    Team mTeam1;
+    Team mTeam2;
     public static int our_member_num = 18;
     public static int opp_member_num = 18;
 
@@ -349,7 +355,7 @@ public class VideoActivity extends Activity {
             switch (Team.who_is_actor[0]) {
                 case 0:
                     int our_point = our_score + point;
-                    tv_our_score.setText(Integer.toString(our_point));//intをsetText()すると落ちる
+                    tv_our_score.setText(Integer.toString(our_point));
                     //    Toast.makeText(context,"味方チーム"+ who_is_acter[1]+"番 得点！",Toast.LENGTH_SHORT).show();
                     break;
                 case 1:
@@ -369,7 +375,7 @@ public class VideoActivity extends Activity {
         Team.resetWhoIsAct();
         if(is_scoresheetview)
             setScoresheet();
-        mEventLogger.getFoul();
+        //mEventLogger.getFoul();
     }
 
     private static class FileSort implements Comparator<File> {
@@ -384,12 +390,12 @@ public class VideoActivity extends Activity {
         mRecorder.resume();
 
         our_team = (ListView) findViewById(R.id.our_team_list);
-        Team mTeam1 = new Team(context, our_team, our_member_num);
+        mTeam1 = new Team(context, our_team, our_member_num);
         opt_team = (ListView) findViewById(R.id.opposing_team_list);
-        Team mTeam2 = new Team(context, opt_team , opp_member_num);
+        mTeam2 = new Team(context, opt_team , opp_member_num);
 
-        our_team.setOnItemClickListener(adptSelectListener);
-        opt_team.setOnItemClickListener(adptSelectListener);
+        our_team.setOnItemClickListener(adptSelectListener1);
+        opt_team.setOnItemClickListener(adptSelectListener2);
     }
     @Override
     protected void onPause() { //別アクティビティ起動時
@@ -397,7 +403,7 @@ public class VideoActivity extends Activity {
         super.onPause();
     }
 
-    private AdapterView.OnItemClickListener adptSelectListener = new AdapterView.OnItemClickListener(){
+    private AdapterView.OnItemClickListener adptSelectListener1 = new AdapterView.OnItemClickListener(){
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             ListView listView = (ListView) parent;
@@ -430,6 +436,53 @@ public class VideoActivity extends Activity {
                 Team.who_is_actor[1] = Integer.parseInt(item);
 
             if(Team.event_name != null) recordEvent(shoot_point, is_success, Team.event_name);
+
+
+            adptList = mTeam1.getAdapter(item);
+            adptList.remove(item);
+            adptList.insert(item, 1);
+            listView.setAdapter(adptList);
+        }
+    };
+    private AdapterView.OnItemClickListener adptSelectListener2 = new AdapterView.OnItemClickListener(){
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            ListView listView = (ListView) parent;
+            String item = (String) listView.getItemAtPosition(position);
+
+            String id_name = context.getResources().getResourceEntryName(listView.getId());
+
+            switch (id_name){
+                case "our_team_list":
+                    //    Toast.makeText(context_, item+"@"+id_name , Toast.LENGTH_SHORT).show();
+                    //    VideoActivity.who_is_acter[0] = 0;
+                    Team.who_is_actor[0] = 0;
+                    break;
+                case "opposing_team_list":
+                    //    Toast.makeText(context_, item+"@"+id_name , Toast.LENGTH_SHORT).show();
+                    //    VideoActivity.who_is_acter[0] = 1;
+                    Team.who_is_actor[0] = 1;
+                    break;
+                default:
+                    Toast.makeText(context, "e:"+item+"@"+id_name , Toast.LENGTH_SHORT).show();
+                    //   VideoActivity.who_is_acter[0] = -1;
+                    Team.who_is_actor[0] = -1;
+                    break;
+            }
+            if(item.equals("?"))
+                //   VideoActivity.who_is_acter[1] = 0;
+                Team.who_is_actor[1] = 0;
+            else
+                //    VideoActivity.who_is_acter[1] = Integer.parseInt(item);
+                Team.who_is_actor[1] = Integer.parseInt(item);
+
+            if(Team.event_name != null) recordEvent(shoot_point, is_success, Team.event_name);
+
+
+            adptList = mTeam2.getAdapter(item);
+            adptList.remove(item);
+            adptList.insert(item, 1);
+            listView.setAdapter(adptList);
         }
     };
 }

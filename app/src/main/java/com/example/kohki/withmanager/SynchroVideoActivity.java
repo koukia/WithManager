@@ -49,7 +49,7 @@ public class SynchroVideoActivity extends Activity {
     private int movie_time = 5000;
 
     //    private String sava_path  = "/storage/emulated/legacy/WithManager/";
-    private String sava_dir = "sdcard/WithManager/";
+    private String sava_dir = "/storage/emulated/legacy/WithManager/";
 
     private VideoRecorder mRecorder = null;
 
@@ -168,12 +168,12 @@ public class SynchroVideoActivity extends Activity {
 
         our_team = (ListView)findViewById(R.id.our_team_list);
         ArrayAdapter<String> adapter_our = new ArrayAdapter<String>(context,
-                android.R.layout.simple_list_item_1, Team.members);
+                android.R.layout.simple_list_item_1, mTeam1.members);
         our_team.setAdapter(adapter_our);
 
         opt_team = (ListView)findViewById(R.id.opposing_team_list);
         ArrayAdapter<String> adapter_opp = new ArrayAdapter<String>(context,
-                android.R.layout.simple_list_item_1, Team.members);
+                android.R.layout.simple_list_item_1, mTeam2.members);
         opt_team.setAdapter(adapter_opp);
 
         our_team.setOnItemClickListener(adptSelectListener);
@@ -211,7 +211,7 @@ public class SynchroVideoActivity extends Activity {
         });
 
         is_scoresheetview = false;
-        findViewById(R.id.chenge_scoresheet_and_eventlog).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.btn_chenge_scoresheet_and_eventlog).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 LinearLayout menu = (LinearLayout) findViewById(R.id.menu);

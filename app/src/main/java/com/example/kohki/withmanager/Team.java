@@ -7,6 +7,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**
@@ -16,11 +17,12 @@ public class Team {
     public String[] event_who = {"", ""};
     private Context context_;
     private static ListView team_lv;
-    public static ArrayList<String> members;
+    public ArrayList<String> members;
     public static int who_is_actor[] = {0, 0};
     public static String event_name = null;
+    ArrayAdapter<String> adapter_teamlist;
 
-    public Team(Context context, ListView team_list, int mem_num) {
+    public Team(Context context, final ListView team_list, int mem_num) {
         this.context_ = context;
 
         team_lv = team_list;
@@ -29,47 +31,21 @@ public class Team {
         for(int i = 4; i <= mem_num; i++){
             members.add(i+"");
         }
-        ArrayAdapter<String> adapter_teamlist = new ArrayAdapter<String>(context_,
+        adapter_teamlist = new ArrayAdapter<String>(context_,
                 android.R.layout.simple_list_item_1, members);
         team_lv.setAdapter(adapter_teamlist);
 
-        team_lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                ListView listView = (ListView) parent;
-                String item = (String) listView.getItemAtPosition(position);
 
-                String id_name = context_.getResources().getResourceEntryName(listView.getId());
-
-                switch (id_name){
-                    case "our_team_list":
-                    //    Toast.makeText(context_, item+"@"+id_name , Toast.LENGTH_SHORT).show();
-                    //    VideoActivity.who_is_acter[0] = 0;
-                        who_is_actor[0] = 0;
-                        break;
-                    case "opposing_team_list":
-                    //    Toast.makeText(context_, item+"@"+id_name , Toast.LENGTH_SHORT).show();
-                    //    VideoActivity.who_is_acter[0] = 1;
-                        who_is_actor[0] = 1;
-                        break;
-                    default:
-                        Toast.makeText(context_, "e:"+item+"@"+id_name , Toast.LENGTH_SHORT).show();
-                     //   VideoActivity.who_is_acter[0] = -1;
-                        who_is_actor[0] = -1;
-                        break;
-                }
-                if(item.equals("?"))
-                //   VideoActivity.who_is_acter[1] = 0;
-                    who_is_actor[1] = 0;
-                else
-                //    VideoActivity.who_is_acter[1] = Integer.parseInt(item);
-                    who_is_actor[1] = Integer.parseInt(item);
-            }
-        });
     }
     public static void resetWhoIsAct(){
         who_is_actor[0] = -1;
         who_is_actor[1] = -1;
         event_name = null;
     }
+    public ArrayAdapter<String> getAdapter(String item){
+        adapter_teamlist.remove(item);
+        adapter_teamlist.insert(item, 1);
+        return adapter_teamlist;
+    }
+
 }
