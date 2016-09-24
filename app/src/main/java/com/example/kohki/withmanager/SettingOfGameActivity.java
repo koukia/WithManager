@@ -22,7 +22,7 @@ import java.util.Map;
 /**
  * Created by kohki on 16/09/20.
  */
-public class SettingOfGame extends Activity {
+public class SettingOfGameActivity extends Activity {
     private Context context;
 
     private TextView tv_ourteam_num;

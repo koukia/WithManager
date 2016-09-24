@@ -56,15 +56,15 @@ public class CardListAdapter extends ArrayAdapter<String> {
                 tv.setText("シュート");
                 if (event[4].equals("1")) { //success
                     if(event[1].equals("0")){//our team
-                        iv.setImageResource(R.drawable.icon_01success);
+                        iv.setImageResource(R.drawable.ico_shootS_white);
                     }else if(event[1].equals("1")){//opp team
-                        iv.setImageResource(R.drawable.icon_02success);
+                        iv.setImageResource(R.drawable.ico_shootS_blue);
                     }
                 }else{
                     if(event[1].equals("0")){//our team
-                        iv.setImageResource(R.drawable.icon_01fail);
+                        iv.setImageResource(R.drawable.ico_shootF_white);
                     }else if(event[1].equals("1")){
-                        iv.setImageResource(R.drawable.icon_02fail);
+                        iv.setImageResource(R.drawable.ico_shootF_blue);
                     }
                 }
                 sub += event[3] + "点 成功";

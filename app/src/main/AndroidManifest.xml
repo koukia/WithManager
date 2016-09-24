@@ -42,7 +42,6 @@
             android:name=".SubGameActivity"
             android:screenOrientation="landscape"
             />
-        <activity android:name=".Result_game" />
         <activity android:name=".Webview" />
         <activity
             android:name=".Status"
@@ -53,9 +52,6 @@
             android:name=".SynchroVideoActivity"
             android:screenOrientation="landscape"
             />
-        <activity
-            android:screenOrientation="landscape"
-            android:name=".SettingOfGame" />
     </application>
 
 </manifest>
