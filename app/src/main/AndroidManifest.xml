@@ -53,7 +53,9 @@
             android:name=".SynchroVideoActivity"
             android:screenOrientation="landscape"
             />
-
+        <activity
+            android:screenOrientation="landscape"
+            android:name=".SettingOfGame" />
     </application>
 
 </manifest>
