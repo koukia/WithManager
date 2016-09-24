@@ -148,6 +148,8 @@ public class VideoActivity extends Activity {
         //Team mTeam2 = new Team(context, (ListView) findViewById(R.id.opposing_team_list));
         mEventLogger = new EventLogger(context,(ListView) findViewById(R.id.event_log));
 
+
+        
         our_team = (ListView)findViewById(R.id.our_team_list);
         ArrayAdapter<String> adapter_our = new ArrayAdapter<String>(context,
                 android.R.layout.simple_list_item_1, Team.members);
