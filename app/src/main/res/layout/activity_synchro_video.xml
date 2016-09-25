@@ -3,15 +3,13 @@
     android:orientation="horizontal"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:weightSum="100"
     android:layout_weight="100">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:orientation="horizontal"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:weightSum="100"
-        android:layout_weight="20">
+        android:weightSum="100">
 
         <ListView
             android:layout_width="wrap_content"
@@ -32,26 +30,27 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_gravity="left"
-                android:gravity="right"
+                android:gravity="left"
                 android:weightSum="100">
                 <ImageButton
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:id="@+id/btn_setting"
-                    android:src="@mipmap/ic_launcher"
+                    android:src="@drawable/ico_btn_setting"
                     android:cropToPadding="false"
                     android:contextClickable="false"
-                    android:scaleType="fitXY" />
+                    android:scaleType="centerCrop" />
                 <ImageButton
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:id="@+id/btn_chenge_scoresheet_and_eventlog"
-                    android:src="@drawable/icon_change"
+                    android:src="@drawable/ico_btn_change_scoresheet"
                     android:scaleType="centerCrop" />
                 <ImageButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/btn_save_or_delete" />
+                    android:id="@+id/btn_save_or_delete"
+                    android:src="@android:drawable/ic_menu_save" />
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
