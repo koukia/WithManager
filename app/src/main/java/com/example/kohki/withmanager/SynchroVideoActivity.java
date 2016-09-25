@@ -624,7 +624,7 @@ public class SynchroVideoActivity extends Activity {
             if (Team.event_name != null) recordEvent(0, 1, Team.event_name);
 
             if (!item.equals("?")) {
-                adptList = mTeam2.getAdapter(item);
+                adptList = mTeam2.getAdapter();
                 adptList.remove(item);
                 adptList.insert(item, 1);
                 listView.setAdapter(adptList);
@@ -666,7 +666,7 @@ public class SynchroVideoActivity extends Activity {
             if (Team.event_name != null) recordEvent(0, 1, Team.event_name);
 
             if (!item.equals("?")) {
-                adptList = mTeam2.getAdapter(item);
+                adptList = mTeam2.getAdapter();
                 adptList.remove(item);
                 adptList.insert(item, 1);
                 listView.setAdapter(adptList);

@@ -438,7 +438,7 @@ public class VideoActivity extends Activity {
             if(Team.event_name != null) recordEvent(shoot_point, is_success, Team.event_name);
 
             if(!item.equals("?")) {
-                adptList = mTeam1.getAdapter(item);
+                adptList = mTeam1.getAdapter();
                 adptList.remove(item);
                 adptList.insert(item, 1);
                 listView.setAdapter(adptList);
@@ -481,7 +481,7 @@ public class VideoActivity extends Activity {
 
 
             if(!item.equals("?")) {
-                adptList = mTeam2.getAdapter(item);
+                adptList = mTeam2.getAdapter();
                 adptList.remove(item);
                 adptList.insert(item, 1);
                 listView.setAdapter(adptList);
