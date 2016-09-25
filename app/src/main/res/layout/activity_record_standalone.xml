@@ -32,7 +32,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_gravity="left"
-                android:gravity="right"
+                android:gravity="left"
                 android:weightSum="100">
                 <ImageButton
                     android:layout_width="50dp"

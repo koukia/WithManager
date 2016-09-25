@@ -50,9 +50,9 @@ public class CardListAdapter extends ArrayAdapter<String> {
         if(event_name.equals("shoot")){
             sub += event[3] + "点";
             if(event[4].equals("0")){
-                sub += "失敗...";
+                sub += " 失敗...";
             }else if(event[4].equals("1")){
-                sub += "成功!!";
+                sub += " 成功!!";
             }
         }
         tv_sub.setText(sub);
@@ -79,7 +79,6 @@ public class CardListAdapter extends ArrayAdapter<String> {
                 break;
             case "foul":
                 tv_title.setText("ファウル");
-                sub +=  "ファウル";
                 if(event[1].equals("0")){//our team
                     iv.setImageResource(R.drawable.ico_foul_white);
                 }else if(event[1].equals("1")){//opp team
@@ -88,8 +87,7 @@ public class CardListAdapter extends ArrayAdapter<String> {
                 break;
 
             case "rebound":
-                tv_title.setText("ファウル");
-                sub +=  "ファウル";
+                tv_title.setText("リバウンド");
                 if(event[1].equals("0")){//our team
                     iv.setImageResource(R.drawable.ico_rebound_white);
                 }else if(event[1].equals("1")){//opp team
@@ -98,8 +96,7 @@ public class CardListAdapter extends ArrayAdapter<String> {
                 break;
 
             case "steal":
-                tv_title.setText("ファウル");
-                sub +=  "ファウル";
+                tv_title.setText("スティール");
                 if(event[1].equals("0")){//our team
                     iv.setImageResource(R.drawable.ico_steal_white);
                 }else if(event[1].equals("1")){//opp team
@@ -109,8 +106,7 @@ public class CardListAdapter extends ArrayAdapter<String> {
 
 
             default:
-                tv_title.setText("unknown");
-                sub += "";
+
                 break;
         }
 
