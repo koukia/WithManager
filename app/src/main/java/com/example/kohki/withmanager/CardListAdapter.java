@@ -28,60 +28,91 @@ public class CardListAdapter extends ArrayAdapter<String> {
             convertView = mInflater.inflate(R.layout.adapter_list_item_card, parent, false);
         }
         String event_info = getItem(position);
-        String[] event= event_info.split(",");
+        String[] event = event_info.split(",");
         //event[] => 0:ID, 1:team, 2:number, 3:shoot_point ,4:is_success, 5:event_name
-        String event_name = event[5];
-        TextView tv = (TextView) convertView.findViewById(R.id.title);
 
-        String sub="";
-        switch (event[1]){
-            case "0":
-                sub += "味方";;
-                break;
-            case "1":
-                sub += "相手";
-                break;
-            default:
-                break;
+        String event_name = event[5];
+
+        //title and sub is message on card.
+        TextView tv_title = (TextView) convertView.findViewById(R.id.title);
+        TextView tv_sub = (TextView) convertView.findViewById(R.id.sub);
+        String sub = "";
+        if (event[1].equals("0")) {
+            sub += "味方チーム";
+        } else if (event[1].equals("1")) {
+            sub += "相手チーム";
         }
-        if(event[2].equals("0"))
-            sub+="?番"+"\n";
-        else
-            sub+=event[2] + "番\n";
-       // Toast.makeText(getContext(),event[5],Toast.LENGTH_SHORT).show();
+        if (event[2].equals("0")) {
+            sub += "?番" + "\n";
+        }else {
+            sub += event[2] + "番\n";
+        }
+        if(event_name.equals("shoot")){
+            sub += event[3] + "点";
+            if(event[4].equals("0")){
+                sub += "失敗...";
+            }else if(event[4].equals("1")){
+                sub += "成功!!";
+            }
+        }
+        tv_sub.setText(sub);
+        // Toast.makeText(getContext(),event[5],Toast.LENGTH_SHORT).show();
 
         ImageView iv = (ImageView) convertView.findViewById(R.id.icon);
         switch (event_name) {
             case "shoot":
-                tv.setText("シュート");
-                if (event[4].equals("1")) { //success
-                    if(event[1].equals("0")){//our team
-                        iv.setImageResource(R.drawable.icon_01success);
-                    }else if(event[1].equals("1")){//opp team
-                        iv.setImageResource(R.drawable.icon_02success);
-                    }
-                }else{
-                    if(event[1].equals("0")){//our team
-                        iv.setImageResource(R.drawable.icon_01fail);
-                    }else if(event[1].equals("1")){
-                        iv.setImageResource(R.drawable.icon_02fail);
-                    }
+                tv_title.setText("シュート");
+
+                if(event[1].equals("0") && event[4].equals("0")){//our team, failed
+                    iv.setImageResource(R.drawable.ico_shoot_failed_white);
+
+                }else if(event[1].equals("0") && event[4].equals("1")){//our team, success
+                    iv.setImageResource(R.drawable.ico_shoot_success_white);
+
+                }else if(event[1].equals("1") && event[4].equals("0")){//opp team, failed
+                    iv.setImageResource(R.drawable.ico_shoot_failed_blue);
+
+                }else if(event[1].equals("1") && event[4].equals("1")) {//opp team, success
+                    iv.setImageResource(R.drawable.ico_shoot_success_blue);
                 }
-                sub += event[3] + "点 成功";
 
                 break;
-
             case "foul":
-                tv.setText("ファウル");
+                tv_title.setText("ファウル");
                 sub +=  "ファウル";
-                iv.setImageResource(R.drawable.icon_foul);
+                if(event[1].equals("0")){//our team
+                    iv.setImageResource(R.drawable.ico_foul_white);
+                }else if(event[1].equals("1")){//opp team
+                    iv.setImageResource(R.drawable.ico_foul_blue);
+                }
                 break;
+
+            case "rebound":
+                tv_title.setText("ファウル");
+                sub +=  "ファウル";
+                if(event[1].equals("0")){//our team
+                    iv.setImageResource(R.drawable.ico_rebound_white);
+                }else if(event[1].equals("1")){//opp team
+                    iv.setImageResource(R.drawable.ico_rebound_blue);
+                }
+                break;
+
+            case "steal":
+                tv_title.setText("ファウル");
+                sub +=  "ファウル";
+                if(event[1].equals("0")){//our team
+                    iv.setImageResource(R.drawable.ico_steal_white);
+                }else if(event[1].equals("1")){//opp team
+                    iv.setImageResource(R.drawable.ico_steal_blue);
+                }
+                break;
+
+
             default:
-                sub += "def";
+                tv_title.setText("unknown");
+                sub += "";
                 break;
         }
-        tv = (TextView) convertView.findViewById(R.id.sub);
-        tv.setText(sub);
 
         return convertView;
     }

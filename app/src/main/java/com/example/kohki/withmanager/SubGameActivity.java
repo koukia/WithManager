@@ -237,7 +237,7 @@ public class SubGameActivity extends AppCompatActivity {
 
         switch(id){
             case R.id.finish:
-                Intent itt_result = new Intent(context, Result_game.class);
+                Intent itt_result = new Intent(context, ResultGame.class);
 
                 writer.append("0");
                 writer.close();
