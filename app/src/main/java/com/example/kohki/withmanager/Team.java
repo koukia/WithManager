@@ -42,9 +42,7 @@ public class Team {
         who_is_actor[1] = -1;
         event_name = null;
     }
-    public ArrayAdapter<String> getAdapter(String item){
-        adapter_teamlist.remove(item);
-        adapter_teamlist.insert(item, 1);
+    public ArrayAdapter<String> getAdapter(){
         return adapter_teamlist;
     }
 

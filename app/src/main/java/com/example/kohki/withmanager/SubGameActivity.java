@@ -79,6 +79,9 @@ public class SubGameActivity extends AppCompatActivity {
         }
     }
 
+    ArrayAdapter<String> adapter1;
+    ArrayAdapter<String> adapter2;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -103,9 +106,9 @@ public class SubGameActivity extends AppCompatActivity {
 
 
         //Player set
-        String[] members1 = {"4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18"};
+        String[] members1 = {"?", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18"};
         lv_players1 = (ListView) findViewById(R.id.our_team_list);
-        ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(this,
+        adapter1 = new ArrayAdapter<String>(this,
                 android.R.layout.simple_list_item_1, members1);
         lv_players1.setAdapter(adapter1);
 
@@ -118,12 +121,18 @@ public class SubGameActivity extends AppCompatActivity {
                 event_who[0] = "0";
                 event_who[1] = item;
                 recordScore("0", item, shoot_point, is_success);
+
+                /*if(!item.equals("?")) {
+                    adapter1.remove(item);
+                    adapter1.insert(item, 1);
+                    listView.setAdapter(adapter1);
+                }*/
             }
         });
 
-        String[] members2 = {"4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18"};
+        String[] members2 = {"?", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18"};
         lv_players2 = (ListView) findViewById(R.id.enemies_team_list);
-        ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(this,
+        adapter2 = new ArrayAdapter<String>(this,
                 android.R.layout.simple_list_item_1, members2);
         lv_players2.setAdapter(adapter2);
 
@@ -136,6 +145,12 @@ public class SubGameActivity extends AppCompatActivity {
                 event_who[0] = "1";
                 event_who[1] = item;
                 recordScore("1", item, shoot_point, is_success);
+
+                /*if(!item.equals("?")) {
+                    adapter2.remove(item);
+                    adapter2.insert(item, 1);
+                    listView.setAdapter(adapter2);
+                }*/
             }
         });
 
@@ -433,7 +448,6 @@ public class SubGameActivity extends AppCompatActivity {
             }
         }).start();
     }
-
     private void refreshProgressMessage(final ProgressDialog dialog) {
         handler.post(new Runnable() {
             @Override
@@ -494,7 +508,6 @@ public class SubGameActivity extends AppCompatActivity {
             x++;
         }
     }
-
     public void bluetoothRecordScore(int[] param){
         //param[0] = チーム, param[1] = 背番号, param[2] = イベントID : スティール->1, リバウンド->2, ファウル->3
         String log = "";
@@ -516,13 +529,9 @@ public class SubGameActivity extends AppCompatActivity {
         }
         Toast.makeText(this, log, Toast.LENGTH_SHORT).show();
     }
-
     private void showErrorDialog(String message){
         DialogBuilder.showErrorDialog(this, message);
     }
-
-
-
     @Override
     public void onResume(){ //アクティビティ再び表示されたとき
         //mRecorder.resume();
