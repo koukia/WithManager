@@ -48,7 +48,6 @@
             android:name=".Status"
             android:label="ステータス"
             />
-        <activity android:name=".TestBluetooth" />
         <activity
             android:name=".SynchroVideoActivity"
             android:screenOrientation="landscape"
