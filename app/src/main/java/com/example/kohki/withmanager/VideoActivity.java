@@ -98,6 +98,7 @@ public class VideoActivity extends Activity {
 
         mDbHelper = new EventDbHelper(context);
         db = mDbHelper.getWritableDatabase();
+        //TODO:
         mDbHelper.onUpgrade(db, EventDbHelper.DATABASE_VERSION, EventDbHelper.DATABASE_VERSION);
         //mDbHelper.createTableGame(db);
 
@@ -116,7 +117,8 @@ public class VideoActivity extends Activity {
 
         try {
             File dir_save = new File(sava_dir);
-            dir_save.mkdir();
+            if(!dir_save.exists())
+                dir_save.mkdir();
         } catch (Exception e) {
             Toast.makeText(context, "e:" + e, Toast.LENGTH_SHORT).show();
         }
@@ -130,7 +132,7 @@ public class VideoActivity extends Activity {
                 if (mRecorder != null) {
                     Date date = new Date();
                     dateTime = sdf.format(date);
-                    System.out.println(dateTime);
+                    System.out.println("Game start at "+dateTime);
                     mEventLogger.addGameTime(dateTime);
                     is_playing = true;
                     btn_start.setVisibility(View.INVISIBLE);
