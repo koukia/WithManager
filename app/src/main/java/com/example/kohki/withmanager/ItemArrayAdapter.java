@@ -50,7 +50,7 @@ public class ItemArrayAdapter extends ArrayAdapter {
                     getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             row = inflater.inflate(R.layout.item_rusult, parent, false);
             viewHolder = new ItemViewHolder();
-            viewHolder.name = (TextView)row.findViewById(R.id.name);
+            viewHolder.name = (TextView)row.findViewById(R.id.num);
             viewHolder.score = (TextView) row.findViewById(R.id.score);
             viewHolder.left = row.findViewById(R.id.left_1);
             viewHolder.right = row.findViewById(R.id.right_1);

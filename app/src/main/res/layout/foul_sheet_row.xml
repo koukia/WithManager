@@ -20,7 +20,7 @@
         android:layout_gravity="center_horizontal"
         android:background="#ffc0cb"
 
-        />
+        android:gravity="right" />
     <View
         android:layout_width="0dp"
         android:layout_height="match_parent"
@@ -39,10 +39,10 @@
     <TextView
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:id="@+id/score"
+        android:id="@+id/foul_sum"
         android:layout_weight="0.4"
         android:layout_gravity="center_horizontal"
         android:background="#98fb98"
 
-        />
+        android:gravity="right" />
 </LinearLayout>

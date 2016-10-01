@@ -16,7 +16,7 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/name"
+        android:id="@+id/num"
         android:layout_below="@+id/textView"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
@@ -62,7 +62,7 @@
         android:layout_height="wrap_content"
         android:text="Grade"
         android:id="@+id/textView4"
-        android:layout_below="@+id/name"
+        android:layout_below="@+id/num"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
