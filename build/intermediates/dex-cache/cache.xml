@@ -5,22 +5,8 @@
         jar="/Users/Haruka/Desktop/WithManager/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
         jumboMode="true"
         revision="24.0.1"
-        sha1="52e26513bb7c08c81267441d7b11e72a7abfd5fb">
+        sha1="18397408fcbaeaea02215bc75f412c911703ff88">
         <dex dex="/Users/Haruka/Desktop/WithManager/app/build/intermediates/pre-dexed/debug/instant-run-bootstrap_c059a6cfd34312eaad0c9596ca2dfe6e244dd403.jar" />
-    </item>
-    <item
-        jar="/Users/Haruka/Desktop/WithManager/app/build/intermediates/exploded-aar/com.android.support/recyclerview-v7/24.1.0/jars/classes.jar"
-        jumboMode="true"
-        revision="24.0.1"
-        sha1="4157816e81f0820983957687e9a6f4c1cea0f1e5">
-        <dex dex="/Users/Haruka/Desktop/WithManager/app/build/intermediates/pre-dexed/debug/com.android.support-recyclerview-v7-24.1.0_e8d69fe85d2a836dce29177466e2ad00adba7b40.jar" />
-    </item>
-    <item
-        jar="/Users/Haruka/Desktop/WithManager/app/build/intermediates/exploded-aar/com.android.support/design/24.1.0/jars/classes.jar"
-        jumboMode="true"
-        revision="24.0.1"
-        sha1="8620c018c108eed501bbdb85324b79136373ea44">
-        <dex dex="/Users/Haruka/Desktop/WithManager/app/build/intermediates/pre-dexed/debug/com.android.support-design-24.1.0_a82bb18747cb9f07b6d03f3d2a79031d464735a7.jar" />
     </item>
     <item
         jar="/Users/Haruka/Desktop/WithManager/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/24.1.1/jars/classes.jar"
@@ -33,7 +19,7 @@
         jar="/Users/Haruka/Desktop/WithManager/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
         jumboMode="true"
         revision="24.0.1"
-        sha1="f9a4c58cdc2344cadb64815c77f51aabf9d0ae3e">
+        sha1="249ca4af3a2dd6a35423d67d1ab9659a4574d3fb">
         <dex dex="/Users/Haruka/Desktop/WithManager/app/build/intermediates/pre-dexed/debug/instant-run_a3ff466f5a67ba4f34f0e14ef689bbe2babf47dc.jar" />
     </item>
     <item
@@ -42,13 +28,6 @@
         revision="24.0.1"
         sha1="b036abbb61656165da99cf44898e4b9123687e65">
         <dex dex="/Users/Haruka/Desktop/WithManager/app/build/intermediates/pre-dexed/debug/MPAndroidChart-v2.1.6_c886e04f6f0cde3fc9b50fe0271dbf20b8f8a727.jar" />
-    </item>
-    <item
-        jar="/Users/Haruka/Desktop/WithManager/app/build/intermediates/exploded-aar/com.android.support/support-vector-drawable/24.1.1/jars/classes.jar"
-        jumboMode="true"
-        revision="24.0.1"
-        sha1="f62e763609f65e47dc6c498760a4accf02776788">
-        <dex dex="/Users/Haruka/Desktop/WithManager/app/build/intermediates/pre-dexed/debug/com.android.support-support-vector-drawable-24.1.1_515519d922b412771334dce6811901bf342c14c5.jar" />
     </item>
     <item
         jar="/Users/Haruka/Desktop/WithManager/app/build/intermediates/exploded-aar/com.android.support/support-v4/24.1.1/jars/classes.jar"
@@ -84,6 +63,27 @@
         revision="24.0.1"
         sha1="3af19f153122737b372622fa6c81dd11a1c6b999">
         <dex dex="/Users/Haruka/Desktop/WithManager/app/build/intermediates/pre-dexed/debug/support-annotations-24.1.1_94264a6fc231aef0b1d132c052554d84c506eda9.jar" />
+    </item>
+    <item
+        jar="/Users/Haruka/Desktop/WithManager/app/build/intermediates/exploded-aar/com.android.support/recyclerview-v7/24.1.0/jars/classes.jar"
+        jumboMode="true"
+        revision="24.0.1"
+        sha1="4157816e81f0820983957687e9a6f4c1cea0f1e5">
+        <dex dex="/Users/Haruka/Desktop/WithManager/app/build/intermediates/pre-dexed/debug/com.android.support-recyclerview-v7-24.1.0_e8d69fe85d2a836dce29177466e2ad00adba7b40.jar" />
+    </item>
+    <item
+        jar="/Users/Haruka/Desktop/WithManager/app/build/intermediates/exploded-aar/com.android.support/design/24.1.0/jars/classes.jar"
+        jumboMode="true"
+        revision="24.0.1"
+        sha1="8620c018c108eed501bbdb85324b79136373ea44">
+        <dex dex="/Users/Haruka/Desktop/WithManager/app/build/intermediates/pre-dexed/debug/com.android.support-design-24.1.0_a82bb18747cb9f07b6d03f3d2a79031d464735a7.jar" />
+    </item>
+    <item
+        jar="/Users/Haruka/Desktop/WithManager/app/build/intermediates/exploded-aar/com.android.support/support-vector-drawable/24.1.1/jars/classes.jar"
+        jumboMode="true"
+        revision="24.0.1"
+        sha1="f62e763609f65e47dc6c498760a4accf02776788">
+        <dex dex="/Users/Haruka/Desktop/WithManager/app/build/intermediates/pre-dexed/debug/com.android.support-support-vector-drawable-24.1.1_515519d922b412771334dce6811901bf342c14c5.jar" />
     </item>
 
 </items>
