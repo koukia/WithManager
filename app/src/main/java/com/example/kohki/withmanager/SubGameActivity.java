@@ -7,6 +7,7 @@ import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.hardware.Camera;
 import android.media.MediaPlayer;
@@ -55,6 +56,14 @@ public class SubGameActivity extends AppCompatActivity {
     boolean fragUndo;
     String undoTeam;
     private boolean is_selectedEvent;
+
+    private Button shoot_success_free;
+    private Button shoot_failed_free;
+    private Button shoot_success_2p;
+    private Button shoot_failed_2p;
+    private Button shoot_success_3p;
+    private Button shoot_failed_3p;
+
 
     private boolean  is_playing;
     private Button btnBluetoothSettiong;
@@ -127,6 +136,7 @@ public class SubGameActivity extends AppCompatActivity {
                     adapter1.insert(item, 1);
                     listView.setAdapter(adapter1);
                 }*/
+                event_who = new String[] {"", ""};
             }
         });
 
@@ -151,68 +161,79 @@ public class SubGameActivity extends AppCompatActivity {
                     adapter2.insert(item, 1);
                     listView.setAdapter(adapter2);
                 }*/
+                event_who = new String[] {"", ""};
             }
         });
 
-        findViewById(R.id.shoot_succes_free).setOnClickListener(new View.OnClickListener(){
+        shoot_success_free = (Button)findViewById(R.id.shoot_succes_free);
+        shoot_success_free.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
                 shoot_point = 1;
                 is_success = 1;
-                Toast.makeText(context, "1P成功", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(context, "1P成功", Toast.LENGTH_SHORT).show();
                 is_selectedEvent = true;
+                setColor(shoot_success_free);
                 //recordScore(event_who[0], event_who[1], shoot_point, 1);
             }
         });
-        findViewById(R.id.shoot_failed_free).setOnClickListener(new View.OnClickListener(){
+        shoot_failed_free = (Button)findViewById(R.id.shoot_failed_free);
+        shoot_failed_free.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
                 shoot_point = 0;
                 is_success = 0;
-                Toast.makeText(context, "1P失敗", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(context, "1P失敗", Toast.LENGTH_SHORT).show();
                 is_selectedEvent = true;
+                setColor(shoot_failed_free);
                 //recordScore(event_who[0], event_who[1], shoot_point, 0);
             }
         });
-
-        findViewById(R.id.shoot_success_2p).setOnClickListener(new View.OnClickListener() {
+        shoot_success_2p = (Button)findViewById(R.id.shoot_success_2p);
+        shoot_success_2p.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 shoot_point = 2;
                 is_success = 1;
-                Toast.makeText(context, "2P成功", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(context, "2P成功", Toast.LENGTH_SHORT).show();
                 is_selectedEvent = true;
+                setColor(shoot_success_2p);
                 //recordScore(event_who[0], event_who[1], shoot_point, 1);
             }
         });
-        findViewById(R.id.shoot_failed_2p).setOnClickListener(new View.OnClickListener(){
+        shoot_failed_2p = (Button)findViewById(R.id.shoot_failed_2p);
+        shoot_failed_2p.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
                 shoot_point = 0;
                 is_success = 0;
-                Toast.makeText(context, "2P失敗", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(context, "2P失敗", Toast.LENGTH_SHORT).show();
                 is_selectedEvent = true;
+                setColor(shoot_failed_2p);
                 //recordScore(event_who[0], event_who[1], shoot_point, 0);
             }
         });
-
-        findViewById(R.id.shoot_success_3p).setOnClickListener(new View.OnClickListener(){
+        shoot_success_3p = (Button)findViewById(R.id.shoot_success_3p);
+        shoot_success_3p.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
                 shoot_point = 3;
                 is_success = 1;
-                Toast.makeText(context, "3P成功", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(context, "3P成功", Toast.LENGTH_SHORT).show();
                 is_selectedEvent = true;
+                setColor(shoot_success_3p);
                 //recordScore(event_who[0], event_who[1], shoot_point, 1);
             }
         });
-        findViewById(R.id.shoot_failed_3p).setOnClickListener(new View.OnClickListener(){
+        shoot_failed_3p = (Button)findViewById(R.id.shoot_failed_3p);
+        shoot_failed_3p.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
                 shoot_point = 0;
                 is_success = 0;
-                Toast.makeText(context, "3P失敗", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(context, "3P失敗", Toast.LENGTH_SHORT).show();
                 is_selectedEvent = true;
+                setColor(shoot_failed_3p);
                 //recordScore(event_who[0], event_who[1], shoot_point, 0);
             }
         });
@@ -541,6 +562,18 @@ public class SubGameActivity extends AppCompatActivity {
     protected void onPause() { //別アクティビティ起動時
         //mRecorder.pause();
         super.onPause();
+    }
+
+
+    public void setColor(Button selectedBtn){
+        /*shoot_success_free.setBackgroundColor(Color.rgb(204,204,204));
+        shoot_failed_free.setBackgroundColor(Color.rgb(204,204,204));
+        shoot_success_2p.setBackgroundColor(Color.rgb(204,204,204));
+        shoot_failed_2p.setBackgroundColor(Color.rgb(204,204,204));
+        shoot_success_3p.setBackgroundColor(Color.rgb(204,204,204));
+        shoot_failed_3p.setBackgroundColor(Color.rgb(204,204,204));
+
+        selectedBtn.setBackgroundColor(Color.rgb(0,0,204));  */
     }
 //TODO:
 // ava.lang.NullPointerException:

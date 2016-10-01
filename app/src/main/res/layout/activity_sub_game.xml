@@ -18,6 +18,10 @@
         android:layout_height="match_parent"
         android:layout_weight="8">
 
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/coat"/>
 
         <LinearLayout
             android:orientation="horizontal"
@@ -36,7 +40,9 @@
                 android:textColor="#0015ff"
                 android:contextClickable="false"
                 android:longClickable="false"
-                android:visibility="invisible" />
+                android:visibility="invisible"
+
+                />
 
             <Button
                 android:layout_width="wrap_content"
