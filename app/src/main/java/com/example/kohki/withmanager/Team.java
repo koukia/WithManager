@@ -38,8 +38,8 @@ public class Team {
 
     }
     public static void resetWhoIsAct(){
-        who_is_actor[0] = -1;
-        who_is_actor[1] = -1;
+        who_is_actor[0] = 0;
+        who_is_actor[1] = 0;
         event_name = null;
     }
     public ArrayAdapter<String> getAdapter(){

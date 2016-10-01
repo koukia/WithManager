@@ -105,7 +105,7 @@ public class VideoRecorder implements SurfaceHolder.Callback {
             //    Log.v("VALUE",Integer.toString(camcorderProfile.videoCodec));
             camcorderProfile.videoCodec = MediaRecorder.VideoEncoder.MPEG_4_SP;
             mrec.setProfile(camcorderProfile);
-        */
+           -- */
             // TODO:他端末での対応 corresponding each device
             mrec.setAudioSource(MediaRecorder.AudioSource.CAMCORDER);
             mrec.setVideoSource(MediaRecorder.VideoSource.CAMERA);

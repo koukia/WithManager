@@ -3,7 +3,6 @@ package com.example.kohki.withmanager;
 import android.app.Activity;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Color;
 import android.content.Intent;
 import android.graphics.PixelFormat;
 import android.hardware.Camera;
@@ -24,7 +23,6 @@ import android.widget.Toast;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
@@ -61,7 +59,7 @@ public class VideoActivity extends Activity {
     public static PreviewSurfaceViewCallback mPreviewCallback;
 
     private boolean is_playing;
-    private boolean is_scoresheetview;
+    private int mode_of_menu = 0;  //0:eventlog, 1:score, 2:foul
 
     private EventLogger mEventLogger;
 
@@ -79,13 +77,13 @@ public class VideoActivity extends Activity {
     private Button shoot_failed3p;
     private Button foul;
 
-    ListView our_team;
-    ListView opt_team;
-    SimpleDateFormat sdf;
-    String dateTime;
+    private ListView our_team;
+    private ListView opt_team;
+    private SimpleDateFormat sdf;
+    private String gameStartDateTime;
 
-    Team mTeam1;
-    Team mTeam2;
+    private Team mTeam1;
+    private Team mTeam2;
     public static int our_member_num = 18;
     public static int opp_member_num = 18;
 
@@ -131,9 +129,9 @@ public class VideoActivity extends Activity {
             public void onClick(View v) {
                 if (mRecorder != null) {
                     Date date = new Date();
-                    dateTime = sdf.format(date);
-                    System.out.println("Game start at "+dateTime);
-                    mEventLogger.addGameTime(dateTime);
+                    gameStartDateTime = sdf.format(date);
+                    System.out.println("Game start at "+gameStartDateTime);
+                    mEventLogger.addGameTime(gameStartDateTime);
                     is_playing = true;
                     btn_start.setVisibility(View.INVISIBLE);
                     btn_stop.setVisibility(View.VISIBLE);
@@ -248,27 +246,42 @@ public class VideoActivity extends Activity {
             }
         });
 
-        is_scoresheetview = false;
         findViewById(R.id.btn_chenge_scoresheet_and_eventlog).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 LinearLayout menu = (LinearLayout) findViewById(R.id.menu);
-                if (!is_scoresheetview) {
-                    LinearLayout eventlog = (LinearLayout) findViewById(R.id.menu_log);
-                    menu.removeView(eventlog);
-                    getLayoutInflater().inflate(R.layout.score_sheet, menu);
+                mode_of_menu++;
+                if(mode_of_menu >= 3)
+                    mode_of_menu = 0;
 
-                    setScoresheet();
-                    is_scoresheetview = true;
-                } else {
-                    LinearLayout scoresheet = (LinearLayout) findViewById(R.id.scoresheet);
-                    menu.removeView(scoresheet);
-                    getLayoutInflater().inflate(R.layout.event_log, menu);
-                    mEventLogger = new EventLogger(context, (ListView) findViewById(R.id.event_log));
-                    is_scoresheetview = false;
+                switch (mode_of_menu){
+                    case 0://eventlog
+                        LinearLayout foulsheet = (LinearLayout) findViewById(R.id.foulsheet);
+                        menu.removeView(foulsheet);
+                        getLayoutInflater().inflate(R.layout.event_log, menu);
+                        mEventLogger = new EventLogger(context, (ListView) findViewById(R.id.event_log));
+
+                        break;
+                    case 1://scoresheet
+                        LinearLayout eventlog = (LinearLayout) findViewById(R.id.menu_log);
+                        menu.removeView(eventlog);
+                        getLayoutInflater().inflate(R.layout.score_sheet, menu);
+                        setScoresheet();
+
+                        break;
+                    case 2:
+                        LinearLayout scoresheet = (LinearLayout) findViewById(R.id.scoresheet);
+                        menu.removeView(scoresheet);
+                        getLayoutInflater().inflate(R.layout.foul_sheet, menu);
+                        setFoulsheet();
+
+                        break;
+                    default:
+                        break;
                 }
             }
         });
+
         findViewById(R.id.btn_setting).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -318,6 +331,49 @@ public class VideoActivity extends Activity {
         //(TextView)findViewById(R.id.name).setBackgroundColor();
     }
 
+    private void setFoulsheet(){
+
+        ListView listView_our = (ListView) findViewById(R.id.our_foul_list);
+        ListView listView_opt = (ListView) findViewById(R.id.opp_foul_list);
+        //リストに追加するためのアダプタ
+        FoulsheetArrayAdapter adpt_our = new FoulsheetArrayAdapter(getApplicationContext(), R.layout.foul_sheet_row);
+        FoulsheetArrayAdapter adpt_opt = new FoulsheetArrayAdapter(getApplicationContext(), R.layout.foul_sheet_row);
+
+        Parcelable state_our = listView_our.onSaveInstanceState();
+        Parcelable state_opt = listView_opt.onSaveInstanceState();
+
+        listView_our.setAdapter(adpt_our);
+        listView_our.onRestoreInstanceState(state_our);
+        listView_opt.setAdapter(adpt_opt);
+        listView_opt.onRestoreInstanceState(state_opt);
+
+        FoulCounter cFoulCounter = new FoulCounter(context, gameStartDateTime);
+        List<Integer[]> foulList = cFoulCounter.getFoulData();
+        Integer[] ourteam_foul = foulList.get(0);//[0]is?,[1]is4,[2]is5...
+        Integer[] oppteam_foul = foulList.get(1);
+        //ourteam
+        int foulsum=0;
+        for(int foulcount : ourteam_foul){//先にチームファウルを出力
+            foulsum += foulcount;
+        }
+        adpt_our.add(new String[]{"team_kind","ourteam"});
+        adpt_our.add(new String[]{"T", String.valueOf(foulsum)});
+        for(int i=1;i<ourteam_foul.length;i++){
+            adpt_our.add(new String[]{String.valueOf(i+3), String.valueOf(ourteam_foul[i])});
+        }
+
+        //oppteam
+        foulsum=0;
+        for(int foulcount : oppteam_foul){
+            foulsum += foulcount;
+        }
+        adpt_opt.add(new String[]{"team_kind","oppteam"});
+        adpt_opt.add(new String[]{"T",String.valueOf(foulsum)});
+        for(int i=1;i<ourteam_foul.length;i++){
+            adpt_opt.add(new String[]{String.valueOf(i+3),String.valueOf(oppteam_foul[i])});
+        }
+    }
+
     public boolean replay(String movie_name){
         mOverLaySurfaceView.setVisibility(SurfaceView.VISIBLE);
         try {
@@ -339,7 +395,7 @@ public class VideoActivity extends Activity {
         return true;
     }
     public void recordEvent(int point, int is_success,String event_name) {
-        if(!is_playing) return ;
+        if (!is_playing) return;
         //TODO:録画中でないとエラー
         String file_name = "no file";
         //   if(mRecorder.mCamera != null) {
@@ -348,10 +404,10 @@ public class VideoActivity extends Activity {
         mRecorder.start();
         //   }
         if (event_name.equals("shoot") && is_success == 1) {
-            final TextView tv_our_score = (TextView)findViewById(R.id.our_score);
+            final TextView tv_our_score = (TextView) findViewById(R.id.our_score);
             int our_score = Integer.parseInt(tv_our_score.getText().toString());
 
-            final TextView tv_opp_score = (TextView)findViewById(R.id.opposing_score);
+            final TextView tv_opp_score = (TextView) findViewById(R.id.opposing_score);
             int opp_score = Integer.parseInt(tv_opp_score.getText().toString());
 
             switch (Team.who_is_actor[0]) {
@@ -373,10 +429,14 @@ public class VideoActivity extends Activity {
                     return ; */
             }
         }
-        mEventLogger.addEvent(Team.who_is_actor[0], Team.who_is_actor[1], point, is_success, event_name, file_name, dateTime);
+        mEventLogger.addEvent(Team.who_is_actor[0], Team.who_is_actor[1], point, is_success, event_name, file_name, gameStartDateTime);
         Team.resetWhoIsAct();
-        if(is_scoresheetview)
+        if (mode_of_menu == 1) {
             setScoresheet();
+        } else if (mode_of_menu == 2){
+            setFoulsheet();
+        }
+
         //mEventLogger.getFoul();
     }
 
