@@ -175,6 +175,7 @@ public class EventLogger {
     private void updateEventLog() {
         CardListAdapter adapter2 = new CardListAdapter(context);
 
+
         ArrayList<String> event_list = new ArrayList<>();
 
         try {
@@ -205,7 +206,7 @@ public class EventLogger {
                         movie_name;
 
                 event_list.add(record);
-                adapter2.add(record);
+                adapter2.insert(record, 0);
 
                 c.moveToNext();
             }
@@ -216,6 +217,8 @@ public class EventLogger {
 
         //   ArrayAdapter<String> adapter = new ArrayAdapter<String>(context,
         //           android.R.layout.simple_list_item_1, event_list);
+
+
         lv_event_list.setAdapter(adapter2);
     }
 
