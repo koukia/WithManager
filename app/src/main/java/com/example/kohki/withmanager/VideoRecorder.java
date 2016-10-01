@@ -105,13 +105,13 @@ public class VideoRecorder implements SurfaceHolder.Callback {
             //    Log.v("VALUE",Integer.toString(camcorderProfile.videoCodec));
             camcorderProfile.videoCodec = MediaRecorder.VideoEncoder.MPEG_4_SP;
             mrec.setProfile(camcorderProfile);
-        */
+           -- */
             // TODO:他端末での対応 corresponding each device
             mrec.setAudioSource(MediaRecorder.AudioSource.CAMCORDER);
             mrec.setVideoSource(MediaRecorder.VideoSource.CAMERA);
             CamcorderProfile camcorderProfile = CamcorderProfile.get(CamcorderProfile.QUALITY_480P);
             //    Toast.makeText(context,Integer.toString(camcorderProfile.videoCodec),Toast.LENGTH_SHORT).show();
-            camcorderProfile.videoCodec = MediaRecorder.VideoEncoder.DEFAULT;
+            camcorderProfile.videoCodec = MediaRecorder.VideoEncoder.H264;
             mrec.setProfile(camcorderProfile);
 
                 /*decide file name*/
@@ -120,7 +120,7 @@ public class VideoRecorder implements SurfaceHolder.Callback {
             mrec.setOutputFile(file_path);
                 /* --- */
             mrec.setPreviewDisplay(surfaceHolder.getSurface());// プレビューに利用するサーフェイスを指定する
-            mrec.setVideoSize(getWidth(), getHeight());
+      //      mrec.setVideoSize(getWidth(), getHeight()); //=> start failed -19
             mrec.prepare();
             mrec.start();
 

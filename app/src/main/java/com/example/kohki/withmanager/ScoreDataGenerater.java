@@ -60,10 +60,6 @@ public class ScoreDataGenerater {
                     if(point == 3) db_row[1] = "(" + db_row[1] + ")";
                     addRowData(db_row);
                 }
-                //合count data related to foulsheet
-                if(event.equals("foul") && success == 1) {
-                    //TODO:foul list
-                }
                 c.moveToNext();
             }
         } catch (SQLException e) {

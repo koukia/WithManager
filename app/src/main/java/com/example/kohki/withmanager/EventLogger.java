@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteCursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.media.MediaPlayer;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -29,6 +30,7 @@ import java.util.ArrayList;
  * -movie_name
  */
 public class EventLogger {
+    private static final String TAG = "EventLogger";
     //DB
     private EventDbHelper mDbHelper;
     private SQLiteDatabase db;
@@ -71,7 +73,7 @@ public class EventLogger {
             String item = (String) listView.getItemAtPosition(position);
             String[] items = item.split(",");
             String movie_name = items[items.length-1];
-            Toast.makeText(context,movie_name+"を再生",Toast.LENGTH_SHORT).show();
+            Log.d(TAG,movie_name+"を再生");
 
             try { //スタンドアローンかBluetooth通信中か
                 if(VideoActivity.mOverLaySurfaceView != null) {
@@ -146,7 +148,7 @@ public class EventLogger {
         newRowId = db.insert(
                 //tableName, // テーブルは現在の時刻
                 EventContract.Event.TABLE_NAME,
-                EventContract.Event.COLUMN_NAME_NULLABLE,
+                null,
                 values);
         updateEventLog();
         //System.out.println("datetime:" + dateTime);
@@ -156,15 +158,14 @@ public class EventLogger {
     public void addGameTime(String dateTime){
 
         ContentValues values = new ContentValues();
-        values.put(EventContract.Game.COL_DATE, dateTime);
+        values.put(EventContract.Game.COL_DATE_TIME, dateTime);
 
         System.out.println(dateTime + "を追加しま");
         db.insert(
-                EventContract.Game.TABLE_NAME,
-                null,
-                values
+            EventContract.Game.TABLE_NAME,
+            null,
+            values
         );
-        System.out.println("した");
     }
 
     private void setDB(){

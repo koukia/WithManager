@@ -13,7 +13,7 @@ public class EventDbHelper extends SQLiteOpenHelper {
     private static final String INT_TYPE = " INTEGER";
     private static final String COMMA_SEP = ",";
 
-    private static final String SQL_CREATE_ENTRIES =
+    private static final String SQL_CREATE_EVENT_ENTRIES =
             "CREATE TABLE " + EventContract.Event.TABLE_NAME + " (" +
                     EventContract.Event._ID + " INTEGER PRIMARY KEY," +
                     EventContract.Event.COL_TEAM       + INT_TYPE + COMMA_SEP +
@@ -24,17 +24,20 @@ public class EventDbHelper extends SQLiteOpenHelper {
                     EventContract.Event.COL_MOVIE_NAME + TEXT_TYPE + COMMA_SEP +
                     EventContract.Event.COL_DATETIME   + TEXT_TYPE + " )";
 
-    private static final String SQL_DELETE_ENTRIES =
+    private static final String SQL_DELETE_EVENT_ENTRIES =
             "DROP TABLE IF EXISTS " + EventContract.Event.TABLE_NAME;
 
 
     //Gameのテーブル作成
-    private static final String SQL_CREATE_GAME =
+    private static final String SQL_CREATE_GAME_ENTRIES =
             "CREATE TABLE " + EventContract.Game.TABLE_NAME + " (" +
-                    EventContract.Game.COL_DATE + TEXT_TYPE + " )";
+                    EventContract.Game._ID + " INTEGER PRIMARY KEY," +
+                    EventContract.Game.COL_DATE_TIME  + TEXT_TYPE + COMMA_SEP +
+                    EventContract.Game.COL_GAME_NAME  + TEXT_TYPE + COMMA_SEP +
+                    EventContract.Game.COL_GAME_NOTES + TEXT_TYPE  +" )";
 
-    private static final String SQL_DELETE_GAME =
-            "DROP TABLE IF EXIST " + EventContract.Game.TABLE_NAME;
+    private static final String SQL_DELETE_GAME_ENTRIES =
+            "DROP TABLE IF EXISTS " + EventContract.Game.TABLE_NAME;
     //---
 
     // If you change the database schema, you must increment the database version.
@@ -46,13 +49,15 @@ public class EventDbHelper extends SQLiteOpenHelper {
     }
 
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(SQL_CREATE_ENTRIES);
+        db.execSQL(SQL_CREATE_EVENT_ENTRIES);
+        db.execSQL(SQL_CREATE_GAME_ENTRIES);
     }
 
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // This database is only a cache for online data, so its upgrade policy is
         // to simply to discard the data and start over
-        db.execSQL(SQL_DELETE_ENTRIES);
+        db.execSQL(SQL_DELETE_EVENT_ENTRIES);
+        db.execSQL(SQL_DELETE_GAME_ENTRIES);
         onCreate(db);
     }
 
@@ -60,13 +65,4 @@ public class EventDbHelper extends SQLiteOpenHelper {
         onUpgrade(db, oldVersion, newVersion);
     }
 
-    public void createTableGame(SQLiteDatabase db){
-        System.out.println(SQL_CREATE_GAME);
-        db.execSQL(SQL_CREATE_GAME);
-        System.out.println("テーブルを作りました");
-    }
-    public void upGradeTable(SQLiteDatabase db){
-        db.execSQL(SQL_DELETE_GAME);
-        createTableGame(db);
-    }
 }

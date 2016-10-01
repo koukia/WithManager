@@ -271,6 +271,48 @@ public class SynchroVideoActivity extends Activity {
             }
         }
     }
+    private void setFoulsheet(){
+
+        ListView listView_our = (ListView) findViewById(R.id.our_foul_list);
+        ListView listView_opt = (ListView) findViewById(R.id.opp_foul_list);
+        //リストに追加するためのアダプタ
+        FoulsheetArrayAdapter adpt_our = new FoulsheetArrayAdapter(getApplicationContext(), R.layout.foul_sheet_row);
+        FoulsheetArrayAdapter adpt_opt = new FoulsheetArrayAdapter(getApplicationContext(), R.layout.foul_sheet_row);
+
+        Parcelable state_our = listView_our.onSaveInstanceState();
+        Parcelable state_opt = listView_opt.onSaveInstanceState();
+
+        listView_our.setAdapter(adpt_our);
+        listView_our.onRestoreInstanceState(state_our);
+        listView_opt.setAdapter(adpt_opt);
+        listView_opt.onRestoreInstanceState(state_opt);
+
+        FoulCounter cFoulCounter = new FoulCounter(context, dateTime);
+        List<Integer[]> foulList = cFoulCounter.getFoulData();
+        Integer[] ourteam_foul = foulList.get(0);//[0]is?,[1]is4,[2]is5...
+        Integer[] oppteam_foul = foulList.get(1);
+        //ourteam
+        int foulsum=0;
+        for(int foulcount : ourteam_foul){//先にチームファウルを出力
+            foulsum += foulcount;
+        }
+        adpt_our.add(new String[]{"team_kind","ourteam"});
+        adpt_our.add(new String[]{"T", String.valueOf(foulsum)});
+        for(int i=1;i<ourteam_foul.length;i++){
+            adpt_our.add(new String[]{String.valueOf(i+3), String.valueOf(ourteam_foul[i])});
+        }
+
+        //oppteam
+        foulsum=0;
+        for(int foulcount : oppteam_foul){
+            foulsum += foulcount;
+        }
+        adpt_opt.add(new String[]{"team_kind","oppteam"});
+        adpt_opt.add(new String[]{"T",String.valueOf(foulsum)});
+        for(int i=1;i<ourteam_foul.length;i++){
+            adpt_opt.add(new String[]{String.valueOf(i+3),String.valueOf(oppteam_foul[i])});
+        }
+    }
 
     public boolean replay(String movie_name){
         mOverLaySurfaceView.setVisibility(SurfaceView.VISIBLE);
