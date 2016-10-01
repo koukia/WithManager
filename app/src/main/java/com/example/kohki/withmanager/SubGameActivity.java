@@ -137,6 +137,7 @@ public class SubGameActivity extends AppCompatActivity {
                     listView.setAdapter(adapter1);
                 }*/
                 event_who = new String[] {"", ""};
+                is_selectedEvent = false;
             }
         });
 
@@ -162,6 +163,7 @@ public class SubGameActivity extends AppCompatActivity {
                     listView.setAdapter(adapter2);
                 }*/
                 event_who = new String[] {"", ""};
+                is_selectedEvent = false;
             }
         });
 
@@ -294,7 +296,7 @@ public class SubGameActivity extends AppCompatActivity {
 
         //Bluetooth通信用のbyte配列
         buf[0] = Byte.parseByte(who_team);
-        buf[1] = Byte.parseByte(who_num);
+        buf[1] = who_num.equals("?") ? 0 : Byte.parseByte(who_num);
         buf[2] = Byte.parseByte(Integer.toString(point));
         buf[3] = Byte.parseByte(Integer.toString(is_success));
         buf[4] = 111;
