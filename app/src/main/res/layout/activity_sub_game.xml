@@ -5,7 +5,7 @@
     android:layout_height="match_parent">
 
     <ListView
-        android:layout_width="50dp"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:id="@+id/our_team_list"
         android:listSelector="@drawable/p2_listselector"
@@ -188,7 +188,7 @@
     </FrameLayout>
 
     <ListView
-        android:layout_width="50dp"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:id="@+id/enemies_team_list"
         android:listSelector="@drawable/p1_listselector"
