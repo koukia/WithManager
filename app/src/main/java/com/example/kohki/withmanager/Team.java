@@ -16,7 +16,7 @@ import java.util.ArrayList;
 public class Team {
     public String[] event_who = {"", ""};
     private Context context_;
-    private static ListView team_lv;
+    private ListView team_lv;
     public ArrayList<String> members;
     public static int who_is_actor[] = {0, 0};
     public static String event_name = null;
@@ -35,7 +35,6 @@ public class Team {
                 android.R.layout.simple_list_item_1, members);
         team_lv.setAdapter(adapter_teamlist);
 
-
     }
     public static void resetWhoIsAct(){
         who_is_actor[0] = -1;
@@ -46,4 +45,19 @@ public class Team {
         return adapter_teamlist;
     }
 
+    public void sortAdapater(){
+        String sort_tmp;
+        for(int i = 6; i <= members.size()-2; i++){
+            for(int j = i + 1; j <= members.size()-1; j++){
+                if(Integer.parseInt(members.get(i)) > Integer.parseInt(members.get(j))){
+                    sort_tmp = members.get(i);
+                    members.remove(i);
+                    members.add(j, sort_tmp);
+                }
+            }
+        }
+        adapter_teamlist = new ArrayAdapter<String>(context_,
+                android.R.layout.simple_list_item_1, members);
+        team_lv.setAdapter(adapter_teamlist);
+    }
 }
