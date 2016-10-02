@@ -4,20 +4,27 @@ import android.app.Activity;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.graphics.PixelFormat;
 import android.hardware.Camera;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -87,6 +94,14 @@ public class VideoActivity extends Activity {
     public static int our_member_num = 18;
     public static int opp_member_num = 18;
 
+
+
+    private FrameLayout mainLayout;
+    private SurfaceView mainSurfaceview;
+    private ImageView image_menu;
+    boolean flg_image = false;
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -102,9 +117,79 @@ public class VideoActivity extends Activity {
 
 
         //main surfaceview
-        SurfaceView main_surface = (SurfaceView) findViewById(R.id.main_surface);
+        final SurfaceView main_surface = (SurfaceView) findViewById(R.id.main_surface);
         mRecorder = new VideoRecorder(context, sava_dir, main_surface, getResources());
 
+        //--- experiment
+        mainLayout = (FrameLayout) findViewById(R.id.camera_screen);
+        mainSurfaceview = (SurfaceView) findViewById(R.id.main_surface) ;
+    //    AsyncTaskListener atl = new AsyncTaskListener(this, mainLayout, mainSurfaceview);
+    //    atl.execute("para");
+
+        mainSurfaceview.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                //   Log.d(TAG,event.getX()+":"+event.getY());
+                FrameLayout.LayoutParams mLayoutParms = new FrameLayout.LayoutParams(300, 300);
+
+                if(event.getAction() == MotionEvent.ACTION_DOWN) {
+                    Log.d("TouchEvent", "getAction()" + "ACTION_DOWN");
+
+                    image_menu = new ImageView(context);
+                    image_menu.setImageBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.icon_hitagi));
+
+                    mLayoutParms.leftMargin = (int) event.getX() - 500;
+                    mLayoutParms.topMargin  = (int) event.getY() - 500;
+
+                    mainLayout.addView(image_menu, mLayoutParms);
+                    flg_image = true;
+                    image_menu.setTag(1);
+
+               /*     image_menu.setOnTouchListener(new View.OnTouchListener() {
+                        @Override
+                        public boolean onTouch(View v, MotionEvent event) {
+                            Toast.makeText(context,"image touch!",Toast.LENGTH_SHORT).show();
+                            return false;
+                        }
+                    });
+                 */   /*
+                    FrameLayout fl = (FrameLayout) findViewById(R.id.camera_screen);
+
+                    for(int i=0;i<fl.getChildCount();i++){
+                        //     if(fl.getChildAt(i).getTag(10) != null)
+                        Log.d("TouchEvent", "V:"+i+fl.getChildAt(i));
+                    }
+                    ImageView im = (ImageView)fl.getChildAt(8);
+                    im.setOnTouchListener(new View.OnTouchListener() {
+                        @Override
+                        public boolean onTouch(View v, MotionEvent event) {
+                            Toast.makeText(context,"image touch!",Toast.LENGTH_SHORT).show();
+                            return false;
+                        }
+                    });
+                    */
+                    return true;
+                }else if(event.getAction() == MotionEvent.ACTION_UP) {
+                    Log.d("TouchEvent", "getAction()" + "ACTION_UP");
+                    mainLayout.removeView(image_menu);
+                    flg_image = false;
+
+                }else if(event.getAction() == MotionEvent.ACTION_MOVE) {
+                    //   Log.d("TouchEvent", "getAction()" + "ACTION_MOVE");
+
+                }
+
+                // MotionEvent.ACTION_CANCEL:
+                // Log.d("TouchEvent", "getAction()" + "ACTION_CANCEL");
+
+                return false;
+            }
+        });
+
+
+
+
+        //---
         //sub surfaceview
         mOverLaySurfaceView = (SurfaceView) findViewById(R.id.sub_surface);
         mOverLayHolder = mOverLaySurfaceView.getHolder();
