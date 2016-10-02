@@ -218,8 +218,6 @@ public class EventLogger {
 
         //   ArrayAdapter<String> adapter = new ArrayAdapter<String>(context,
         //           android.R.layout.simple_list_item_1, event_list);
-
-
         lv_event_list.setAdapter(adapter2);
     }
 

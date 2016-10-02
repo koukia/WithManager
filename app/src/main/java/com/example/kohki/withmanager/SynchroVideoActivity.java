@@ -670,6 +670,7 @@ public class SynchroVideoActivity extends Activity {
                 adptList.remove(item);
                 adptList.insert(item, 1);
                 listView.setAdapter(adptList);
+                mTeam1.sortAdapater();
             }
         }
     };
@@ -712,6 +713,7 @@ public class SynchroVideoActivity extends Activity {
                 adptList.remove(item);
                 adptList.insert(item, 1);
                 listView.setAdapter(adptList);
+                mTeam2.sortAdapater();
             }
         }
     };
