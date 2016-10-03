@@ -11,6 +11,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -24,13 +26,16 @@ public class Player extends AppCompatActivity implements NavigationView.OnNaviga
     Button btnNewPlayer;
     ListView player;
     ArrayAdapter<String> playerName;
-
     private PlayerDBManager mPlayerManage;
+    WebView myWebView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player);
+
+        myWebView = (WebView)findViewById(R.id.webView);
+        myWebView.setWebViewClient(new WebViewClient());
 
         // new add
         mPlayerManage = new PlayerDBManager(this);
@@ -107,12 +112,13 @@ public class Player extends AppCompatActivity implements NavigationView.OnNaviga
                 break;
 
             case R.id.review_page:
-                Intent itt_review = new Intent(getApplication(), Webview.class);
-                startActivity(itt_review);
+                myWebView.loadUrl("https://with-manager.herokuapp.com/");
+                myWebView.getSettings().setJavaScriptEnabled(true);
                 break;
 
             case R.id.add_player:
-
+                myWebView.loadUrl("https://with-manager.herokuapp.com/auth/signup");
+                myWebView.getSettings().setJavaScriptEnabled(true);
                 break;
         }
 
@@ -120,5 +126,4 @@ public class Player extends AppCompatActivity implements NavigationView.OnNaviga
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
 }
