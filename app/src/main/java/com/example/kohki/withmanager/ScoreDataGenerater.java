@@ -17,8 +17,10 @@ public class ScoreDataGenerater {
     private static SQLiteDatabase db;
     private List<String[]> l_scoredata;
     int sum, now_our, now_opt;
+    private String gameStartDateTime;
 
-    public ScoreDataGenerater(Context context){
+    public ScoreDataGenerater(Context context, String gameStartDateTime){
+        this.gameStartDateTime = gameStartDateTime;
         mDbHelper = new EventDbHelper(context);
         db = mDbHelper.getWritableDatabase();
         l_scoredata = new ArrayList<>();
@@ -38,23 +40,18 @@ public class ScoreDataGenerater {
             c.moveToFirst();
 
             for (int i = 0; i < rowcount; i++) {
-                int id = c.getInt(c.getColumnIndex(EventContract.Event._ID));
-                int team = c.getInt(c.getColumnIndex(EventContract.Event.COL_TEAM));
-                int num = c.getInt(c.getColumnIndex(EventContract.Event.COL_NUM));
-                int point = c.getInt(c.getColumnIndex(EventContract.Event.COL_POINT));
-                int success = c.getInt(c.getColumnIndex(EventContract.Event.COL_SUCCESS));
-                String event = c.getString(c.getColumnIndex(EventContract.Event.COL_EVENT));
-                String movie_name = c.getString(c.getColumnIndex(EventContract.Event.COL_MOVIE_NAME));
-                // 9/6: checked getting all column and they are correct
-                String record = +id + "," +
-                        team + "," +
-                        num + "," +
-                        point + "," +
-                        success + "," +
-                        event + "," +
-                        movie_name;
-                //合count data related to scoresheet
-                if(event.equals("shoot") && success == 1){
+                int    id          = c.getInt(c.getColumnIndex(EventContract.Event._ID));
+                int    team        = c.getInt(c.getColumnIndex(EventContract.Event.COL_TEAM));
+                int    num         = c.getInt(c.getColumnIndex(EventContract.Event.COL_NUM));
+                int    point       = c.getInt(c.getColumnIndex(EventContract.Event.COL_POINT));
+                int    success     = c.getInt(c.getColumnIndex(EventContract.Event.COL_SUCCESS));
+                String event       = c.getString(c.getColumnIndex(EventContract.Event.COL_EVENT));
+                String movie_name  = c.getString(c.getColumnIndex(EventContract.Event.COL_MOVIE_NAME));
+                String start_time  = c.getString(c.getColumnIndex(EventContract.Event.COL_DATETIME));
+                String quarter_num = c.getString(c.getColumnIndex(EventContract.Event.COL_QUARTER_NUM));
+
+                //count data related to scoresheet
+                if(event.equals("shoot") && success == 1 && start_time.equals(gameStartDateTime)){
                     String[] db_row = {team+"", num+"", point+""};
                     System.out.println(point);
                     if(point == 3) db_row[1] = "(" + db_row[1] + ")";
