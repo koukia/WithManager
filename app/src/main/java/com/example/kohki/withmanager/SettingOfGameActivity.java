@@ -83,7 +83,7 @@ public class SettingOfGameActivity extends Activity {
                     }
                 }else { // number of team member
                     int mem_num = Integer.parseInt(tv_num.getText()+"");
-                    if (mem_num >= 6) {
+                    if (mem_num > Team.min_team_members) {
                         tv_num.setText(mem_num - 1 + "");
                     }
                 }
@@ -100,7 +100,7 @@ public class SettingOfGameActivity extends Activity {
                     }
                 }else { // number of team member
                     int mem_num = Integer.parseInt(tv_num.getText()+"");
-                    if (mem_num < 30) {
+                    if (mem_num < Team.max_team_members) {
                         tv_num.setText(mem_num + 1 + "");
                     }
                 }

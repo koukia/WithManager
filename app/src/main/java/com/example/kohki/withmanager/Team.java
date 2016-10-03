@@ -19,6 +19,9 @@ public class Team {
     private ListView team_lv;
     public ArrayList<String> members;
     public static int who_is_actor[] = {0, 0};
+    public static int min_team_members = 5;
+    public static int max_team_members = 30;
+
     public static String event_name = null;
     ArrayAdapter<String> adapter_teamlist;
 
@@ -28,8 +31,8 @@ public class Team {
         team_lv = team_list;
         members = new ArrayList<>();
         members.add("?");
-        for(int i = 4; i <= mem_num; i++){
-            members.add(i+"");
+        for(int i = 0; i < mem_num; i++){
+            members.add((4+i)+"");
         }
         adapter_teamlist = new ArrayAdapter<String>(context_,
                 android.R.layout.simple_list_item_1, members);

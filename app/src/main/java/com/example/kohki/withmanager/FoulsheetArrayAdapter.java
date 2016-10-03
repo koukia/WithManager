@@ -72,11 +72,11 @@ public class FoulsheetArrayAdapter extends ArrayAdapter {
 
         if (stat[0].equals("team_kind")) {
             if (stat[1].equals("ourteam")) {
-                viewHolder.tv_mem_num.setText("味方");
-                viewHolder.tv_foul_sum.setText("Foul");
+                viewHolder.tv_mem_num.setText("味方  ");
+                viewHolder.tv_foul_sum.setText("Foul  ");
             } else if (stat[1].equals("oppteam")) {
-                viewHolder.tv_mem_num.setText("相手");
-                viewHolder.tv_foul_sum.setText("Foul");
+                viewHolder.tv_mem_num.setText("相手  ");
+                viewHolder.tv_foul_sum.setText("Foul  ");
             }
         }else {
             if (stat[0].equals("T")) {

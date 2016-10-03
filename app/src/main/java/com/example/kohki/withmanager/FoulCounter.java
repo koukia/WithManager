@@ -64,8 +64,8 @@ public class FoulCounter {
     }
 */
     public List getFoulData() {
-        Integer[] ourteam_counter = new Integer[VideoActivity.our_member_num-3];//[0] => ?,[1] => num4
-        Integer[] oppteam_counter = new Integer[VideoActivity.opp_member_num-3];
+        Integer[] ourteam_counter = new Integer[Team.max_team_members+1];//[0] => ?,[1] => num4
+        Integer[] oppteam_counter = new Integer[Team.max_team_members+1];
         for(int i=0;i<ourteam_counter.length;i++){
             ourteam_counter[i]=0;
         }
@@ -94,12 +94,12 @@ public class FoulCounter {
                         if(num == 0)//num is ?
                             ourteam_counter[num] = ourteam_counter[num] + 1;
                         else
-                            ourteam_counter[num - 3] = ourteam_counter[num - 3] + 1;
+                            ourteam_counter[num-3] = ourteam_counter[num-3] + 1;
                     }else if(team == 1){//oppteam
                         if(num == 0)
                             oppteam_counter[num] = oppteam_counter[num] + 1;
                         else
-                            oppteam_counter[num - 3] = oppteam_counter[num - 3] + 1;
+                            oppteam_counter[num-3] = oppteam_counter[num-3] + 1;
                     }
                 }
                 c.moveToNext();

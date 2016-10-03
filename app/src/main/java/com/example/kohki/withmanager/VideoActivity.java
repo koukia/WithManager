@@ -84,8 +84,8 @@ public class VideoActivity extends Activity {
 
     private Team mTeam1;
     private Team mTeam2;
-    public static int our_member_num = 18;
-    public static int opp_member_num = 18;
+    public static int our_member_num = 15;
+    public static int opp_member_num = 15;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -333,19 +333,20 @@ public class VideoActivity extends Activity {
 
     private void setFoulsheet(){
 
-        ListView listView_our = (ListView) findViewById(R.id.our_foul_list);
-        ListView listView_opt = (ListView) findViewById(R.id.opp_foul_list);
+        ListView lv_ourfoul = (ListView) findViewById(R.id.our_foul_list);
+        ListView lv_oppfoul = (ListView) findViewById(R.id.opp_foul_list);
         //リストに追加するためのアダプタ
-        FoulsheetArrayAdapter adpt_our = new FoulsheetArrayAdapter(getApplicationContext(), R.layout.foul_sheet_row);
-        FoulsheetArrayAdapter adpt_opt = new FoulsheetArrayAdapter(getApplicationContext(), R.layout.foul_sheet_row);
+        FoulsheetArrayAdapter adpt_our_foulsheet = new FoulsheetArrayAdapter(getApplicationContext(), R.layout.foul_sheet_row);
+        FoulsheetArrayAdapter adpt_opp_foulsheet = new FoulsheetArrayAdapter(getApplicationContext(), R.layout.foul_sheet_row);
 
-        Parcelable state_our = listView_our.onSaveInstanceState();
-        Parcelable state_opt = listView_opt.onSaveInstanceState();
+        //REVIEW: Instance state is needed ?
+        //   Parcelable state_our = lv_ourfoul.onSaveInstanceState();
+        lv_ourfoul.setAdapter(adpt_our_foulsheet);
+      //  lv_ourfoul.onRestoreInstanceState(state_our);
 
-        listView_our.setAdapter(adpt_our);
-        listView_our.onRestoreInstanceState(state_our);
-        listView_opt.setAdapter(adpt_opt);
-        listView_opt.onRestoreInstanceState(state_opt);
+    //    Parcelable state_opt = lv_oppfoul.onSaveInstanceState();
+        lv_oppfoul.setAdapter(adpt_opp_foulsheet);
+      //  lv_oppfoul.onRestoreInstanceState(state_opt);
 
         FoulCounter cFoulCounter = new FoulCounter(context, gameStartDateTime);
         List<Integer[]> foulList = cFoulCounter.getFoulData();
@@ -356,10 +357,10 @@ public class VideoActivity extends Activity {
         for(int foulcount : ourteam_foul){//先にチームファウルを出力
             foulsum += foulcount;
         }
-        adpt_our.add(new String[]{"team_kind","ourteam"});
-        adpt_our.add(new String[]{"T", String.valueOf(foulsum)});
+        adpt_our_foulsheet.add(new String[]{"team_kind","ourteam"});
+        adpt_our_foulsheet.add(new String[]{"T", String.valueOf(foulsum)});
         for(int i=1;i<ourteam_foul.length;i++){
-            adpt_our.add(new String[]{String.valueOf(i+3), String.valueOf(ourteam_foul[i])});
+            adpt_our_foulsheet.add(new String[]{String.valueOf(i+3), String.valueOf(ourteam_foul[i])});
         }
 
         //oppteam
@@ -367,33 +368,13 @@ public class VideoActivity extends Activity {
         for(int foulcount : oppteam_foul){
             foulsum += foulcount;
         }
-        adpt_opt.add(new String[]{"team_kind","oppteam"});
-        adpt_opt.add(new String[]{"T",String.valueOf(foulsum)});
-        for(int i=1;i<ourteam_foul.length;i++){
-            adpt_opt.add(new String[]{String.valueOf(i+3),String.valueOf(oppteam_foul[i])});
+        adpt_opp_foulsheet.add(new String[]{"team_kind","oppteam"});
+        adpt_opp_foulsheet.add(new String[]{"T",String.valueOf(foulsum)});
+        for(int i=1;i<oppteam_foul.length;i++){
+            adpt_opp_foulsheet.add(new String[]{String.valueOf(i+3), String.valueOf(oppteam_foul[i])});
         }
     }
 
-    public boolean replay(String movie_name){
-        mOverLaySurfaceView.setVisibility(SurfaceView.VISIBLE);
-        try {
-            if (mPreviewCallback.mMediaPlayer != null) {
-                mPreviewCallback.mMediaPlayer.release();
-                mPreviewCallback.mMediaPlayer = null;
-            }
-            mPreviewCallback.palyVideo(movie_name);
-            mPreviewCallback.mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                @Override
-                public void onCompletion(MediaPlayer mp) {
-                    mOverLaySurfaceView.setVisibility(SurfaceView.INVISIBLE);
-                }
-            });
-        } catch (NullPointerException e) {
-            Toast.makeText(context, "ぬるぽ", Toast.LENGTH_LONG).show();
-            return false;
-        }
-        return true;
-    }
     public void recordEvent(int point, int is_success,String event_name) {
         if (!is_playing) return;
         //TODO:録画中でないとエラー
@@ -440,12 +421,6 @@ public class VideoActivity extends Activity {
         //mEventLogger.getFoul();
     }
 
-    private static class FileSort implements Comparator<File> {
-        public int compare(File src, File target) {
-            int diff = src.getName().compareTo(target.getName());
-            return diff;
-        }
-    }
     @Override
     public void onResume(){
         super.onResume();
@@ -458,6 +433,7 @@ public class VideoActivity extends Activity {
 
         our_team.setOnItemClickListener(adptSelectListener1);
         opt_team.setOnItemClickListener(adptSelectListener2);
+
     }
     @Override
     protected void onPause() { //別アクティビティ起動時
