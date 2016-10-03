@@ -20,11 +20,11 @@
             <item
                 android:id="@+id/review_page"
                 android:icon="@android:drawable/ic_menu_save"
-                android:title="レビュー" />
+                android:title="レビュー(ログイン)" />
             <item
                 android:id="@+id/add_player"
                 android:icon="@android:drawable/ic_menu_add"
-                android:title="add_player" />
+                android:title="選手登録" />
         </menu>
     </item>
 </menu>

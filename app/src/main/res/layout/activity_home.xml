@@ -12,20 +12,20 @@
     android:weightSum="1">
 
     <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/btn_player"
-        android:text="選手一覧"
-        android:layout_gravity="bottom"
-        />
-
-    <Button
         android:layout_width="165dp"
         android:layout_height="93dp"
         android:id="@+id/btn_game"
         android:layout_gravity="bottom"
         android:background="@drawable/game"
         />
+
+    <Button
+        android:layout_width="114dp"
+        android:layout_height="97dp"
+        android:id="@+id/btn_player"
+        android:background="@drawable/players"
+        android:layout_weight="0.39"
+        android:layout_gravity="bottom" />
 
 </LinearLayout>
 
