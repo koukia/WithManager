@@ -1,7 +1,10 @@
 package com.example.kohki.withmanager;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.database.sqlite.SQLiteDatabase;
 import android.content.Intent;
 import android.graphics.PixelFormat;
@@ -86,6 +89,7 @@ public class VideoActivity extends Activity {
     private Team mTeam2;
     public static int our_member_num = 15;
     public static int opp_member_num = 15;
+    public static int quarter_num = 1;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -291,6 +295,46 @@ public class VideoActivity extends Activity {
                 }catch (Exception e) {
                     Log.v("IntentErr:", e.getMessage() + "," + e);
                 }
+            }
+        });
+
+        findViewById(R.id.btn_save_or_delete).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder ADB_quarter_save = new AlertDialog.Builder(context);
+                ADB_quarter_save.setTitle("第"+quarter_num+"Q の記録を完了しますか？");
+            //    alertDialogBuilder.setMessage("メッセージ");
+                if(quarter_num == 4) {
+                    quarter_num = 1;
+                }else if(quarter_num <= 3) {
+                    ADB_quarter_save.setNeutralButton("第"+(quarter_num+1)+"Qの記録をする", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            quarter_num++;
+                            Toast.makeText(context,"第"+quarter_num+"Q 記録開始",Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+                ADB_quarter_save.setNegativeButton("保存して終了する", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //TODO:fix(create) result activity
+                        Intent itt = new Intent(context, GameResultActivity.class);
+                        itt.putExtra("gamestartdatetime",gameStartDateTime);
+                        startActivity(itt);
+                    }
+                });
+                ADB_quarter_save.setPositiveButton("いいえ", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+                // アラートダイアログのキャンセルが可能かどうかを設定します
+                ADB_quarter_save.setCancelable(true);
+                AlertDialog alertDialog = ADB_quarter_save.create();
+                // アラートダイアログを表示します
+                alertDialog.show();
             }
         });
     }

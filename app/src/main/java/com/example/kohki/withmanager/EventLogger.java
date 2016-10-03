@@ -137,13 +137,15 @@ public class EventLogger {
 
          /* DB insert*/
         ContentValues values = new ContentValues();
-        values.put(EventContract.Event.COL_TEAM,       team);
-        values.put(EventContract.Event.COL_NUM,        number);
-        values.put(EventContract.Event.COL_POINT,     shoot_point);
-        values.put(EventContract.Event.COL_SUCCESS,   is_success );
-        values.put(EventContract.Event.COL_EVENT,      event_name);
-        values.put(EventContract.Event.COL_MOVIE_NAME, movie_name);
-        values.put(EventContract.Event.COL_DATETIME, dateTime);
+        values.put(EventContract.Event.COL_TEAM,        team);
+        values.put(EventContract.Event.COL_NUM,         number);
+        values.put(EventContract.Event.COL_POINT,       shoot_point);
+        values.put(EventContract.Event.COL_SUCCESS,     is_success );
+        values.put(EventContract.Event.COL_EVENT,       event_name);
+        values.put(EventContract.Event.COL_MOVIE_NAME,  movie_name);
+        values.put(EventContract.Event.COL_DATETIME,    dateTime);
+        values.put(EventContract.Event.COL_QUARTER_NUM, VideoActivity.quarter_num);
+
         long newRowId;
         newRowId = db.insert(
                 //tableName, // テーブルは現在の時刻
@@ -160,7 +162,7 @@ public class EventLogger {
         ContentValues values = new ContentValues();
         values.put(EventContract.Game.COL_DATE_TIME, dateTime);
 
-        System.out.println(dateTime + "を追加しま");
+        System.out.println(dateTime + "を追加しました");
         db.insert(
             EventContract.Game.TABLE_NAME,
             null,

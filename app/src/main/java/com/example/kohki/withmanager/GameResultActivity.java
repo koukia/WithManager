@@ -1,22 +1,22 @@
 package com.example.kohki.withmanager;
 
-import android.content.ClipData;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Parcelable;
+import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
+import android.widget.Toast;
 
-import java.io.IOException;
 import java.io.InputStream;
-import java.util.List;
 
-public class ResultGame extends AppCompatActivity {
+/**
+ * Created by kohki on 16/10/03.
+ */
+public class GameResultActivity extends AppCompatActivity {
+
     private final int HOME = 0;
     AlertDialog.Builder alert;
 
@@ -24,10 +24,18 @@ public class ResultGame extends AppCompatActivity {
     private ItemArrayAdapter adpt_our, adpt_ene;
     private InputStream inputStream;
 
+    private String gameStartDateTime;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_result_game);
+
+        Intent itt = getIntent();
+        gameStartDateTime = itt.getStringExtra("gamestartdatetime");
+        if(gameStartDateTime != null){
+            Toast.makeText(this, "to-re-ta", Toast.LENGTH_SHORT).show();
+        }
 /*
         listView_our = (ListView) findViewById(R.id.listView_our);
         listView_ene = (ListView) findViewById(R.id.listView_ene);
