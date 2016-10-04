@@ -1,8 +1,11 @@
 package com.example.kohki.withmanager;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+
+import java.util.HashMap;
 
 /**
  * Created by kohki on 16/09/05.
@@ -16,17 +19,17 @@ public class EventDbHelper extends SQLiteOpenHelper {
     private static final String SQL_CREATE_EVENT_ENTRIES =
             "CREATE TABLE " + EventContract.Event.TABLE_NAME + " (" +
                     EventContract.Event._ID + " INTEGER PRIMARY KEY," +
-                    EventContract.Event.COL_TEAM       + INT_TYPE + COMMA_SEP +
-                    EventContract.Event.COL_NUM        + INT_TYPE + COMMA_SEP +
-                    EventContract.Event.COL_POINT      + INT_TYPE + COMMA_SEP +
-                    EventContract.Event.COL_SUCCESS    + INT_TYPE + COMMA_SEP +
-                    EventContract.Event.COL_EVENT      + TEXT_TYPE + COMMA_SEP +
-                    EventContract.Event.COL_MOVIE_NAME + TEXT_TYPE + COMMA_SEP +
-                    EventContract.Event.COL_DATETIME   + TEXT_TYPE + " )";
+                    EventContract.Event.COL_TEAM        + INT_TYPE  + COMMA_SEP +
+                    EventContract.Event.COL_NUM         + INT_TYPE  + COMMA_SEP +
+                    EventContract.Event.COL_POINT       + INT_TYPE  + COMMA_SEP +
+                    EventContract.Event.COL_SUCCESS     + INT_TYPE  + COMMA_SEP +
+                    EventContract.Event.COL_EVENT       + TEXT_TYPE + COMMA_SEP +
+                    EventContract.Event.COL_MOVIE_NAME  + TEXT_TYPE + COMMA_SEP +
+                    EventContract.Event.COL_DATETIME    + TEXT_TYPE + COMMA_SEP +
+                    EventContract.Event.COL_QUARTER_NUM + INT_TYPE  +" )";
 
     private static final String SQL_DELETE_EVENT_ENTRIES =
             "DROP TABLE IF EXISTS " + EventContract.Event.TABLE_NAME;
-
 
     //Gameのテーブル作成
     private static final String SQL_CREATE_GAME_ENTRIES =
@@ -65,4 +68,33 @@ public class EventDbHelper extends SQLiteOpenHelper {
         onUpgrade(db, oldVersion, newVersion);
     }
 
+    public static HashMap<String,String> getRowFromID(Context context, int id){
+        EventDbHelper mDbHelper = new EventDbHelper(context);
+        SQLiteDatabase db = mDbHelper.getWritableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM "+ EventContract.Event.TABLE_NAME+" WHERE _id=?", new String[]{String.valueOf(id)});
+        HashMap<String,String> row = new HashMap<>();
+        try {
+            if (cursor.moveToNext()) {
+                row.put(EventContract.Event.COL_TEAM,
+                        cursor.getString(cursor.getColumnIndex(EventContract.Event.COL_TEAM)));
+                row.put(EventContract.Event.COL_NUM,
+                        cursor.getString(cursor.getColumnIndex(EventContract.Event.COL_NUM)));
+                row.put(EventContract.Event.COL_POINT,
+                        cursor.getString(cursor.getColumnIndex(EventContract.Event.COL_POINT)));
+                row.put(EventContract.Event.COL_SUCCESS,
+                        cursor.getString(cursor.getColumnIndex(EventContract.Event.COL_SUCCESS)));
+                row.put(EventContract.Event.COL_EVENT,
+                        cursor.getString(cursor.getColumnIndex(EventContract.Event.COL_EVENT)));
+                row.put(EventContract.Event.COL_MOVIE_NAME,
+                        cursor.getString(cursor.getColumnIndex(EventContract.Event.COL_MOVIE_NAME)));
+                row.put(EventContract.Event.COL_DATETIME,
+                        cursor.getString(cursor.getColumnIndex(EventContract.Event.COL_DATETIME)));
+                row.put(EventContract.Event.COL_QUARTER_NUM,
+                        cursor.getString(cursor.getColumnIndex(EventContract.Event.COL_QUARTER_NUM)));
+            }
+        } finally {
+            cursor.close();
+        }
+        return row;
+    }
 }

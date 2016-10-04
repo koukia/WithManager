@@ -18,7 +18,7 @@ import java.util.List;
  */
 public class FoulsheetArrayAdapter extends ArrayAdapter {
     private List<String[]> foulList = new ArrayList<>();
-
+    private static final String TAG = "FoulsheetArrayAdapter";
     static class ItemViewHolder{
         TextView tv_mem_num;
         TextView tv_foul_sum;
@@ -52,7 +52,7 @@ public class FoulsheetArrayAdapter extends ArrayAdapter {
                     getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             row = inflater.inflate(R.layout.foul_sheet_row, parent, false);
             viewHolder = new ItemViewHolder();
-            viewHolder.tv_mem_num  = (TextView)row.findViewById(R.id.num);
+            viewHolder.tv_mem_num  = (TextView) row.findViewById(R.id.num);
             viewHolder.tv_foul_sum = (TextView) row.findViewById(R.id.foul_sum);
             viewHolder.left        = row.findViewById(R.id.left_1);
             viewHolder.right       = row.findViewById(R.id.right_1);
@@ -61,57 +61,70 @@ public class FoulsheetArrayAdapter extends ArrayAdapter {
             viewHolder = (ItemViewHolder)row.getTag();
         }
         String[] stat = getItem(position);
-        Log.d("[0]",""+stat[0]);
-        Log.d("[1]",""+stat[1]);
+    //    Log.d("[0]","stat[0]"+stat[0]);
+    //    Log.d("[1]","stat[1]"+stat[1]);
 
         viewHolder.left.setBackgroundColor(Color.parseColor("#ffffff"));
         viewHolder.tv_mem_num.setBackgroundColor(Color.parseColor("#ffffff"));
         viewHolder.right.setBackgroundColor(Color.parseColor("#ffffff"));
         viewHolder.tv_foul_sum.setBackgroundColor(Color.parseColor("#ffffff"));
         viewHolder.tv_mem_num.setTextColor(Color.BLACK);
+        viewHolder.tv_foul_sum.setTextColor(Color.BLACK);
 
         if (stat[0].equals("team_kind")) {
             if (stat[1].equals("ourteam")) {
                 viewHolder.tv_mem_num.setText("味方");
+                viewHolder.tv_mem_num.setGravity(Gravity.CENTER);
                 viewHolder.tv_foul_sum.setText("Foul");
+                viewHolder.tv_foul_sum.setGravity(Gravity.CENTER);
             } else if (stat[1].equals("oppteam")) {
                 viewHolder.tv_mem_num.setText("相手");
+                viewHolder.tv_mem_num.setGravity(Gravity.CENTER);
                 viewHolder.tv_foul_sum.setText("Foul");
+                viewHolder.tv_foul_sum.setGravity(Gravity.CENTER);
             }
-        }else {
-            if (stat[0].equals("T")) {
-                viewHolder.tv_mem_num.setText(stat[0] + "    ");
-                viewHolder.tv_mem_num.setTextColor(Color.BLACK);
+        }else if (stat[0].equals("T")) {
+            viewHolder.tv_mem_num.setText("T");
+            viewHolder.tv_mem_num.setGravity(Gravity.CENTER);
+            try {
+                setFoulSum(viewHolder.tv_foul_sum, Integer.parseInt(stat[1]) );
+            } catch (NumberFormatException e) {
+                Log.d(TAG, e + "");
+            }
+        }else if (!stat[0].equals("?")) {
+            viewHolder.left.setBackgroundColor(Color.parseColor("#ffc0cb"));
+            viewHolder.tv_mem_num.setBackgroundColor(Color.parseColor("#ffc0cb"));
+            viewHolder.right.setBackgroundColor(Color.parseColor("#98fb98"));
+            viewHolder.tv_foul_sum.setBackgroundColor(Color.parseColor("#98fb98"));
+            viewHolder.tv_mem_num.setTextColor(Color.BLACK);
+            viewHolder.tv_mem_num.setText(stat[0] + "番");
 
-                setFoulSum(viewHolder.tv_foul_sum,Integer.parseInt(stat[1]));
-            } else {
-                if (!stat[0].equals("?")) {
-                    viewHolder.left.setBackgroundColor(Color.parseColor("#ffc0cb"));
-                    viewHolder.tv_mem_num.setBackgroundColor(Color.parseColor("#ffc0cb"));
-                    viewHolder.right.setBackgroundColor(Color.parseColor("#98fb98"));
-                    viewHolder.tv_foul_sum.setBackgroundColor(Color.parseColor("#98fb98"));
-
-                    viewHolder.tv_mem_num.setText(stat[0] + "番");
-                    viewHolder.tv_mem_num.setTextColor(Color.BLACK);
-
-                    setFoulSum(viewHolder.tv_foul_sum,Integer.parseInt(stat[1]));
-                }
+            try {
+                setFoulSum(viewHolder.tv_foul_sum, Integer.parseInt(stat[1]));
+            } catch (NumberFormatException e) {
+                Log.d(TAG, e + "");
             }
         }
-
         return row;
     }
 
     private void setFoulSum(TextView tv, int foul_sum){
-        if (foul_sum >= 3 && foul_sum <= 4) {
-            tv.setText(foul_sum + "回");
-            tv.setTextColor(Color.parseColor("#ff8cff"));
-        } else if (foul_sum >= 5) {
+        if (foul_sum >= 5) {
             tv.setText(foul_sum + "回");
             tv.setTextColor(Color.parseColor("#ff0000"));
-        } else {
+            tv.setGravity(Gravity.CENTER);
+        } else if (foul_sum >= 3 && foul_sum <= 4) {
+            tv.setText(foul_sum + "回");
+            tv.setTextColor(Color.parseColor("#ff8cff"));
+            tv.setGravity(Gravity.CENTER);
+        } else if (foul_sum >= 1) {
             tv.setText(foul_sum + "回");
             tv.setTextColor(Color.BLACK);
+            tv.setGravity(Gravity.CENTER);
+        }else if (foul_sum == 0) {
+            tv.setText(" - ");
+            tv.setTextColor(Color.BLACK);
+            tv.setGravity(Gravity.CENTER);
         }
     }
 }

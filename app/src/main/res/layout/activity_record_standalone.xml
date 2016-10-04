@@ -16,22 +16,21 @@
             android:layout_height="wrap_content"
             android:id="@+id/our_team_list"
             android:listSelector="@drawable/p2_listselector"
-            android:layout_weight="30"
+            android:layout_weight="30.5"
             android:background="#ffffff" />
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_weight="25"
+            android:layout_weight="24"
             android:id="@+id/menu">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_gravity="left"
-                android:gravity="left"
-                android:weightSum="100">
+                android:weightSum="100"
+                android:gravity="center">
                 <ImageButton
                     android:layout_width="50dp"
                     android:layout_height="50dp"
@@ -268,7 +267,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/opposing_team_list"
             android:listSelector="@drawable/p1_listselector"
-            android:layout_weight="30"
+            android:layout_weight="30.5"
             android:background="#0000FF"
             android:textFilterEnabled="false" />
     </LinearLayout>

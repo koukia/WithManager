@@ -27,8 +27,8 @@ public class ResultGame extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_result_game);
-
+        setContentView(R.layout.activity_gameresult_sub);
+/*
         listView_our = (ListView) findViewById(R.id.listView_our);
         listView_ene = (ListView) findViewById(R.id.listView_ene);
 
@@ -64,7 +64,7 @@ public class ResultGame extends AppCompatActivity {
                 adpt_ene.add(scoreData);
             }
         }
-
+*/
         alert = new AlertDialog.Builder(this);
         alert.setTitle("通知");
         alert.setMessage("ホーム画面に戻ります\nよろしいですか？");

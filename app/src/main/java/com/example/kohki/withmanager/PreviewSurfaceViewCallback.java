@@ -22,15 +22,14 @@ public class PreviewSurfaceViewCallback implements SurfaceHolder.Callback {
             this.context = context;
         }
         public void palyVideo(String path){
-            preview_video_path = path;
+            String data_sorce = path;
             try {
                 // MediaPlayerを生成
                 mMediaPlayer = new MediaPlayer();
                 // 動画ファイルをMediaPlayerに読み込ませる
-                mMediaPlayer.setDataSource(preview_video_path);
+                mMediaPlayer.setDataSource(data_sorce);
                 // 読み込んだ動画ファイルを画面に表示する
                 mMediaPlayer.setDisplay(holder);
-               // mMediaPlayer.
                 mMediaPlayer.prepare();
                 mMediaPlayer.start();
             } catch (IllegalArgumentException e) {
@@ -41,7 +40,7 @@ public class PreviewSurfaceViewCallback implements SurfaceHolder.Callback {
                 Log.e(TAG,e.getMessage()+", "+e);
                 Toast.makeText(context, "IllegalStateException:"+e, Toast.LENGTH_LONG).show();
             } catch (IOException e) {
-                Log.e(TAG,e.getMessage()+", "+e);
+                Log.e(TAG,e+"");
                 Toast.makeText(context, "IOException:"+e, Toast.LENGTH_LONG).show();
             } finally {
 
@@ -51,11 +50,13 @@ public class PreviewSurfaceViewCallback implements SurfaceHolder.Callback {
         @Override
         public void surfaceChanged(SurfaceHolder holder, int arg1, int arg2, int arg3) {
             this.holder = holder;
+        //    Toast.makeText(context,"surfaceChanged()",Toast.LENGTH_SHORT).show();
         }
 
         @Override
         public void surfaceCreated(SurfaceHolder holder) {
             this.holder = holder;
+        //    Toast.makeText(context,"surfaceCreated()",Toast.LENGTH_SHORT).show();
         }
 
         @Override
@@ -66,6 +67,7 @@ public class PreviewSurfaceViewCallback implements SurfaceHolder.Callback {
                 mMediaPlayer.release();
                 mMediaPlayer = null;
             }
+        //    Toast.makeText(context,"surfaceDestroyed()",Toast.LENGTH_SHORT).show();
         }
 
 }

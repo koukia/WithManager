@@ -17,6 +17,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by kohki on 16/09/01.
@@ -36,11 +37,13 @@ public class EventLogger {
     private SQLiteDatabase db;
     ListView lv_event_list;
     private static Context context;
+    private String gameStartDateTime;
 
-    public EventLogger(Context context, ListView event_list){
-
+    public EventLogger(Context context, ListView event_list, String gameStartDateTime){
         this.context = context;
         lv_event_list = event_list ;
+        this.gameStartDateTime = gameStartDateTime;
+
         setDB();
         // DB reset *****  If you delete here comment to reset DB, Commentout here !!
         //mDbHelper.onUpgrade(db, EventDbHelper.DATABASE_VERSION, EventDbHelper.DATABASE_VERSION);
@@ -57,9 +60,9 @@ public class EventLogger {
 
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            ListView listView = (ListView) parent;
-            String item = (String) listView.getItemAtPosition(position);
-            //    Toast.makeText(context,item+"",Toast.LENGTH_SHORT).show();
+            ListView lv_event_log      = (ListView) parent;
+        //    int   item_of_event_log = (int)lv_event_log.getItemAtPosition(position);
+            // Toast.makeText(context,item+"",Toast.LENGTH_SHORT).show();
         }
     }
     static class EventLogListItemLongClickListener  implements ListView.OnItemLongClickListener {
@@ -69,10 +72,10 @@ public class EventLogger {
 
         @Override
         public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-            ListView listView = (ListView) parent;
-            String item = (String) listView.getItemAtPosition(position);
-            String[] items = item.split(",");
-            String movie_name = items[items.length-1];
+            ListView lv_event_log      = (ListView) parent;
+            int   item_of_event_log = (int)lv_event_log.getItemAtPosition(position);
+            HashMap<String,String> row =  EventDbHelper.getRowFromID(context,item_of_event_log);
+            String   movie_name = row.get(EventContract.Event.COL_MOVIE_NAME);
             Log.d(TAG,movie_name+"を再生");
 
             try { //スタンドアローンかBluetooth通信中か
@@ -111,7 +114,7 @@ public class EventLogger {
         }
     }
 
-    public void addEvent(int team, int number, int shoot_point, int is_success, String event_name, String movie_name, String dateTime){
+    public void addEvent(int team, int number, int shoot_point, int is_success, String event_name, String movie_name, String dateTime ){
         String log = "addEvent() err";
 
         switch (event_name){
@@ -137,16 +140,17 @@ public class EventLogger {
 
          /* DB insert*/
         ContentValues values = new ContentValues();
-        values.put(EventContract.Event.COL_TEAM,       team);
-        values.put(EventContract.Event.COL_NUM,        number);
-        values.put(EventContract.Event.COL_POINT,     shoot_point);
-        values.put(EventContract.Event.COL_SUCCESS,   is_success );
-        values.put(EventContract.Event.COL_EVENT,      event_name);
-        values.put(EventContract.Event.COL_MOVIE_NAME, movie_name);
-        values.put(EventContract.Event.COL_DATETIME, dateTime);
+        values.put(EventContract.Event.COL_TEAM,        team);
+        values.put(EventContract.Event.COL_NUM,         number);
+        values.put(EventContract.Event.COL_POINT,       shoot_point);
+        values.put(EventContract.Event.COL_SUCCESS,     is_success );
+        values.put(EventContract.Event.COL_EVENT,       event_name);
+        values.put(EventContract.Event.COL_MOVIE_NAME,  movie_name);
+        values.put(EventContract.Event.COL_DATETIME,    dateTime);
+        values.put(EventContract.Event.COL_QUARTER_NUM, VideoActivity.current_quarter_num);
+
         long newRowId;
         newRowId = db.insert(
-                //tableName, // テーブルは現在の時刻
                 EventContract.Event.TABLE_NAME,
                 null,
                 values);
@@ -156,11 +160,9 @@ public class EventLogger {
 
     //Startが押された時に、ゲームの開始時刻を保存しておく
     public void addGameTime(String dateTime){
-
         ContentValues values = new ContentValues();
         values.put(EventContract.Game.COL_DATE_TIME, dateTime);
-
-        System.out.println(dateTime + "を追加しま");
+        System.out.println(dateTime + "を追加しました");
         db.insert(
             EventContract.Game.TABLE_NAME,
             null,
@@ -174,11 +176,7 @@ public class EventLogger {
     }
 
     private void updateEventLog() {
-        CardListAdapter adapter2 = new CardListAdapter(context);
-
-
-        ArrayList<String> event_list = new ArrayList<>();
-
+        CardListAdapter adpt_eventlog = new CardListAdapter(context);
         try {
             //SQLiteCursor c = (SQLiteCursor)db.rawQuery(sql, null);
             SQLiteCursor c = (SQLiteCursor)db.query(
@@ -186,39 +184,16 @@ public class EventLogger {
                     null,null,null,null,null,null,null);
 
             int rowcount = c.getCount();
-            StringBuffer sb = new StringBuffer();
             c.moveToFirst();
-
             for (int i = 0; i < rowcount ; i++) {
-                int id            = c.getInt(c.getColumnIndex(EventContract.Event._ID));
-                int team          = c.getInt(c.getColumnIndex(EventContract.Event.COL_TEAM));
-                int num           = c.getInt(c.getColumnIndex(EventContract.Event.COL_NUM));
-                int point         = c.getInt(c.getColumnIndex(EventContract.Event.COL_POINT));
-                int success       = c.getInt(c.getColumnIndex(EventContract.Event.COL_SUCCESS));
-                String event      = c.getString(c.getColumnIndex(EventContract.Event.COL_EVENT));
-                String movie_name = c.getString(c.getColumnIndex(EventContract.Event.COL_MOVIE_NAME));
-                // 9/6: checked getting all column and they are correct
-                String record = +id+","+
-                        team + ","+
-                        num + ","+
-                        point + ","+
-                        success+","+
-                        event + ","+
-                        movie_name;
-
-                event_list.add(record);
-                adapter2.insert(record, 0);
-
+                int id_event_db = c.getInt(c.getColumnIndex(EventContract.Event._ID));
+                adpt_eventlog.insert(id_event_db, 0);//adapterにセットするしておいてclicklistenerで使う
                 c.moveToNext();
             }
         } catch (SQLException e) {
             Log.e("ERROR", e.toString());
         }
-        /**/
-
-        //   ArrayAdapter<String> adapter = new ArrayAdapter<String>(context,
-        //           android.R.layout.simple_list_item_1, event_list);
-        lv_event_list.setAdapter(adapter2);
+        lv_event_list.setAdapter(adpt_eventlog);
     }
 
     public ArrayList<Integer[]> getFoul(){
