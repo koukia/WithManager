@@ -99,8 +99,8 @@ public class SynchroVideoActivity extends Activity {
     Team mTeam1;
     Team mTeam2;
     private ArrayAdapter<String> adptList;
-    public static int our_member_num = 18;
-    public static int opp_member_num = 18;
+    public static int our_member_num = 15;
+    public static int opp_member_num = 15;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -167,7 +167,7 @@ public class SynchroVideoActivity extends Activity {
         mTeam1 = new Team(context, (ListView) findViewById(R.id.our_team_list), our_member_num);
         mTeam2 = new Team(context, (ListView) findViewById(R.id.opposing_team_list), opp_member_num);
 
-        mEventLogger = new EventLogger(context,(ListView) findViewById(R.id.event_log));
+        mEventLogger = new EventLogger(context,(ListView) findViewById(R.id.event_log), dateTime);
 
         our_team = (ListView)findViewById(R.id.our_team_list);
         ArrayAdapter<String> adapter_our = new ArrayAdapter<String>(context,
@@ -227,7 +227,7 @@ public class SynchroVideoActivity extends Activity {
                     LinearLayout scoresheet = (LinearLayout) findViewById(R.id.scoresheet);
                     menu.removeView(scoresheet);
                     getLayoutInflater().inflate(R.layout.event_log, menu);
-                    mEventLogger = new EventLogger(context,(ListView) findViewById(R.id.event_log));
+                    mEventLogger = new EventLogger(context,(ListView) findViewById(R.id.event_log), dateTime);
                     is_scoresheetview = false;
                 }
             }
@@ -255,7 +255,7 @@ public class SynchroVideoActivity extends Activity {
         listView_opt.setAdapter(adpt_opt);
         listView_opt.onRestoreInstanceState(state_opt);
 
-        ScoreDataGenerater cScoreData = new ScoreDataGenerater(context);
+        ScoreDataGenerater cScoreData = new ScoreDataGenerater(context, dateTime);
         List<String[]> scoreList = cScoreData.getScoreData();
         for (String[] scoreData : scoreList) {
             if (scoreData[0].equals("0")) {

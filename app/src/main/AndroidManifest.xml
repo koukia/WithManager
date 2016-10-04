@@ -56,6 +56,9 @@
             android:name=".SettingOfGameActivity"
             android:screenOrientation="landscape"
             />
+        <activity
+            android:name=".GameResultActivity"
+            />
     </application>
 
 </manifest>

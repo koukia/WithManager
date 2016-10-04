@@ -16,17 +16,17 @@ public class EventDbHelper extends SQLiteOpenHelper {
     private static final String SQL_CREATE_EVENT_ENTRIES =
             "CREATE TABLE " + EventContract.Event.TABLE_NAME + " (" +
                     EventContract.Event._ID + " INTEGER PRIMARY KEY," +
-                    EventContract.Event.COL_TEAM       + INT_TYPE + COMMA_SEP +
-                    EventContract.Event.COL_NUM        + INT_TYPE + COMMA_SEP +
-                    EventContract.Event.COL_POINT      + INT_TYPE + COMMA_SEP +
-                    EventContract.Event.COL_SUCCESS    + INT_TYPE + COMMA_SEP +
-                    EventContract.Event.COL_EVENT      + TEXT_TYPE + COMMA_SEP +
-                    EventContract.Event.COL_MOVIE_NAME + TEXT_TYPE + COMMA_SEP +
-                    EventContract.Event.COL_DATETIME   + TEXT_TYPE + " )";
+                    EventContract.Event.COL_TEAM        + INT_TYPE  + COMMA_SEP +
+                    EventContract.Event.COL_NUM         + INT_TYPE  + COMMA_SEP +
+                    EventContract.Event.COL_POINT       + INT_TYPE  + COMMA_SEP +
+                    EventContract.Event.COL_SUCCESS     + INT_TYPE  + COMMA_SEP +
+                    EventContract.Event.COL_EVENT       + TEXT_TYPE + COMMA_SEP +
+                    EventContract.Event.COL_MOVIE_NAME  + TEXT_TYPE + COMMA_SEP +
+                    EventContract.Event.COL_DATETIME    + TEXT_TYPE + COMMA_SEP +
+                    EventContract.Event.COL_QUARTER_NUM + INT_TYPE  +" )";
 
     private static final String SQL_DELETE_EVENT_ENTRIES =
             "DROP TABLE IF EXISTS " + EventContract.Event.TABLE_NAME;
-
 
     //Gameのテーブル作成
     private static final String SQL_CREATE_GAME_ENTRIES =

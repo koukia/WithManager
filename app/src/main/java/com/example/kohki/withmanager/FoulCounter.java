@@ -25,11 +25,11 @@ public class FoulCounter {
     private SQLiteDatabase db;
     //ListView foulsheet_list;
     private static Context context;
-    private String str_GameStartTime;
+    private String gameStartDateTime;
 
-    public FoulCounter(Context context, String game_start_time){
+    public FoulCounter(Context context, String gameStartDateTime){
         this.context = context;
-        str_GameStartTime = game_start_time;
+        this.gameStartDateTime = gameStartDateTime;
     //    this.foulsheet_list = foulsheet_list ;
         mDbHelper = new EventDbHelper(context);
         db = mDbHelper.getWritableDatabase();
@@ -64,15 +64,22 @@ public class FoulCounter {
     }
 */
     public List getFoulData() {
-        Integer[] ourteam_counter = new Integer[VideoActivity.our_member_num-3];//[0] => ?,[1] => num4
-        Integer[] oppteam_counter = new Integer[VideoActivity.opp_member_num-3];
-        for(int i=0;i<ourteam_counter.length;i++){
-            ourteam_counter[i]=0;
+        Integer[] our_memberfoul_counter = new Integer[Team.max_team_members];//[0] => num4,[1] => num5
+        Integer[] opp_memberfoul_counter = new Integer[Team.max_team_members];
+        Integer[] our_teamfoul_counter   = new Integer[4];
+        Integer[] opp_teamfoul_counter   = new Integer[4];
+        for(int i=0;i<our_memberfoul_counter.length;i++){
+            our_memberfoul_counter[i]=0;
         }
-        for(int i=0;i<oppteam_counter.length;i++){
-            oppteam_counter[i]=0;
+        for(int i=0;i<opp_memberfoul_counter.length;i++){
+            opp_memberfoul_counter[i]=0;
         }
-
+        for(int i=0;i<our_teamfoul_counter.length;i++){
+            our_teamfoul_counter[i]=0;
+        }
+        for(int i=0;i<opp_teamfoul_counter.length;i++){
+            opp_teamfoul_counter[i]=0;
+        }
         /*get all data from DB*/
         try {
             SQLiteCursor c = (SQLiteCursor) db.query(
@@ -82,24 +89,27 @@ public class FoulCounter {
             int rowcount = c.getCount();
             c.moveToFirst();
             for (int i = 0; i < rowcount; i++) {
-                String time_of_event = c.getString(c.getColumnIndex(EventContract.Event.COL_DATETIME));
-                String event_name    = c.getString(c.getColumnIndex(EventContract.Event.COL_EVENT));
-                String is_success    = c.getString(c.getColumnIndex(EventContract.Event.COL_SUCCESS));
+                String event_name = c.getString(c.getColumnIndex(EventContract.Event.COL_EVENT));
+                String is_success = c.getString(c.getColumnIndex(EventContract.Event.COL_SUCCESS));
+                String start_time = c.getString(c.getColumnIndex(EventContract.Event.COL_DATETIME));
 
-                if(time_of_event.equals(str_GameStartTime) && event_name.equals("foul") && is_success.equals("1")){
-                    int team = c.getInt(c.getColumnIndex(EventContract.Event.COL_TEAM));
-                    int num  = c.getInt(c.getColumnIndex(EventContract.Event.COL_NUM));
-                    Log.d(TAG,""+num);
+                if(event_name.equals("foul") && is_success.equals("1") && start_time.equals(gameStartDateTime)){
+                    int team        = c.getInt(c.getColumnIndex(EventContract.Event.COL_TEAM));
+                    int num         = c.getInt(c.getColumnIndex(EventContract.Event.COL_NUM));
+                    int quarter_num = c.getInt(c.getColumnIndex(EventContract.Event.COL_QUARTER_NUM));
+
                     if(team == 0){//ourteam
-                        if(num == 0)//num is ?
-                            ourteam_counter[num] = ourteam_counter[num] + 1;
-                        else
-                            ourteam_counter[num - 3] = ourteam_counter[num - 3] + 1;
+                    //    if(num == 0)//num is ?
+                    //        ourteam_counter[num] = ourteam_counter[num] + 1;
+                        if(num >= 4) {
+                            our_memberfoul_counter[num-4] = our_memberfoul_counter[num-4] + 1;
+                        }
+                        our_teamfoul_counter[quarter_num-1] = our_teamfoul_counter[quarter_num-1] + 1;
                     }else if(team == 1){//oppteam
-                        if(num == 0)
-                            oppteam_counter[num] = oppteam_counter[num] + 1;
-                        else
-                            oppteam_counter[num - 3] = oppteam_counter[num - 3] + 1;
+                        if(num >= 4) {
+                            opp_memberfoul_counter[num-4] = opp_memberfoul_counter[num-4] + 1;
+                        }
+                        opp_teamfoul_counter[quarter_num-1] = opp_teamfoul_counter[quarter_num-1] + 1;
                     }
                 }
                 c.moveToNext();
@@ -108,8 +118,10 @@ public class FoulCounter {
             Log.e(TAG, e.toString());
         }
         ArrayList<Integer[]> foul_data_list = new ArrayList<>();
-        foul_data_list.add(ourteam_counter);
-        foul_data_list.add(oppteam_counter);
+        foul_data_list.add(our_memberfoul_counter);
+        foul_data_list.add(our_teamfoul_counter);
+        foul_data_list.add(opp_memberfoul_counter);
+        foul_data_list.add(opp_teamfoul_counter);
 
         return foul_data_list;
     }
