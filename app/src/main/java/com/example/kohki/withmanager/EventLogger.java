@@ -17,6 +17,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by kohki on 16/09/01.
@@ -59,9 +60,9 @@ public class EventLogger {
 
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            ListView listView = (ListView) parent;
-            String item = (String) listView.getItemAtPosition(position);
-            //    Toast.makeText(context,item+"",Toast.LENGTH_SHORT).show();
+            ListView lv_event_log      = (ListView) parent;
+        //    int   item_of_event_log = (int)lv_event_log.getItemAtPosition(position);
+            // Toast.makeText(context,item+"",Toast.LENGTH_SHORT).show();
         }
     }
     static class EventLogListItemLongClickListener  implements ListView.OnItemLongClickListener {
@@ -71,10 +72,10 @@ public class EventLogger {
 
         @Override
         public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-            ListView listView = (ListView) parent;
-            String item = (String) listView.getItemAtPosition(position);
-            String[] items = item.split(",");
-            String movie_name = items[items.length-1];
+            ListView lv_event_log      = (ListView) parent;
+            int   item_of_event_log = (int)lv_event_log.getItemAtPosition(position);
+            HashMap<String,String> row =  EventDbHelper.getRowFromID(context,item_of_event_log);
+            String   movie_name = row.get(EventContract.Event.COL_MOVIE_NAME);
             Log.d(TAG,movie_name+"を再生");
 
             try { //スタンドアローンかBluetooth通信中か
@@ -146,7 +147,6 @@ public class EventLogger {
         values.put(EventContract.Event.COL_EVENT,       event_name);
         values.put(EventContract.Event.COL_MOVIE_NAME,  movie_name);
         values.put(EventContract.Event.COL_DATETIME,    dateTime);
-//        values.put(EventContract.Event.COL_QUARTER_NUM, VideoActivity.current_quarter_num);
         values.put(EventContract.Event.COL_QUARTER_NUM, VideoActivity.current_quarter_num);
 
         long newRowId;
@@ -186,28 +186,8 @@ public class EventLogger {
             int rowcount = c.getCount();
             c.moveToFirst();
             for (int i = 0; i < rowcount ; i++) {
-                int id            = c.getInt(c.getColumnIndex(EventContract.Event._ID));
-                int team          = c.getInt(c.getColumnIndex(EventContract.Event.COL_TEAM));
-                int num           = c.getInt(c.getColumnIndex(EventContract.Event.COL_NUM));
-                int point         = c.getInt(c.getColumnIndex(EventContract.Event.COL_POINT));
-                int success       = c.getInt(c.getColumnIndex(EventContract.Event.COL_SUCCESS));
-                String event      = c.getString(c.getColumnIndex(EventContract.Event.COL_EVENT));
-                String movie_name = c.getString(c.getColumnIndex(EventContract.Event.COL_MOVIE_NAME));
-                String start_time = c.getString(c.getColumnIndex(EventContract.Event.COL_DATETIME));
-                int quarter_num   = c.getInt(c.getColumnIndex(EventContract.Event.COL_QUARTER_NUM));
-
-                // 9/6: checked getting all column and they are correct
-                String record = +id+","+
-                        team + ","+
-                        num + ","+
-                        point + ","+
-                        success+","+
-                        event + ","+
-                        movie_name + ","+
-                        start_time + ","+
-                        quarter_num + ",";
-
-                adpt_eventlog.insert(record, 0);
+                int id_event_db = c.getInt(c.getColumnIndex(EventContract.Event._ID));
+                adpt_eventlog.insert(id_event_db, 0);//adapterにセットするしておいてclicklistenerで使う
                 c.moveToNext();
             }
         } catch (SQLException e) {

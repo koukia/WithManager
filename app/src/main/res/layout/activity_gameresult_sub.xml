@@ -4,8 +4,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.kohki.withmanager.ResultGame"
-    android:weightSum="1"
+    android:weightSum="2"
     >
+
+    <ListView
+        android:layout_width="0dp"
+        android:layout_height="fill_parent"
+        android:layout_weight="1"
+        android:id="@+id/listView_our"
+        android:divider = "#000000"
+        android:dividerHeight="2sp"
+        />
 
     <View
         android:layout_width="0dp"
@@ -17,16 +26,7 @@
     <ListView
         android:layout_width="0dp"
         android:layout_height="fill_parent"
-        android:layout_weight="0.2"
-        android:id="@+id/listView_our"
-        android:divider = "#000000"
-        android:dividerHeight="2sp"
-        />
-
-    <ListView
-        android:layout_width="0dp"
-        android:layout_height="fill_parent"
-        android:layout_weight="0.2"
+        android:layout_weight="1"
         android:layout_gravity="left"
         android:id="@+id/listView_ene"
         android:divider = "#000000"
