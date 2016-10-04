@@ -31,7 +31,7 @@ public class Team {
         team_lv = team_list;
         members = new ArrayList<>();
         members.add("?");
-        for(int i = 0; i <= mem_num -4; i++){
+        for(int i = 0; i <= mem_num; i++){
             members.add((4+i)+"");
         }
         adapter_teamlist = new ArrayAdapter<String>(context_,
