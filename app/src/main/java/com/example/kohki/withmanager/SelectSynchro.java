@@ -33,6 +33,7 @@ public class SelectSynchro extends AppCompatActivity {
         public void onClick(View view){
             try{
                 Intent ittSelect = new Intent(context, VideoActivity.class);
+                ittSelect.putExtra("mode","single");
                 startActivity(ittSelect);
             }catch(Exception e){
                 Log.v("IntentErr:", e.getMessage() + "," + e);

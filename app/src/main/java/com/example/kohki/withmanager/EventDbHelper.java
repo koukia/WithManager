@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -71,7 +72,7 @@ public class EventDbHelper extends SQLiteOpenHelper {
     public static HashMap<String,String> getRowFromID(Context context, int id){
         EventDbHelper mDbHelper = new EventDbHelper(context);
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM "+ EventContract.Event.TABLE_NAME+" WHERE _id=?", new String[]{String.valueOf(id)});
+        Cursor cursor = db.rawQuery("SELECT * FROM "+ EventContract.Event.TABLE_NAME+" WHERE _id = ?", new String[]{String.valueOf(id)});
         HashMap<String,String> row = new HashMap<>();
         try {
             if (cursor.moveToNext()) {
@@ -96,5 +97,22 @@ public class EventDbHelper extends SQLiteOpenHelper {
             cursor.close();
         }
         return row;
+    }
+    public static ArrayList<String> getRowFromSuccessShoot(SQLiteDatabase db, String game_start_time){
+        Cursor cursor = db.rawQuery("SELECT * FROM "+ EventContract.Event.TABLE_NAME+" WHERE "+
+                EventContract.Event.COL_SUCCESS+" = '1' and "+
+                EventContract.Event.COL_EVENT+" = 'shoot' and "+
+                EventContract.Event.COL_DATETIME+" = ?", new String[]{String.valueOf(game_start_time)});
+        ArrayList column = new ArrayList();
+        try {
+            Integer[] row = new Integer[2];
+            if (cursor.moveToNext()) {
+                row[0] = cursor.getInt(cursor.getColumnIndex(EventContract.Event.COL_TEAM));
+                row[1] = cursor.getInt(cursor.getColumnIndex(EventContract.Event.COL_POINT));
+            }
+        } finally {
+            cursor.close();
+        }
+        return column;
     }
 }

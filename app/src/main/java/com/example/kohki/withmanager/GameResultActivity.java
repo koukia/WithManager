@@ -3,6 +3,7 @@ package com.example.kohki.withmanager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v7.app.AlertDialog;
@@ -60,7 +61,9 @@ public class GameResultActivity extends AppCompatActivity {
             getLayoutInflater().inflate(R.layout.event_log,   event_log);
             getLayoutInflater().inflate(R.layout.score_sheet, score_sheet);
             getLayoutInflater().inflate(R.layout.foul_sheet,  foul_sheet);
-            EventLogger EventLogger = new EventLogger(context, (ListView) findViewById(R.id.event_log), gameStartDateTime);
+            EventDbHelper  cDbHelper = new EventDbHelper(context);
+            SQLiteDatabase mDB       = cDbHelper.getWritableDatabase();
+            EventLogger.updateEventLog(context, (ListView) findViewById(R.id.event_log));
             setScoresheet();
             setFoulsheet();
 

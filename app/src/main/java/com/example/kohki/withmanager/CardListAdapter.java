@@ -45,7 +45,6 @@ public class CardListAdapter extends ArrayAdapter<Integer> {
         String datetime     = row.get(EventContract.Event.COL_DATETIME);
         String quarter_num  = row.get(EventContract.Event.COL_QUARTER_NUM);
 
-
         //title and sub is message on card.
         TextView tv_title = (TextView) convertView.findViewById(R.id.title);
         TextView tv_sub = (TextView) convertView.findViewById(R.id.sub);
@@ -74,7 +73,7 @@ public class CardListAdapter extends ArrayAdapter<Integer> {
         ImageView iv = (ImageView) convertView.findViewById(R.id.icon);
         switch (event) {
             case "shoot":
-                tv_title.setText("シュート (第"+quarter_num+"Q)");
+                tv_title.setText("シュート(第"+quarter_num+"Q)");
 
                 if(team.equals("0") && success.equals("0")){//our team, failed
                     iv.setImageResource(R.drawable.ico_shoot_failed_white);
@@ -116,13 +115,9 @@ public class CardListAdapter extends ArrayAdapter<Integer> {
                     iv.setImageResource(R.drawable.ico_steal_blue);
                 }
                 break;
-
-
             default:
-
                 break;
         }
-
         return convertView;
     }
 }

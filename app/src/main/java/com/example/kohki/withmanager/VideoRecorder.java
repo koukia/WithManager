@@ -58,28 +58,29 @@ public class VideoRecorder implements SurfaceHolder.Callback {
 
     public void resume(){
         int  numberOfCameras = Camera.getNumberOfCameras();
-        Log.v("Camera num", numberOfCameras+"");
+        Log.d("Camera num", numberOfCameras+"");
         // 各カメラの情報を取得
         for (int i = 0; i < numberOfCameras; i++) {
             Camera.CameraInfo caminfo = new Camera.CameraInfo();
             Camera.getCameraInfo(i, caminfo);
-
+            Log.v("CameraID", ""+i);
             // カメラの向きを取得
             int facing = caminfo.facing;
-            if (facing == Camera.CameraInfo.CAMERA_FACING_BACK) {
-                //    Log.v("CameraID", "back:"+i);
-                //    Toast.makeText(context, "バックカメラID:"+Integer.toString(i), Toast.LENGTH_LONG).show();
+            if (facing == Camera.CameraInfo.CAMERA_FACING_BACK) { // facing is 0
                 try{
+                    Log.v(TAG, "1");
                     mCamera = Camera.open(i);
+                    Log.v(TAG, "2");
                     surfaceHolder = surfaceView.getHolder();
+                    Log.v(TAG, "3");
                     surfaceHolder.addCallback(this);
+                    Log.v(TAG, "4");
                 } catch (RuntimeException ex){
                     Log.d("Err","Camera cant open");
                     Toast.makeText(context, "RuntimeException", Toast.LENGTH_LONG).show();
                 }
-            } else if (facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
-            } else {
-                Log.d("MultiCameraTest", "cameraId=" + Integer.toString(i) + ", unknown camera?");
+            }else if(facing == Camera.CameraInfo.CAMERA_FACING_FRONT){
+                Log.v("FRONT_CAMERA", "cameraId=" + Integer.toString(i));
             }
         }
     }
@@ -165,8 +166,8 @@ public class VideoRecorder implements SurfaceHolder.Callback {
         }
         int origin_movie_time = getDuration(origin_file);
         File edit_file = new File(edit_filename); //修正後ファイル
-        if (origin_movie_time > VideoActivity.movie_time) {
-            int cut_start_time = (origin_movie_time - VideoActivity.movie_time) / 1000 * 1000 - 500;
+        if (origin_movie_time > VideoActivity.sMovieTime) {
+            int cut_start_time = (origin_movie_time - VideoActivity.sMovieTime) / 1000 * 1000 - 500;
             //Toast.makeText(context, "movie_time:" + movie_time + "\ncut_start_time:" + cut_start_time, Toast.LENGTH_LONG).show();
             if (cut_start_time <= 0) {
                 //   Toast.makeText(context, "ノーカット", Toast.LENGTH_LONG).show();
@@ -182,7 +183,7 @@ public class VideoRecorder implements SurfaceHolder.Callback {
             }
             //Toast.makeText(context, edit_file.getAbsolutePath().toString(), Toast.LENGTH_LONG).show();
             // Toast.makeText(context, getDuration(new File(after_edit_file.getAbsolutePath().toString())), Toast.LENGTH_LONG).show();
-        } else if (origin_movie_time < VideoActivity.movie_time) {
+        } else if (origin_movie_time < VideoActivity.sMovieTime) {
             //   Toast.makeText(context, "within 5000ms\n"+editedMovies.size(), Toast.LENGTH_SHORT).show();
             if (editedMovies.size() >= 1) { //editedMovies.get(editedMovies.size() - 1).exists()
                 try {
@@ -262,16 +263,16 @@ public class VideoRecorder implements SurfaceHolder.Callback {
             Log.i(TAG, "starting preview");
 
             Camera.CameraInfo camInfo = new Camera.CameraInfo();
-            Camera.Parameters params = mCamera.getParameters();
-        /*    if(params.getSupportedFocusModes().contains(
+
+            /*
+               if(params.getSupportedFocusModes().contains(
                     params.FOCUS_MODE_CONTINUOUS_VIDEO)){
                 params.setFocusMode(params.FOCUS_MODE_CONTINUOUS_VIDEO);
             }
          */
             int camera_id = findFrontFacingCameraID();
-            Camera.getCameraInfo(camera_id, camInfo);//---
+            Camera.getCameraInfo(camera_id, camInfo);
             int cameraRotationOffset = camInfo.orientation;
-
             Camera.Parameters parameters = mCamera.getParameters();
             List<Camera.Size> previewSizes = parameters.getSupportedPreviewSizes();
             Camera.Size previewSize = null;

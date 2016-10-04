@@ -22,34 +22,24 @@ import java.util.HashMap;
 /**
  * Created by kohki on 16/09/01.
  *
- * 記録されるもの:
- * -Team
- * -number
- * -event
- * --shoot
- * --bool
- * -movie_name
  */
 public class EventLogger {
     private static final String TAG = "EventLogger";
-    //DB
     private EventDbHelper mDbHelper;
-    private SQLiteDatabase db;
-    ListView lv_event_list;
+    private SQLiteDatabase mDb;
+    private ListView lv_event_list;
     private static Context context;
     private String gameStartDateTime;
     private static int cnt_double_click=0;
     private static int pre_id =-1;
-    public EventLogger(Context context, ListView event_list, String gameStartDateTime){
+
+    public EventLogger(Context context, ListView event_list){
         this.context = context;
         lv_event_list = event_list ;
-        this.gameStartDateTime = gameStartDateTime;
 
-        setDB();
-        // DB reset *****  If you delete here comment to reset DB, Commentout here !!
-        //mDbHelper.onUpgrade(db, EventDbHelper.DATABASE_VERSION, EventDbHelper.DATABASE_VERSION);
-
-        updateEventLog();
+        mDbHelper = new EventDbHelper(context);
+        mDb = mDbHelper.getWritableDatabase();
+        updateEventLog(context, event_list);
         event_list.setOnItemClickListener(new EventLogListItemClickListener());
         event_list.setOnItemLongClickListener(new EventLogListItemLongClickListener());
     }
@@ -90,8 +80,8 @@ public class EventLogger {
             Log.d(TAG,movie_name+"を再生");
 
             try { //スタンドアローンかBluetooth通信中か
-                if(VideoActivity.mOverLaySurfaceView != null) {
-                    VideoActivity.mOverLaySurfaceView.setVisibility(SurfaceView.VISIBLE);
+                if(VideoActivity.sv_sPlayBackView != null) {
+                    VideoActivity.sv_sPlayBackView.setVisibility(SurfaceView.VISIBLE);
                     if (VideoActivity.mPreviewCallback.mMediaPlayer != null) {
                         VideoActivity.mPreviewCallback.mMediaPlayer.release();
                         VideoActivity.mPreviewCallback.mMediaPlayer = null;
@@ -100,11 +90,11 @@ public class EventLogger {
                     VideoActivity.mPreviewCallback.mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                         @Override
                         public void onCompletion(MediaPlayer mp) {
-                            VideoActivity.mOverLaySurfaceView.setVisibility(SurfaceView.INVISIBLE);
+                            VideoActivity.sv_sPlayBackView.setVisibility(SurfaceView.INVISIBLE);
                         }
                     });
-                }else if(SynchroVideoActivity.mOverLaySurfaceView != null){
-                    SynchroVideoActivity.mOverLaySurfaceView.setVisibility(SurfaceView.VISIBLE);
+                }else if(SynchroVideoActivity.sv_sPlayBackView != null){
+                    SynchroVideoActivity.sv_sPlayBackView.setVisibility(SurfaceView.VISIBLE);
                     if (SynchroVideoActivity.mPreviewCallback.mMediaPlayer != null) {
                         SynchroVideoActivity.mPreviewCallback.mMediaPlayer.release();
                         SynchroVideoActivity.mPreviewCallback.mMediaPlayer = null;
@@ -113,7 +103,7 @@ public class EventLogger {
                     SynchroVideoActivity.mPreviewCallback.mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                         @Override
                         public void onCompletion(MediaPlayer mp) {
-                            SynchroVideoActivity.mOverLaySurfaceView.setVisibility(SurfaceView.INVISIBLE);
+                            SynchroVideoActivity.sv_sPlayBackView.setVisibility(SurfaceView.INVISIBLE);
                         }
                     });
                 }
@@ -125,72 +115,65 @@ public class EventLogger {
         }
     }
 
-
-    public void addEvent(int team, int number, int shoot_point, int is_success, String event_name, String movie_name, String dateTime ){
-        String log = "addEvent() err";
-
-        switch (event_name){
-            case "shoot":
-                log = team+"チーム"+number+"番"+"\nE:"+shoot_point+"点"+is_success+"\nMovie:"+movie_name;
-                break;
-            case "foul":
-                log = team+"チーム"+number+"番"+"\nE:"+event_name+"\nMovie:"+movie_name;
-                break;
-            case "traveling":
-                log = team+"チーム"+number+"番"+"\nE:"+event_name+"\nMovie:"+movie_name;
-                break;
-            case "steal":
-                log = team+"チーム"+number+"番"+"\nE:"+event_name+"\nMovie:"+movie_name;
-                break;
-            case "rebound":
-                log = team+"チーム"+number+"番"+"\nE:"+event_name+"\nMovie:"+movie_name;
-                break;
-            default:
-                break;
-        }
-    //    Toast.makeText(context, log, Toast.LENGTH_SHORT).show();
-
+    public static void addEvent(SQLiteDatabase db, int team, int number){
          /* DB insert*/
         ContentValues values = new ContentValues();
         values.put(EventContract.Event.COL_TEAM,        team);
         values.put(EventContract.Event.COL_NUM,         number);
-        values.put(EventContract.Event.COL_POINT,       shoot_point);
-        values.put(EventContract.Event.COL_SUCCESS,     is_success );
-        values.put(EventContract.Event.COL_EVENT,       event_name);
-        values.put(EventContract.Event.COL_MOVIE_NAME,  movie_name);
-        values.put(EventContract.Event.COL_DATETIME,    dateTime);
-        values.put(EventContract.Event.COL_QUARTER_NUM, VideoActivity.current_quarter_num);
+        values.put(EventContract.Event.COL_POINT,       VideoActivity.sPoint);
+        values.put(EventContract.Event.COL_SUCCESS,     VideoActivity.sSuccess );
+        values.put(EventContract.Event.COL_EVENT,       VideoActivity.sEventName);
+        values.put(EventContract.Event.COL_MOVIE_NAME,  VideoActivity.sMovieName);
+        values.put(EventContract.Event.COL_DATETIME,    VideoActivity.sGameStartDateTime);
+        values.put(EventContract.Event.COL_QUARTER_NUM, VideoActivity.sCurrentQuarterNum);
 
+        Toast.makeText(context,team+","+VideoActivity.sMovieName+","+VideoActivity.sGameStartDateTime,Toast.LENGTH_SHORT).show();
         long newRowId;
         newRowId = db.insert(
                 EventContract.Event.TABLE_NAME,
                 null,
                 values);
-        updateEventLog();
         //System.out.println("datetime:" + dateTime);
     }
+    public void addEvent(int team, int number, int point, int is_success, String event,
+                         String movie_name, String start_time, int quarter_num){
+         /* DB insert*/
+        ContentValues values = new ContentValues();
+        values.put(EventContract.Event.COL_TEAM,        team);
+        values.put(EventContract.Event.COL_NUM,         number);
+        values.put(EventContract.Event.COL_POINT,       point);
+        values.put(EventContract.Event.COL_SUCCESS,     is_success );
+        values.put(EventContract.Event.COL_EVENT,       event);
+        values.put(EventContract.Event.COL_MOVIE_NAME,  movie_name);
+        values.put(EventContract.Event.COL_DATETIME,    start_time);
+        values.put(EventContract.Event.COL_QUARTER_NUM, quarter_num);
 
+        long newRowId;
+        newRowId = mDb.insert(
+                EventContract.Event.TABLE_NAME,
+                null,
+                values);
+        //System.out.println("datetime:" + dateTime);
+    }
     //Startが押された時に、ゲームの開始時刻を保存しておく
     public void addGameTime(String dateTime){
         ContentValues values = new ContentValues();
         values.put(EventContract.Game.COL_DATE_TIME, dateTime);
         System.out.println(dateTime + "を追加しました");
-        db.insert(
+        mDb.insert(
             EventContract.Game.TABLE_NAME,
             null,
             values
         );
     }
 
-    private void setDB(){
-        mDbHelper = new EventDbHelper(context);
-        db = mDbHelper.getWritableDatabase();
-    }
 
-    private void updateEventLog() {
+    public static void updateEventLog(Context context, ListView lv_event_list) {
         CardListAdapter adpt_eventlog = new CardListAdapter(context);
+        EventDbHelper mDbHelper = new EventDbHelper(context);
+        SQLiteDatabase db = mDbHelper.getWritableDatabase();
         try {
-            //SQLiteCursor c = (SQLiteCursor)db.rawQuery(sql, null);
+            //SQLiteCursor c = (SQLiteCursor)mDb.rawQuery(sql, null);
             SQLiteCursor c = (SQLiteCursor)db.query(
                     true,EventContract.Event.TABLE_NAME,
                     null,null,null,null,null,null,null);
@@ -212,8 +195,8 @@ public class EventLogger {
         ArrayList<Integer[]> foulList = new ArrayList<>();
 
         try {
-            //SQLiteCursor c = (SQLiteCursor)db.rawQuery(sql, null);
-            SQLiteCursor c = (SQLiteCursor) db.query(
+            //SQLiteCursor c = (SQLiteCursor).rawQuery(sql, null);
+            SQLiteCursor c = (SQLiteCursor) mDb.query(
                     EventContract.Event.TABLE_NAME,
                     new String[] {EventContract.Event.COL_TEAM, EventContract.Event.COL_NUM},
                     EventContract.Event.COL_EVENT + " = ?", new String[] {"foul"},
@@ -238,8 +221,8 @@ public class EventLogger {
         ArrayList<String> games = new ArrayList<>();
 
         try{
-            //SQLiteCursor c = (SQLiteCursor)db.rawQuery(sql, null);
-            SQLiteCursor c = (SQLiteCursor) db.query(
+            //SQLiteCursor c = (SQLiteCursor)mDb.rawQuery(sql, null);
+            SQLiteCursor c = (SQLiteCursor) mDb.query(
                     EventContract.Event.TABLE_NAME,
                     new String[] {EventContract.Event.COL_DATETIME},
                     null, null,
