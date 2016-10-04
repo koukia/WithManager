@@ -38,7 +38,8 @@ public class EventLogger {
     ListView lv_event_list;
     private static Context context;
     private String gameStartDateTime;
-
+    private static int cnt_double_click=0;
+    private static int pre_id =-1;
     public EventLogger(Context context, ListView event_list, String gameStartDateTime){
         this.context = context;
         lv_event_list = event_list ;
@@ -51,7 +52,6 @@ public class EventLogger {
         updateEventLog();
         event_list.setOnItemClickListener(new EventLogListItemClickListener());
         event_list.setOnItemLongClickListener(new EventLogListItemLongClickListener());
-
     }
     static class EventLogListItemClickListener implements ListView.OnItemClickListener {
 
@@ -61,8 +61,19 @@ public class EventLogger {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             ListView lv_event_log      = (ListView) parent;
-        //    int   item_of_event_log = (int)lv_event_log.getItemAtPosition(position);
-            // Toast.makeText(context,item+"",Toast.LENGTH_SHORT).show();
+            int   id_of_event_log = (int)lv_event_log.getItemAtPosition(position);
+            if(id_of_event_log == pre_id){
+                cnt_double_click++;
+                if(cnt_double_click >= 2) {
+                    HashMap<String,String> row = EventDbHelper.getRowFromID(context,id_of_event_log);
+                    Toast.makeText(context,row+"",Toast.LENGTH_SHORT).show();
+
+                    cnt_double_click=0;
+                }
+            }else if (pre_id == -1){
+                cnt_double_click++;
+            }
+            pre_id = id_of_event_log;
         }
     }
     static class EventLogListItemLongClickListener  implements ListView.OnItemLongClickListener {
@@ -113,6 +124,7 @@ public class EventLogger {
             return false;
         }
     }
+
 
     public void addEvent(int team, int number, int shoot_point, int is_success, String event_name, String movie_name, String dateTime ){
         String log = "addEvent() err";

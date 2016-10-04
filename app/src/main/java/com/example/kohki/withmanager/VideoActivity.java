@@ -87,6 +87,7 @@ public class VideoActivity extends Activity {
 
     private Team mTeam1;
     private Team mTeam2;
+    
     public static int our_member_num = 15;
     public static int opp_member_num = 15;
     public static int current_quarter_num = 1;
