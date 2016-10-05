@@ -9,6 +9,7 @@ import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.widget.Toast;
@@ -28,32 +29,28 @@ import java.util.List;
  * Created by Kohki on 2016/07/25.
  */
 public class VideoRecorder implements SurfaceHolder.Callback {
+    private final static String TAG = "VideoRecorderClass";
+
     private SurfaceHolder surfaceHolder;
     private SurfaceView surfaceView;
-    public MediaRecorder mrec;
-    public Camera mCamera;
+    private MediaRecorder mMediaRecorder;
+    private Camera mCamera = null;
 
-    private final static String TAG = "VideoRecorderClass";
     private Context context;
     private boolean is_recording = false;
 
-
-    public ArrayList<File> originMovies = new ArrayList<>();
-    public ArrayList<File> editedMovies = new ArrayList<>();
-
-    private SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-    private String sava_path;
+    private String mSavaPath;
+    private String mMovieFilePath;
 
     Resources resources;
     public VideoRecorder(Context context, String path, SurfaceView sv, Resources resources){
         this.context = context;
-
-        sava_path = path;
+        mSavaPath = path;
         surfaceView = sv;
         surfaceHolder = surfaceView.getHolder();
         surfaceHolder.addCallback(this);
         this.resources = resources;
-
+        resume();
     }
 
     public void resume(){
@@ -93,45 +90,37 @@ public class VideoRecorder implements SurfaceHolder.Callback {
     }
 
     public void start(){
-        String file_path = "";
+        if(mCamera == null)
+            resume();
         try {
-            mrec = new MediaRecorder();
+            mMediaRecorder = new MediaRecorder();
             mCamera.unlock();
-            mrec.setCamera(mCamera);
+            mMediaRecorder.setCamera(mCamera);
 
-        /* --
-            mrec.setAudioSource(MediaRecorder.AudioSource.CAMCORDER);
-            mrec.setVideoSource(MediaRecorder.VideoSource.CAMERA);
-            CamcorderProfile camcorderProfile = CamcorderProfile.get(CamcorderProfile.QUALITY_480P);
-            //    Log.v("VALUE",Integer.toString(camcorderProfile.videoCodec));
-            camcorderProfile.videoCodec = MediaRecorder.VideoEncoder.MPEG_4_SP;
-            mrec.setProfile(camcorderProfile);
-           -- */
             // TODO:他端末での対応 corresponding each device
-            mrec.setAudioSource(MediaRecorder.AudioSource.CAMCORDER);
-            mrec.setVideoSource(MediaRecorder.VideoSource.CAMERA);
+            mMediaRecorder.setAudioSource(MediaRecorder.AudioSource.CAMCORDER);
+            mMediaRecorder.setVideoSource(MediaRecorder.VideoSource.CAMERA);
             CamcorderProfile camcorderProfile = CamcorderProfile.get(CamcorderProfile.QUALITY_480P);
             //    Toast.makeText(context,Integer.toString(camcorderProfile.videoCodec),Toast.LENGTH_SHORT).show();
             camcorderProfile.videoCodec = MediaRecorder.VideoEncoder.H264;
-            mrec.setProfile(camcorderProfile);
+            mMediaRecorder.setProfile(camcorderProfile);
 
                 /*decide file name*/
             Date date = new Date();
-            file_path = sava_path + sdf1.format(date) + ".mp4";
-            mrec.setOutputFile(file_path);
+            SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            mSavaPath = mSavaPath + sdf1.format(date) + ".mp4";
+            mMediaRecorder.setOutputFile(mMovieFilePath);
                 /* --- */
-            mrec.setPreviewDisplay(surfaceHolder.getSurface());// プレビューに利用するサーフェイスを指定する
+            mMediaRecorder.setPreviewDisplay(surfaceHolder.getSurface());// プレビューに利用するサーフェイスを指定する
       //      mrec.setVideoSize(getWidth(), getHeight()); //=> start failed -19
-            mrec.prepare();
-            mrec.start();
+            mMediaRecorder.prepare();
+            mMediaRecorder.start();
 
-            originMovies.add(new File(file_path));
             is_recording = true;
         }catch (IOException e) {
-            String message = e.getMessage();
+            Log.e(TAG,""+e);
             Toast.makeText(context, "IOe:" + e, Toast.LENGTH_SHORT).show();
         }catch (RuntimeException e) {
-            String message = e.getMessage();
             Toast.makeText(context, "Re:" + e, Toast.LENGTH_SHORT).show();
         }
     }
@@ -151,7 +140,6 @@ public class VideoRecorder implements SurfaceHolder.Callback {
     }
 
     public String save() {
-        if(!(originMovies.size() > 0)) return "";
 
         VideoEdit mVideoEdit = new VideoEdit();
         File origin_file = originMovies.get(originMovies.size() - 1);
@@ -296,17 +284,11 @@ public class VideoRecorder implements SurfaceHolder.Callback {
             }
 
             int degrees = getSurfaceDegrees();
-
             int displayRotation = getDisplayRotation(camInfo, cameraRotationOffset, degrees);
-
             Log.d(TAG, "displayRotation:" + displayRotation);
-
             mCamera.setDisplayOrientation(displayRotation);
-
             int rotate = getRotation(camInfo, cameraRotationOffset, degrees);
-
             Log.v(TAG, "rotate: " + rotate);
-
             Log.v(TAG, "preview size: " + previewSize.width + " / " + previewSize.height);
             parameters.setPreviewSize(previewSize.width, previewSize.height);
             parameters.setRotation(rotate);
@@ -316,8 +298,6 @@ public class VideoRecorder implements SurfaceHolder.Callback {
             mCamera.startPreview();
 
             Log.d(TAG, "preview started");
-
-
         } catch (IOException e) {
             Log.d(TAG, "Error setting camera preview: " + e.getMessage());
         }
@@ -336,18 +316,16 @@ public class VideoRecorder implements SurfaceHolder.Callback {
         return isFrontFacingCam;
     }
     private int getHeight(){
-        DisplayMetrics dm = Resources.getSystem().getDisplayMetrics();
-        int height = dm.heightPixels;
-
-        return height;
+    //    DisplayMetrics dm = Resources.getSystem().getDisplayMetrics();
+    //    int height = dm.heightPixels;
+    //    return height;
+        return surfaceView.getHeight();
     }
     private int getWidth(){
-        //    DisplayMetrics displayMetrics = new DisplayMetrics();
-        //    getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        DisplayMetrics dm = Resources.getSystem().getDisplayMetrics();
-        int width = dm.widthPixels;
-
-        return width;
+    //    DisplayMetrics dm = Resources.getSystem().getDisplayMetrics();
+    //    int width = dm.widthPixels;
+    //    return width;
+        return surfaceView.getWidth();
     }
     private boolean isLandscape(){
         if (resources.getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
@@ -359,24 +337,7 @@ public class VideoRecorder implements SurfaceHolder.Callback {
 
     private int getSurfaceDegrees(){
         Configuration config = resources.getConfiguration();
-        //  int rotation = getWindowManager().getDefaultDisplay().getRotation();
-        int degrees = 0;
-/*
-        switch (rotation) {
-            case Surface.ROTATION_0:
-                degrees = 0;
-                break; // Natural orientation
-            case Surface.ROTATION_90:
-                degrees = 90;
-                break; // Landscape left
-            case Surface.ROTATION_180:
-                degrees = 180;
-                break;// Upside down
-            case Surface.ROTATION_270:
-                degrees = 270;
-                break;// Landscape right
-        }
-*/
+        int degrees = 90;
         switch(config.orientation) {
             case Configuration.ORIENTATION_PORTRAIT:
                 degrees = 0;
@@ -384,8 +345,6 @@ public class VideoRecorder implements SurfaceHolder.Callback {
             case Configuration.ORIENTATION_LANDSCAPE:
                 degrees = 90;
                 break;
-            default:
-                //    str = "デフォルト";
         }
         return degrees;
     }
@@ -403,12 +362,9 @@ public class VideoRecorder implements SurfaceHolder.Callback {
     private int getDisplayRotation(Camera.CameraInfo camInfo, int cameraRotationOffset, int degrees){
         int displayRotation;
         if (isFrontFacingCam(camInfo)) {
-
             displayRotation = (cameraRotationOffset + degrees) % 360;
             displayRotation = (360 - displayRotation) % 360;
-
         } else { // back-facing
-
             displayRotation = (cameraRotationOffset - degrees + 360) % 360;
         }
         return displayRotation;

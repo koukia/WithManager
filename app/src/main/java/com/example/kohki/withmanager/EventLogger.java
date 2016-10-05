@@ -94,16 +94,17 @@ public class EventLogger {
                         VideoActivity.mMainSurfaceCallback.mMediaPlayer.release();
                         VideoActivity.mMainSurfaceCallback.mMediaPlayer = null;
                     }
+                    /*
                     VideoRecorder m_recorder = new VideoRecorder(context,"",VideoActivity.mSubSurface,Resources.getSystem());
 
-
+                    VideoActivity.mRecor
                     VideoActivity.mMainHolder = VideoActivity.mMainSurface.getHolder();
                     VideoActivity.mMainHolder.setFormat(PixelFormat.TRANSLUCENT);//ここで半透明にする
                     VideoActivity.mMainSurfaceCallback = new PreviewSurfaceViewCallback(context);
                     VideoActivity.mMainHolder.addCallback(VideoActivity.mMainSurfaceCallback);
                     VideoActivity.mMainSurface.setVisibility(SurfaceView.INVISIBLE);
 
-
+*/
                     VideoActivity.mMainSurfaceCallback.palyVideo(movie_name);
                     VideoActivity.mMainSurfaceCallback.mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                         @Override
