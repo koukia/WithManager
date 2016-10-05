@@ -36,6 +36,9 @@ public class CardListAdapter extends ArrayAdapter<Integer> {
         Integer id_event_db = getItem(position);
         HashMap<String, String> row = EventDbHelper.getRowFromID(context, id_event_db);
 
+        if(row.size() == 0){
+            return convertView;
+        }
         String team         = row.get(EventContract.Event.COL_TEAM);
         String num          = row.get(EventContract.Event.COL_NUM);
         String point        = row.get(EventContract.Event.COL_POINT);

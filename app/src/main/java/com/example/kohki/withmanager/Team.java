@@ -69,7 +69,7 @@ public class Team extends VideoActivity {
                 }
                 if (item.equals("?"))
                     sTeamAndNum[1] = 0;
-                else{
+                else {
                     sTeamAndNum[1] = Integer.parseInt(item);
 
                     adpt_teamList.remove(item);
@@ -78,14 +78,18 @@ public class Team extends VideoActivity {
                     sortAdapater();
                 }
                 //記録
-                EventLogger.addEvent(mDB, sTeamAndNum[0],sTeamAndNum[1]);
-                EventLogger.updateEventLog(context,lv_EventLog);
+                mEventLogger = new EventLogger(context);
+                mEventLogger.addEvent(sTeamAndNum[0], sTeamAndNum[1]);
+                if (flg_eventMenu == 0) {
+                    mEventLogger.updateEventLog(context, VideoActivity.lv_eventLog);
+                } else if (flg_eventMenu == 1){
+                    setScoresheet();
+                }else if(flg_eventMenu == 2) {
+                    setFoulsheet();
+                }
                 updateScoreView();
             }else{
-                tv_sMessageBar.setText("イベントボタンを先に押してください");
-                tv_sMessageBar.setTextSize(12);
-                tv_sMessageBar.setBackgroundColor(88990000);
-                tv_sMessageBar.setGravity(Gravity.CENTER);
+
             }
         }
     }

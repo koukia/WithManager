@@ -142,7 +142,7 @@ public class SynchroVideoActivity extends Activity {
         } catch (Exception e) {
             Toast.makeText(context, "e:" + e, Toast.LENGTH_SHORT).show();
         }
-        mEventLogger = new EventLogger(context, (ListView) findViewById(R.id.event_log));
+        mEventLogger = new EventLogger(context);
 
         sdf = new SimpleDateFormat("yyyyMMddHHmmss");
         //Start button
@@ -217,7 +217,8 @@ public class SynchroVideoActivity extends Activity {
                         LinearLayout foulsheet = (LinearLayout) findViewById(R.id.foulsheet);
                         menu.removeView(foulsheet);
                         getLayoutInflater().inflate(R.layout.event_log, menu);
-                        mEventLogger = new EventLogger(context, (ListView) findViewById(R.id.event_log));
+                        mEventLogger = new EventLogger(context);
+                        mEventLogger.updateEventLog(context, (ListView)findViewById(R.id.event_log));
 
                         break;
                     case 1://scoresheet

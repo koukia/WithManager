@@ -63,7 +63,8 @@ public class GameResultActivity extends AppCompatActivity {
             getLayoutInflater().inflate(R.layout.foul_sheet,  foul_sheet);
             EventDbHelper  cDbHelper = new EventDbHelper(context);
             SQLiteDatabase mDB       = cDbHelper.getWritableDatabase();
-            EventLogger.updateEventLog(context, (ListView) findViewById(R.id.event_log));
+            EventLogger m_event_loger = new EventLogger(context);
+            m_event_loger.updateEventLog(context, (ListView) findViewById(R.id.event_log));
             setScoresheet();
             setFoulsheet();
 

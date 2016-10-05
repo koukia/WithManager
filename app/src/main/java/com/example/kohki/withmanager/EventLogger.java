@@ -2,18 +2,24 @@ package com.example.kohki.withmanager;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.res.Resources;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteCursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
+import android.graphics.PixelFormat;
 import android.media.MediaPlayer;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.SurfaceView;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -25,25 +31,23 @@ import java.util.HashMap;
  */
 public class EventLogger {
     private static final String TAG = "EventLogger";
+    private static Context context;
     private EventDbHelper mDbHelper;
     private SQLiteDatabase mDb;
-    private ListView lv_event_list;
-    private static Context context;
-    private String gameStartDateTime;
-    private static int cnt_double_click=0;
-    private static int pre_id =-1;
+    private static int cntDoubleClick=0;
+    private static int preId =-1;
 
-    public EventLogger(Context context, ListView event_list){
+    private Spinner spn_num;
+//TODO:num
+    String[] spn_event = {"1Pシュート", ""};
+
+    public EventLogger(Context context){
         this.context = context;
-        lv_event_list = event_list ;
 
         mDbHelper = new EventDbHelper(context);
         mDb = mDbHelper.getWritableDatabase();
-        updateEventLog(context, event_list);
-        event_list.setOnItemClickListener(new EventLogListItemClickListener());
-        event_list.setOnItemLongClickListener(new EventLogListItemLongClickListener());
     }
-    static class EventLogListItemClickListener implements ListView.OnItemClickListener {
+    class EventLogListItemClickListener implements ListView.OnItemClickListener {
 
         EventLogListItemClickListener() {
         }
@@ -52,18 +56,22 @@ public class EventLogger {
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             ListView lv_event_log      = (ListView) parent;
             int   id_of_event_log = (int)lv_event_log.getItemAtPosition(position);
-            if(id_of_event_log == pre_id){
-                cnt_double_click++;
-                if(cnt_double_click >= 2) {
+            if(id_of_event_log == preId){
+                cntDoubleClick++;
+                if(cntDoubleClick >= 2) {
                     HashMap<String,String> row = EventDbHelper.getRowFromID(context,id_of_event_log);
-                    Toast.makeText(context,row+"",Toast.LENGTH_SHORT).show();
+              //      Toast.makeText(context,row+"",Toast.LENGTH_SHORT).show();
+               //     VideoActivity v = new VideoActivity();
+               //     v.changeEditView(row);
 
-                    cnt_double_click=0;
+
+
+                    cntDoubleClick=0;
                 }
-            }else if (pre_id == -1){
-                cnt_double_click++;
+            }else if (preId == -1){
+                cntDoubleClick++;
             }
-            pre_id = id_of_event_log;
+            preId = id_of_event_log;
         }
     }
     static class EventLogListItemLongClickListener  implements ListView.OnItemLongClickListener {
@@ -80,17 +88,27 @@ public class EventLogger {
             Log.d(TAG,movie_name+"を再生");
 
             try { //スタンドアローンかBluetooth通信中か
-                if(VideoActivity.sv_sPlayBackView != null) {
-                    VideoActivity.sv_sPlayBackView.setVisibility(SurfaceView.VISIBLE);
-                    if (VideoActivity.mPreviewCallback.mMediaPlayer != null) {
-                        VideoActivity.mPreviewCallback.mMediaPlayer.release();
-                        VideoActivity.mPreviewCallback.mMediaPlayer = null;
+                if(VideoActivity.mSubSurface != null) {
+                    VideoActivity.mSubSurface.setVisibility(SurfaceView.VISIBLE);
+                    if (VideoActivity.mMainSurfaceCallback.mMediaPlayer != null) {
+                        VideoActivity.mMainSurfaceCallback.mMediaPlayer.release();
+                        VideoActivity.mMainSurfaceCallback.mMediaPlayer = null;
                     }
-                    VideoActivity.mPreviewCallback.palyVideo(movie_name);
-                    VideoActivity.mPreviewCallback.mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                    VideoRecorder m_recorder = new VideoRecorder(context,"",VideoActivity.mSubSurface,Resources.getSystem());
+
+
+                    VideoActivity.mMainHolder = VideoActivity.mMainSurface.getHolder();
+                    VideoActivity.mMainHolder.setFormat(PixelFormat.TRANSLUCENT);//ここで半透明にする
+                    VideoActivity.mMainSurfaceCallback = new PreviewSurfaceViewCallback(context);
+                    VideoActivity.mMainHolder.addCallback(VideoActivity.mMainSurfaceCallback);
+                    VideoActivity.mMainSurface.setVisibility(SurfaceView.INVISIBLE);
+
+
+                    VideoActivity.mMainSurfaceCallback.palyVideo(movie_name);
+                    VideoActivity.mMainSurfaceCallback.mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                         @Override
                         public void onCompletion(MediaPlayer mp) {
-                            VideoActivity.sv_sPlayBackView.setVisibility(SurfaceView.INVISIBLE);
+                            VideoActivity.mMainSurface.setVisibility(SurfaceView.INVISIBLE);
                         }
                     });
                 }else if(SynchroVideoActivity.sv_sPlayBackView != null){
@@ -108,14 +126,14 @@ public class EventLogger {
                     });
                 }
             } catch (NullPointerException e) {
-                Toast.makeText(context, "ぬるぽ", Toast.LENGTH_LONG).show();
+                Toast.makeText(context, "ぬるぽ"+e, Toast.LENGTH_LONG).show();
                 return false;
             }
             return false;
         }
     }
 
-    public static void addEvent(SQLiteDatabase db, int team, int number){
+    public void addEvent(int team, int number){
          /* DB insert*/
         ContentValues values = new ContentValues();
         values.put(EventContract.Event.COL_TEAM,        team);
@@ -127,13 +145,10 @@ public class EventLogger {
         values.put(EventContract.Event.COL_DATETIME,    VideoActivity.sGameStartDateTime);
         values.put(EventContract.Event.COL_QUARTER_NUM, VideoActivity.sCurrentQuarterNum);
 
-        Toast.makeText(context,team+","+VideoActivity.sMovieName+","+VideoActivity.sGameStartDateTime,Toast.LENGTH_SHORT).show();
-        long newRowId;
-        newRowId = db.insert(
+        mDb.insert(
                 EventContract.Event.TABLE_NAME,
                 null,
                 values);
-        //System.out.println("datetime:" + dateTime);
     }
     public void addEvent(int team, int number, int point, int is_success, String event,
                          String movie_name, String start_time, int quarter_num){
@@ -153,7 +168,6 @@ public class EventLogger {
                 EventContract.Event.TABLE_NAME,
                 null,
                 values);
-        //System.out.println("datetime:" + dateTime);
     }
     //Startが押された時に、ゲームの開始時刻を保存しておく
     public void addGameTime(String dateTime){
@@ -167,8 +181,10 @@ public class EventLogger {
         );
     }
 
+    public void updateEventLog(Context context, ListView lv_event_list) {
+        lv_event_list.setOnItemClickListener(new EventLogListItemClickListener());
+        lv_event_list.setOnItemLongClickListener(new EventLogListItemLongClickListener());
 
-    public static void updateEventLog(Context context, ListView lv_event_list) {
         CardListAdapter adpt_eventlog = new CardListAdapter(context);
         EventDbHelper mDbHelper = new EventDbHelper(context);
         SQLiteDatabase db = mDbHelper.getWritableDatabase();

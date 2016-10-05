@@ -18,6 +18,7 @@ import android.os.Handler;
 import android.os.Parcelable;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -26,6 +27,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,6 +36,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -45,27 +48,29 @@ public class VideoActivity extends Activity {
     private static Context context;
 
     private EventDbHelper cDbHelper;
-    public static SQLiteDatabase mDB;
+    protected static SQLiteDatabase mDB;
     private VideoRecorder mRecorder = null;
-    private EventLogger mEventLogger;
+    protected EventLogger mEventLogger;
     private Camera mCamera;
 
-    public static SurfaceView main_surface;
+    public static SurfaceView mMainSurface;
+    public static SurfaceHolder mMainHolder;
+    public static PreviewSurfaceViewCallback mMainSurfaceCallback;
 
-    public static SurfaceView   sv_sPlayBackView;
-    public static SurfaceHolder sh_sPlayBackHolder;
-    public static PreviewSurfaceViewCallback mPreviewCallback;
+    public static SurfaceView   mSubSurface;
+    public static SurfaceHolder mSubHolder;
+    public static PreviewSurfaceViewCallback mSubSurfaceCallback;
 
     private ListView lv_mOurTeamList;
     private ListView lv_mOppTeamList;
 
     private Button btn_start;
     private Button btn_stop;
+    protected static ListView lv_eventLog;
 
     private static TextView tv_ourScore;
     private static TextView tv_oppScore;
     protected static TextView tv_sMessageBar;
-    protected static ListView lv_EventLog;
 
     private SimpleDateFormat sdf;
 
@@ -83,10 +88,10 @@ public class VideoActivity extends Activity {
 
     private boolean isPlaying;
     protected static boolean isSaving = false;
-    private int flg_menu = 0;  //0:eventlog, 1:score, 2:foul
+    protected int flg_eventMenu = 0;  //0:eventlog, 1:score, 2:foul
 
-    private String sava_dir  = "/storage/emulated/legacy/WithManager/";
-    //    private String sava_dir = "sdcard/WithManager/";
+    //private String sava_dir  = "/storage/emulated/legacy/WithManager/";
+    private String sava_dir = "sdcard/WithManager/";
 
     /* Synchro only */
     private static final Handler handler = new Handler();
@@ -132,32 +137,40 @@ public class VideoActivity extends Activity {
             setContentView(R.layout.activity_synchro_video);
              /* Synchro only */
             buf = new byte[4]; buf[3] = 111;
-            sdf = new SimpleDateFormat();
+        //    sdf = new SimpleDateFormat();
             /* --- */
         }
 
         context = this;
 
+        Date date = new Date();
+        sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+        sGameStartDateTime = sdf.format(date);
+        //    System.out.println("Game start at "+sGameStartDateTime);
+        mEventLogger = new EventLogger(context);
+        mEventLogger.addGameTime(sGameStartDateTime);
+        lv_eventLog = (ListView) findViewById(R.id.event_log);
+        mEventLogger.updateEventLog(context, lv_eventLog);
+
         cDbHelper = new EventDbHelper(context);
         mDB       = cDbHelper.getWritableDatabase();
-        cDbHelper.onUpgrade(mDB, EventDbHelper.DATABASE_VERSION, EventDbHelper.DATABASE_VERSION);
         //TODO:
+        cDbHelper.onUpgrade(mDB, EventDbHelper.DATABASE_VERSION, EventDbHelper.DATABASE_VERSION);
 
         //main surfaceview
-        main_surface = (SurfaceView) findViewById(R.id.main_surface);
-        mRecorder = new VideoRecorder(context, sava_dir, main_surface, getResources());
+        mMainSurface = (SurfaceView) findViewById(R.id.main_surface);
+        mRecorder = new VideoRecorder(context, sava_dir, mMainSurface, getResources());
 
         //sub surfaceview
-        sv_sPlayBackView = (SurfaceView) findViewById(R.id.sub_surface);
-        sh_sPlayBackHolder = sv_sPlayBackView.getHolder();
-        sh_sPlayBackHolder.setFormat(PixelFormat.TRANSLUCENT);//ここで半透明にする
-        mPreviewCallback = new PreviewSurfaceViewCallback(context);
-        sh_sPlayBackHolder.addCallback(mPreviewCallback);
-        sv_sPlayBackView.setVisibility(SurfaceView.INVISIBLE);
+        mSubSurface = (SurfaceView) findViewById(R.id.sub_surface);
+        mSubHolder = mSubSurface.getHolder();
+        mSubHolder.setFormat(PixelFormat.TRANSLUCENT);//ここで半透明にする
+        mSubSurfaceCallback = new PreviewSurfaceViewCallback(context);
+        mSubHolder.addCallback(mSubSurfaceCallback);
+        mSubSurface.setVisibility(SurfaceView.INVISIBLE);
 
         tv_ourScore    = (TextView) findViewById(R.id.our_score);
         tv_oppScore    = (TextView) findViewById(R.id.opposing_score);
-        tv_sMessageBar = (TextView) findViewById(R.id.message);
 
         try {
             File dir_save = new File(sava_dir);
@@ -166,20 +179,14 @@ public class VideoActivity extends Activity {
         } catch (Exception e) {
             Toast.makeText(context, "e:" + e, Toast.LENGTH_SHORT).show();
         }
-        lv_EventLog = (ListView) findViewById(R.id.event_log);
-        mEventLogger = new EventLogger(context, lv_EventLog);
 
-        sdf = new SimpleDateFormat("yyyyMMddHHmmss");
         //Start button
         btn_start = (Button)findViewById(R.id.btn_start);
         btn_start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //--- set
                 if (mRecorder != null) {
-                    Date date = new Date();
-                    sGameStartDateTime = sdf.format(date);
-                //    System.out.println("Game start at "+sGameStartDateTime);
-                    mEventLogger.addGameTime(sGameStartDateTime);
                     isPlaying = true;
                     btn_start.setVisibility(View.INVISIBLE);
                     btn_stop.setVisibility(View.VISIBLE);
@@ -304,18 +311,17 @@ public class VideoActivity extends Activity {
             @Override
             public void onClick(View view) {
                 LinearLayout menu = (LinearLayout) findViewById(R.id.menu);
-                flg_menu++;
-                if(flg_menu >= 3)
-                    flg_menu = 0;
+                flg_eventMenu++;
+                if(flg_eventMenu >= 3)
+                    flg_eventMenu = 0;
 
-                switch (flg_menu){
+                switch (flg_eventMenu){
                     case 0://eventlog
                         LinearLayout foulsheet = (LinearLayout) findViewById(R.id.foulsheet);
                         menu.removeView(foulsheet);
                         getLayoutInflater().inflate(R.layout.event_log, menu);
-                        lv_EventLog = (ListView) findViewById(R.id.event_log);
-                        EventLogger.updateEventLog(context,lv_EventLog);
-
+                        lv_eventLog = (ListView) findViewById(R.id.event_log);
+                        mEventLogger.updateEventLog(context, lv_eventLog);
                         break;
                     case 1://scoresheet
                         LinearLayout eventlog = (LinearLayout) findViewById(R.id.menu_log);
@@ -390,7 +396,7 @@ public class VideoActivity extends Activity {
         });
     }
 
-    private void setScoresheet(){
+    protected void setScoresheet(){
         ListView listView_our, listView_opt;
         ItemArrayAdapter adpt_our, adpt_opt;
 
@@ -425,7 +431,7 @@ public class VideoActivity extends Activity {
         //(TextView)findViewById(R.id.name).setBackgroundColor();
     }
 
-    private void setFoulsheet(){
+    protected void setFoulsheet(){
 
         ListView lv_ourfoul = (ListView) findViewById(R.id.our_foul_list);
         ListView lv_oppfoul = (ListView) findViewById(R.id.opp_foul_list);
@@ -488,16 +494,18 @@ public class VideoActivity extends Activity {
         }
         isSaving = true;
     }
+
     public static void updateScoreView(){ //is accessed from Team.java
         isSaving = false;
         //---点数更新fromDB
         ArrayList column = EventDbHelper.getRowFromSuccessShoot(mDB, sGameStartDateTime);
-
+        Toast.makeText(context,"column:"+column.size(),Toast.LENGTH_SHORT).show();
         int our_score = 0;
         int opp_score = 0;
-        for(int i=0;i<column.size()-1;i++){
+        for(int i=0;i<column.size();i++){
             try {
                 Integer[] row = (Integer[]) column.get(i);
+                Toast.makeText(context,row[0]+":"+row[1],Toast.LENGTH_SHORT).show();
                 if(row[0] == 0){
                     our_score = our_score + row[1];
                 }else if(row[0] == 1){
@@ -510,6 +518,14 @@ public class VideoActivity extends Activity {
         tv_ourScore.setText(our_score+"");
         tv_oppScore.setText(opp_score+"");
         //---
+    }
+    public void changeEditView(HashMap<String,String> row){
+        LinearLayout eventlog = (LinearLayout) VideoActivity.lv_eventLog.getParent();
+        LinearLayout menu = (LinearLayout) eventlog.getParent();
+        menu.removeView(eventlog);
+        LayoutInflater LayoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater.inflate(R.layout.event_editor_view, menu);
+
     }
     @Override
     public void onResume(){
@@ -526,7 +542,7 @@ public class VideoActivity extends Activity {
         Team.TeamSelectListener our_team_lisener = cOurTeam.new TeamSelectListener();
         Team.TeamSelectListener opp_team_lisener = cOppTeam.new TeamSelectListener();
 
-        lv_mOppTeamList.setOnItemClickListener(our_team_lisener);
+        lv_mOurTeamList.setOnItemClickListener(our_team_lisener);
         lv_mOppTeamList.setOnItemClickListener(opp_team_lisener);
         //---
     }

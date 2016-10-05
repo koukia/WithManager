@@ -98,6 +98,7 @@ public class EventDbHelper extends SQLiteOpenHelper {
         }
         return row;
     }
+    
     public static ArrayList<String> getRowFromSuccessShoot(SQLiteDatabase db, String game_start_time){
         Cursor cursor = db.rawQuery("SELECT * FROM "+ EventContract.Event.TABLE_NAME+" WHERE "+
                 EventContract.Event.COL_SUCCESS+" = '1' and "+
