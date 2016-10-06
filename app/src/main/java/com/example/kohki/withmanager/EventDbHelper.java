@@ -1,5 +1,6 @@
 package com.example.kohki.withmanager;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
@@ -7,6 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -127,20 +129,48 @@ public class EventDbHelper extends SQLiteOpenHelper {
     }
     public static boolean updateColumn(SQLiteDatabase db, int id, int team, int num,
                                        int point, int success, String event){
-
-        String sql = "UPDATE " + EventContract.Event.TABLE_NAME + " set "+
-                EventContract.Event.COL_TEAM+"='"+team+"', "+
-                EventContract.Event.COL_NUM+"='"+num+"', "+
-                EventContract.Event.COL_POINT+"='"+point+"', "+
-                EventContract.Event.COL_SUCCESS+"='"+success+"', "+
-                EventContract.Event.COL_EVENT+"='"+event+"'"+
-                " where "+ EventContract.Event._ID+"="+id+";";
-        try {
-            db.execSQL(sql);
+        Log.d("update","team:"+team+"num:"+num+",point:"+point+",event:"+event);
+        ContentValues values = new ContentValues();
+        values.put(EventContract.Event.COL_TEAM, team);
+        values.put(EventContract.Event.COL_NUM, num);
+        values.put(EventContract.Event.COL_POINT, point);
+        values.put(EventContract.Event.COL_SUCCESS, success);
+        values.put(EventContract.Event.COL_EVENT, event);
+     /*   String sql = "update " + EventContract.Event.TABLE_NAME + " set "+
+                EventContract.Event.COL_TEAM+"="+team+", "+
+                EventContract.Event.COL_NUM+"="+num+", "+
+                EventContract.Event.COL_POINT+"="+point+", "+
+                EventContract.Event.COL_SUCCESS+"="+success+", "+
+                EventContract.Event.COL_EVENT+"='"+event+
+                "' where "+ EventContract.Event._ID+"="+id+";";
+     */   try {
+         //   db.execSQL(sql);
+            db.update(EventContract.Event.TABLE_NAME,values,
+                    EventContract.Event._ID+"=?",new String[]{id+""});
         } catch (SQLException e) {
             Log.e("SQL", e.toString());
             return false;
         }
         return true;
+    }
+    public static boolean deleteRow(Context context, int id){
+        EventDbHelper dbHelper = null;
+        SQLiteDatabase db = null;
+        try {
+            dbHelper = new EventDbHelper(context);
+            db = dbHelper.getWritableDatabase();
+            db.delete(EventContract.Event.TABLE_NAME, "_id=?", new String[]{id + ""});
+        }catch (SQLException e){
+            Log.w("deleteRow",e);
+            return false;
+        }finally {
+            if (db != null) {
+                db.close();
+            }
+            if (dbHelper != null) {
+                dbHelper.close();
+            }
+            return true;
+        }
     }
 }

@@ -3,6 +3,7 @@ package com.example.kohki.withmanager;
 import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteCursor;
@@ -22,8 +23,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 import android.widget.Toast;
@@ -43,6 +47,13 @@ public class EventLogger {
     private static int cntDoubleClick=0;
     private static int preId =-1;
 
+    private int record_id;
+    private int team;
+    private int num;
+    private int point;
+    private int success;
+    private String event;
+    private AlertDialog.Builder mADBuilder;
     public EventLogger(Context context){
         this.context = context;
 
@@ -63,62 +74,139 @@ public class EventLogger {
                 if(cntDoubleClick >= 2) {
                     HashMap<String,String> row = EventDbHelper.getRowFromID(context,id_of_event_log);
               //      Toast.makeText(context,row+"",Toast.LENGTH_SHORT).show();
-                    //--- edit dialog
-
-                    // カスタムビューを設定
+                    //--- edit eventlog
                     LayoutInflater inflater = (LayoutInflater)context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
-                    final View layout = inflater.inflate(R.layout.event_editor_view,
-                            null);
+                    final View layout = inflater.inflate(R.layout.event_editor_view,null);
 
-                    // アラーとダイアログ を生成
-                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(context);
                     builder.setTitle("イベント編集");
                     builder.setView(layout);
                     builder.setCancelable(true);
-                    /*
-                    layout.findViewById(R.id.btn_edit_return).setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
 
+                    record_id = id_of_event_log;
+                    team      = Integer.parseInt(row.get(EventContract.Event.COL_TEAM));
+                    num       = Integer.parseInt(row.get(EventContract.Event.COL_NUM));
+                    point     = Integer.parseInt(row.get(EventContract.Event.COL_POINT));
+                    success   = Integer.parseInt(row.get(EventContract.Event.COL_SUCCESS));
+                    event     = row.get(EventContract.Event.COL_EVENT);
+                    Log.d("edit","id:"+record_id+",team:"+team+",num:"+num+",point:"+point+
+                    ",success:"+success+",event:"+event);
+
+                    RadioButton rdobtn;
+                    if(team == 0) {
+                        rdobtn = (RadioButton)layout.findViewById(R.id.rdobtn_ourteam);
+                        rdobtn.setChecked(true);
+                    }else if(team == 1){
+                        rdobtn = (RadioButton)layout.findViewById(R.id.rdobtn_oppteam);
+                        rdobtn.setChecked(true);
+                    }
+                    if(event.equals("foul")){
+                        rdobtn = (RadioButton)layout.findViewById(R.id.rdobtn_foul);
+                        rdobtn.setChecked(true);
+                    }else if(event.equals("rebound")){
+                        rdobtn = (RadioButton)layout.findViewById(R.id.rdobtn_rebound);
+                        rdobtn.setChecked(true);
+                    }else if(event.equals("shoot")){
+                        rdobtn = (RadioButton)layout.findViewById(R.id.rdobtn_shoot);
+                        rdobtn.setChecked(true);
+                        if(point == 1){
+                            rdobtn = (RadioButton)layout.findViewById(R.id.rdobtn_shoot01);
+                            rdobtn.setChecked(true);
+                        }else if(point == 2){
+                            rdobtn = (RadioButton)layout.findViewById(R.id.rdobtn_shoot02);
+                            rdobtn.setChecked(true);
+                        }else if(point == 3){
+                            rdobtn = (RadioButton)layout.findViewById(R.id.rdobtn_shoot03);
+                            rdobtn.setChecked(true);
                         }
-                    });
-                    layout.findViewById(R.id.btn_edit_save).setOnClickListener(new View.OnClickListener() {
+                    }
+                    if(success == 1){
+                        rdobtn = (RadioButton)layout.findViewById(R.id.rdobtn_success);
+                        rdobtn.setChecked(true);
+                    }else if(success == 0){
+                        rdobtn = (RadioButton)layout.findViewById(R.id.rdobtn_failed);
+                        rdobtn.setChecked(true);
+                    }
+
+                    builder.setNeutralButton("戻る", new DialogInterface.OnClickListener() {
                         @Override
-                        public void onClick(View v) {
-                            layout
-                        }
-                    });
-                    layout.findViewById(R.id.btn_edit_delete).setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            layout
-                        }
-                    });*/
-                    /*
-                    builder.setPositiveButton("OK", new OnClickListener () {
                         public void onClick(DialogInterface dialog, int which) {
-                            // OK ボタンクリック処理
-                            // ID と PASSWORD を取得
-                            EditText id
-                                    = (EditText)layout.findViewById(R.id.customDlg_id);
-                            EditText pass
-                                    = (EditText)layout.findViewById(R.id.customDlg_pass);
-                            String strId   = id.getText().toString();
-                            String strPass = pass.getText().toString();
+
                         }
                     });
-                    builder.setNegativeButton("Cancel", new OnClickListener() {
+                    builder.setPositiveButton("保存", new DialogInterface.OnClickListener() {
+                        @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            // Cancel ボタンクリック処理
+                            RadioGroup rg = (RadioGroup) layout.findViewById(R.id.rdog_team);
+                            int id = rg.getCheckedRadioButtonId();
+                            if(id == R.id.rdobtn_ourteam) {
+                                team = 0;
+                            }else if(id == R.id.rdobtn_oppteam){
+                                    team = 1;
+                            }
+
+                            rg = (RadioGroup) layout.findViewById(R.id.rdog_event);
+                            id = rg.getCheckedRadioButtonId();
+                            switch (id){
+                                case R.id.rdobtn_foul:
+                                    event = "foul";
+                                    point=0;
+                                    success=1;
+                                    break;
+                                case R.id.rdobtn_steal:
+                                    event = "steal";
+                                    point=0;
+                                    success=1;
+                                    break;
+                                case R.id.rdobtn_rebound:
+                                    event = "rebound";
+                                    point=0;
+                                    success=1;
+                                    break;
+                                case R.id.rdobtn_shoot:
+                                    event = "shoot";
+                                    rg = (RadioGroup) layout.findViewById(R.id.rdog_success);
+                                    id = rg.getCheckedRadioButtonId();
+                                    if(id == R.id.rdobtn_success){
+                                        success = 1;
+                                    }else if(id == R.id.rdobtn_failed){
+                                        success = 0;
+                                    }
+                                    rg = (RadioGroup) layout.findViewById(R.id.rdog_shoot);
+                                    id = rg.getCheckedRadioButtonId();
+                                    if(id == R.id.rdobtn_shoot01){
+                                        point = 1;
+                                    }else if(id == R.id.rdobtn_shoot02){
+                                        point = 2;
+                                    }else if(id == R.id.rdobtn_shoot03) {
+                                        point = 3;
+                                    }
+                                    break;
+                            }
+                            EventDbHelper mDbHelper = new EventDbHelper(context);
+                            SQLiteDatabase db = mDbHelper.getWritableDatabase();
+                            Log.d("---from edit save btn", "id:"+id+",team:"+team+",num:"+num
+                                    +",point:"+point+",success:"+success+",event:"+event);
+                            Boolean result = EventDbHelper.updateColumn(db,id,team,num,point,success,event);
+                            Log.d("---edit_save_result:",""+result);
+
+                            EventLogger ev = new EventLogger(context);
+
+                            ev.updateEventLog(context, VideoActivity.lv_eventLog);
+                            VideoActivity.updateScoreView();
                         }
-                    });*/
-
-                    // 表示
-                    builder.create().show();
-
-
-
-                    //---
+                    });
+                    builder.setNegativeButton("削除", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Boolean result = EventDbHelper.deleteRow(context,record_id);
+                            Log.d("btn_edit_delete",result+"");
+                            EventLogger ev = new EventLogger(context);
+                            ev.updateEventLog(context, VideoActivity.lv_eventLog);
+                            VideoActivity.updateScoreView();
+                        }
+                    });
+                    builder.show();
                     cntDoubleClick=0;
                 }
             }else if (preId == -1){
