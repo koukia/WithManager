@@ -181,7 +181,7 @@
             android:layout_width="60dp"
             android:layout_height="40dp"
             android:text="削除"
-            android:id="@+id/btn_evevnt_delete" />
+            android:id="@+id/btn_edit_delete" />
     </LinearLayout>
 
 </LinearLayout>

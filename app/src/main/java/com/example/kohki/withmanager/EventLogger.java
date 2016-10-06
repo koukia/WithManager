@@ -10,6 +10,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.graphics.PixelFormat;
 import android.media.MediaPlayer;
+import android.os.Build;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Gravity;
@@ -42,9 +43,6 @@ public class EventLogger {
     private static int cntDoubleClick=0;
     private static int preId =-1;
 
-//TODO:num
-    String[] spn_event = {"1Pシュート", ""};
-
     public EventLogger(Context context){
         this.context = context;
 
@@ -76,7 +74,26 @@ public class EventLogger {
                     AlertDialog.Builder builder = new AlertDialog.Builder(context);
                     builder.setTitle("イベント編集");
                     builder.setView(layout);
+                    builder.setCancelable(true);
+                    /*
+                    layout.findViewById(R.id.btn_edit_return).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
 
+                        }
+                    });
+                    layout.findViewById(R.id.btn_edit_save).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            layout
+                        }
+                    });
+                    layout.findViewById(R.id.btn_edit_delete).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            layout
+                        }
+                    });*/
                     /*
                     builder.setPositiveButton("OK", new OnClickListener () {
                         public void onClick(DialogInterface dialog, int which) {

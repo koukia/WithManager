@@ -80,6 +80,30 @@ public class VideoRecorder implements SurfaceHolder.Callback {
                 }
             }
         }
+        if(mCamera == null){
+            for (int i = 0; i < numberOfCameras; i++) {
+                Camera.CameraInfo caminfo = new Camera.CameraInfo();
+                Camera.getCameraInfo(i, caminfo);
+                Log.v("CameraID", "" + i);
+                // カメラの向きを取得
+                int facing = caminfo.facing;
+                if (facing == Camera.CameraInfo.CAMERA_FACING_FRONT) { // facing is 0
+                    try {
+                        Log.v(TAG, "1");
+                        mCamera = Camera.open(i);
+                        Log.v(TAG, "2");
+                        mSurfaceHolder = mSurfaceView.getHolder();
+                        Log.v(TAG, "3");
+                        mSurfaceHolder.addCallback(this);
+                        Log.v(TAG, "4");
+                    } catch (RuntimeException e) {
+                        Log.d(TAG + "resume", "Camera cant open:" + e);
+                        Toast.makeText(context, "Camera cant open" + e, Toast.LENGTH_LONG).show();
+                    }
+                }
+            }
+        }
+
     }
 
 
