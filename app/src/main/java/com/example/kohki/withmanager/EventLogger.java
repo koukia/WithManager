@@ -11,7 +11,10 @@ import android.graphics.PixelFormat;
 import android.media.MediaPlayer;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Surface;
+import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.widget.AdapterView;
@@ -37,7 +40,6 @@ public class EventLogger {
     private static int cntDoubleClick=0;
     private static int preId =-1;
 
-    private Spinner spn_num;
 //TODO:num
     String[] spn_event = {"1Pシュート", ""};
 
@@ -76,6 +78,8 @@ public class EventLogger {
     }
     static class EventLogListItemLongClickListener  implements ListView.OnItemLongClickListener {
 
+        VideoRecorder mRecorder;
+
         EventLogListItemLongClickListener() {
         }
 
@@ -89,29 +93,27 @@ public class EventLogger {
 
             try { //スタンドアローンかBluetooth通信中か
                 if(VideoActivity.mSubSurface != null) {
+
                     VideoActivity.mSubSurface.setVisibility(SurfaceView.VISIBLE);
-                    if (VideoActivity.mMainSurfaceCallback.mMediaPlayer != null) {
-                        VideoActivity.mMainSurfaceCallback.mMediaPlayer.release();
-                        VideoActivity.mMainSurfaceCallback.mMediaPlayer = null;
+                    if (VideoActivity.mSubSurfaceCallback.mMediaPlayer != null) {
+                        VideoActivity.mSubSurfaceCallback.mMediaPlayer.release();
+                        VideoActivity.mSubSurfaceCallback.mMediaPlayer = null;
                     }
-                    /*
-                    VideoRecorder m_recorder = new VideoRecorder(context,"",VideoActivity.mSubSurface,Resources.getSystem());
-
-                    VideoActivity.mRecor
-                    VideoActivity.mMainHolder = VideoActivity.mMainSurface.getHolder();
-                    VideoActivity.mMainHolder.setFormat(PixelFormat.TRANSLUCENT);//ここで半透明にする
-                    VideoActivity.mMainSurfaceCallback = new PreviewSurfaceViewCallback(context);
-                    VideoActivity.mMainHolder.addCallback(VideoActivity.mMainSurfaceCallback);
-                    VideoActivity.mMainSurface.setVisibility(SurfaceView.INVISIBLE);
-
-*/
-                    VideoActivity.mMainSurfaceCallback.palyVideo(movie_name);
-                    VideoActivity.mMainSurfaceCallback.mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                    VideoActivity.mSubSurfaceCallback.palyVideo(movie_name);
+                    VideoActivity.mSubSurfaceCallback.mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                         @Override
                         public void onCompletion(MediaPlayer mp) {
-                            VideoActivity.mMainSurface.setVisibility(SurfaceView.INVISIBLE);
+                            VideoActivity.mSubSurface.setVisibility(SurfaceView.INVISIBLE);
+
+
+                   //         VideoActivity.mRecorder = new VideoRecorder(context, VideoActivity.saveDir,
+                   //                 VideoActivity.mMainSurface, context.getResources());
+                   //         VideoActivity.mSmallSurface.setVisibility(SurfaceView.INVISIBLE);
+
                         }
                     });
+
+
                 }else if(SynchroVideoActivity.sv_sPlayBackView != null){
                     SynchroVideoActivity.sv_sPlayBackView.setVisibility(SurfaceView.VISIBLE);
                     if (SynchroVideoActivity.mPreviewCallback.mMediaPlayer != null) {
@@ -145,7 +147,7 @@ public class EventLogger {
         values.put(EventContract.Event.COL_MOVIE_NAME,  VideoActivity.sMovieName);
         values.put(EventContract.Event.COL_DATETIME,    VideoActivity.sGameStartDateTime);
         values.put(EventContract.Event.COL_QUARTER_NUM, VideoActivity.sCurrentQuarterNum);
-
+        Log.d(TAG,"insert_values:"+values);
         mDb.insert(
                 EventContract.Event.TABLE_NAME,
                 null,

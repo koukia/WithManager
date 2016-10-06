@@ -83,9 +83,11 @@ public class Team extends VideoActivity {
                 if (flg_eventMenu == 0) {
                     mEventLogger.updateEventLog(context, VideoActivity.lv_eventLog);
                 } else if (flg_eventMenu == 1){
-                    setScoresheet();
+                    VideoActivity v = new VideoActivity();
+                    v.setScoresheet();
                 }else if(flg_eventMenu == 2) {
-                    setFoulsheet();
+                    VideoActivity v = new VideoActivity();
+                    v.setFoulsheet();
                 }
                 updateScoreView();
             }else{

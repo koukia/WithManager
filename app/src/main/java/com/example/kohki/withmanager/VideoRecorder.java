@@ -29,28 +29,30 @@ import java.util.List;
  * Created by Kohki on 2016/07/25.
  */
 public class VideoRecorder implements SurfaceHolder.Callback {
-    private final static String TAG = "VideoRecorderClass";
+    private final static String TAG = "VideoRecCls";
+    private static Context context;
 
-    private SurfaceHolder surfaceHolder;
-    private SurfaceView surfaceView;
+    private SurfaceView   mSurfaceView;
+    private SurfaceHolder mSurfaceHolder;
+
     private MediaRecorder mMediaRecorder;
-    private Camera mCamera = null;
-
-    private Context context;
+    private Camera        mCamera = null;
     private boolean is_recording = false;
 
     private String mSavaPath;
     private String mMovieFilePath;
+    private ArrayList<String> mMovieFilePaths;
 
     Resources resources;
     public VideoRecorder(Context context, String path, SurfaceView sv, Resources resources){
         this.context = context;
         mSavaPath = path;
-        surfaceView = sv;
-        surfaceHolder = surfaceView.getHolder();
-        surfaceHolder.addCallback(this);
+        mSurfaceView = sv;
+        mSurfaceHolder = sv.getHolder();
+        mSurfaceHolder.addCallback(this);
         this.resources = resources;
-        resume();
+        mMovieFilePaths = new ArrayList<>();
+    //    resume();
     }
 
     public void resume(){
@@ -68,70 +70,88 @@ public class VideoRecorder implements SurfaceHolder.Callback {
                     Log.v(TAG, "1");
                     mCamera = Camera.open(i);
                     Log.v(TAG, "2");
-                    surfaceHolder = surfaceView.getHolder();
+                    mSurfaceHolder = mSurfaceView.getHolder();
                     Log.v(TAG, "3");
-                    surfaceHolder.addCallback(this);
+                    mSurfaceHolder.addCallback(this);
                     Log.v(TAG, "4");
-                } catch (RuntimeException ex){
-                    Log.d("Err","Camera cant open");
-                    Toast.makeText(context, "RuntimeException", Toast.LENGTH_LONG).show();
+                } catch (RuntimeException e){
+                    Log.d(TAG+"resume","Camera cant open:"+e);
+                    Toast.makeText(context, "Camera cant open"+e, Toast.LENGTH_LONG).show();
                 }
-            }else if(facing == Camera.CameraInfo.CAMERA_FACING_FRONT){
-                Log.v("FRONT_CAMERA", "cameraId=" + Integer.toString(i));
             }
+        }
+    }
+
+
+    public void start(){
+        if(mCamera == null)
+            return;
+         //   resume();
+        try {
+            mMediaRecorder = new MediaRecorder();
+            Log.d(TAG+"start()","1");
+            mCamera.unlock();
+            Log.d(TAG+"start()","2");
+
+            mMediaRecorder.setCamera(mCamera);
+            Log.d(TAG+"start()","3");
+
+            // TODO:他端末での対応 corresponding each device
+            mMediaRecorder.setAudioSource(MediaRecorder.AudioSource.CAMCORDER);
+            Log.d(TAG+"start()","4");
+
+            mMediaRecorder.setVideoSource(MediaRecorder.VideoSource.CAMERA);
+            Log.d(TAG+"start()","5");
+
+            CamcorderProfile camcorderProfile = CamcorderProfile.get(CamcorderProfile.QUALITY_480P);
+            //    Toast.makeText(context,Integer.toString(camcorderProfile.videoCodec),Toast.LENGTH_SHORT).show();
+            camcorderProfile.videoCodec = MediaRecorder.VideoEncoder.DEFAULT;
+            Log.d(TAG+"start()","default"+MediaRecorder.VideoEncoder.DEFAULT);
+            mMediaRecorder.setProfile(camcorderProfile);
+            Log.d(TAG+"start()","6");
+
+                /*decide file name*/
+            Date date = new Date();
+            SimpleDateFormat sdf1 = new SimpleDateFormat("yyyyMMddHHmmss");
+            mMovieFilePath = mSavaPath + sdf1.format(date) + ".mp4";
+            mMediaRecorder.setOutputFile(mMovieFilePath);
+                /* --- */
+            Log.d(TAG+"start()","7");
+
+            mMediaRecorder.setPreviewDisplay(mSurfaceHolder.getSurface());// プレビューに利用するサーフェイスを指定する
+      //      mrec.setVideoSize(getWidth(), getHeight()); //=> start failed -19
+            mMediaRecorder.prepare();
+            Log.d(TAG+"start()","8");
+
+            mMediaRecorder.start();
+            Log.d(TAG+"start()","9");
+
+            is_recording = true;
+        }catch (IOException e) {
+            Log.e(TAG+"start()",""+e);
+            Toast.makeText(context, "IOe:" + e, Toast.LENGTH_SHORT).show();
+        }catch (RuntimeException e) {
+            Log.e(TAG+"start()",""+e);
+            Toast.makeText(context, "Re:" + e, Toast.LENGTH_SHORT).show();
         }
     }
     public void pause(){
         if(mCamera != null) {
+        //    Toast.makeText(context,"pause()",Toast.LENGTH_SHORT).show();
             mCamera.stopPreview();
             mCamera.release();
             mCamera = null;
         }
     }
 
-    public void start(){
-        if(mCamera == null)
-            resume();
-        try {
-            mMediaRecorder = new MediaRecorder();
-            mCamera.unlock();
-            mMediaRecorder.setCamera(mCamera);
-
-            // TODO:他端末での対応 corresponding each device
-            mMediaRecorder.setAudioSource(MediaRecorder.AudioSource.CAMCORDER);
-            mMediaRecorder.setVideoSource(MediaRecorder.VideoSource.CAMERA);
-            CamcorderProfile camcorderProfile = CamcorderProfile.get(CamcorderProfile.QUALITY_480P);
-            //    Toast.makeText(context,Integer.toString(camcorderProfile.videoCodec),Toast.LENGTH_SHORT).show();
-            camcorderProfile.videoCodec = MediaRecorder.VideoEncoder.H264;
-            mMediaRecorder.setProfile(camcorderProfile);
-
-                /*decide file name*/
-            Date date = new Date();
-            SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            mSavaPath = mSavaPath + sdf1.format(date) + ".mp4";
-            mMediaRecorder.setOutputFile(mMovieFilePath);
-                /* --- */
-            mMediaRecorder.setPreviewDisplay(surfaceHolder.getSurface());// プレビューに利用するサーフェイスを指定する
-      //      mrec.setVideoSize(getWidth(), getHeight()); //=> start failed -19
-            mMediaRecorder.prepare();
-            mMediaRecorder.start();
-
-            is_recording = true;
-        }catch (IOException e) {
-            Log.e(TAG,""+e);
-            Toast.makeText(context, "IOe:" + e, Toast.LENGTH_SHORT).show();
-        }catch (RuntimeException e) {
-            Toast.makeText(context, "Re:" + e, Toast.LENGTH_SHORT).show();
-        }
-    }
-
     public void stop() {
-        if(mrec != null) {
+        if(mMediaRecorder != null) {
+        //    Toast.makeText(context,"stop()",Toast.LENGTH_SHORT).show();
             try {
-                mrec.stop();
-                mrec.reset();
-                mrec.release();
-                mrec = null;
+                mMediaRecorder.stop();
+                mMediaRecorder.reset();
+                mMediaRecorder.release();
+                mMediaRecorder = null;
             }catch (RuntimeException e){
                 Toast.makeText(context,e+"",Toast.LENGTH_SHORT).show();
             }
@@ -142,27 +162,30 @@ public class VideoRecorder implements SurfaceHolder.Callback {
     public String save() {
 
         VideoEdit mVideoEdit = new VideoEdit();
-        File origin_file = originMovies.get(originMovies.size() - 1);
-        String[] arr_origin_filename = origin_file.getAbsoluteFile().toString().split("/");
-        String edit_filename = "";
+        String[] arr_origin_filename = mMovieFilePath.split("/");
+
+        String edit_movie_path = "";
         for (int i = 0; i < arr_origin_filename.length; i++) {
-            edit_filename += arr_origin_filename[i];
+            edit_movie_path += arr_origin_filename[i];
             if (i != arr_origin_filename.length - 1)
-                edit_filename += "/";
+                edit_movie_path += "/";
             if (i == arr_origin_filename.length - 2)
-                edit_filename += "Edited_";
+                edit_movie_path += "Edited";
         }
-        int origin_movie_time = getDuration(origin_file);
-        File edit_file = new File(edit_filename); //修正後ファイル
+        File f_movie = new File(mMovieFilePath);
+        int origin_movie_time = getDuration(f_movie);
+
+        File f_edit_movie = new File(edit_movie_path); //修正後ファイル
+
         if (origin_movie_time > VideoActivity.sMovieTime) {
-            int cut_start_time = (origin_movie_time - VideoActivity.sMovieTime) / 1000 * 1000 - 500;
-            //Toast.makeText(context, "movie_time:" + movie_time + "\ncut_start_time:" + cut_start_time, Toast.LENGTH_LONG).show();
+            int cut_start_time = (origin_movie_time - VideoActivity.sMovieTime) / 1000 * 1000;
+            Log.d(TAG,"movie_time:" + origin_movie_time + "\ncut_start_time:" + cut_start_time);
             if (cut_start_time <= 0) {
-                //   Toast.makeText(context, "ノーカット", Toast.LENGTH_LONG).show();
+                Log.d(TAG,"no-cut");
             } else {//5秒以下に編集
                 try {
                     //     Toast.makeText(context, "カットあり", Toast.LENGTH_LONG).show();
-                    mVideoEdit.startTrim(origin_file, edit_file, cut_start_time, origin_movie_time);
+                    mVideoEdit.startTrim(f_movie, f_edit_movie, cut_start_time, origin_movie_time);
                 } catch (IOException e) {
                     Log.d("IOException", "startTrim");
                 } catch (Exception e) {
@@ -173,12 +196,12 @@ public class VideoRecorder implements SurfaceHolder.Callback {
             // Toast.makeText(context, getDuration(new File(after_edit_file.getAbsolutePath().toString())), Toast.LENGTH_LONG).show();
         } else if (origin_movie_time < VideoActivity.sMovieTime) {
             //   Toast.makeText(context, "within 5000ms\n"+editedMovies.size(), Toast.LENGTH_SHORT).show();
-            if (editedMovies.size() >= 1) { //editedMovies.get(editedMovies.size() - 1).exists()
+            if (mMovieFilePaths.size() >= 1) { //editedMovies.get(editedMovies.size() - 1).exists()
                 try {
                     boolean result = mVideoEdit.appendMovie(
-                            editedMovies.get(editedMovies.size()-1).getAbsolutePath().toString(),
-                            origin_file.getAbsolutePath(),
-                            edit_file.getAbsolutePath() );
+                            mMovieFilePaths.get(mMovieFilePaths.size()-1),
+                            mMovieFilePath,
+                            edit_movie_path );
                     if(!result) {
                         //   Toast.makeText(context, "結合失敗", Toast.LENGTH_LONG).show();
                     }
@@ -186,12 +209,12 @@ public class VideoRecorder implements SurfaceHolder.Callback {
                     Toast.makeText(context, "IndexOutOfBoundsException", Toast.LENGTH_LONG).show();
                 }
             } else {
-                copyFile(origin_file, edit_file);
-                //       Toast.makeText(context, "5秒未満の動画を生成(origin copy)", Toast.LENGTH_LONG).show();
+                mMovieFilePaths.add(mMovieFilePath);
+                return mMovieFilePath;
             }
         }
-        editedMovies.add(edit_file);
-        return edit_filename;
+        mMovieFilePaths.add(edit_movie_path);
+        return edit_movie_path;
     }
     private static int getDuration(File audioFile) {
         MediaPlayer mp = new MediaPlayer();
@@ -227,13 +250,13 @@ public class VideoRecorder implements SurfaceHolder.Callback {
     /* these 3 method are needed */
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width,int height) {
-        //    Toast.makeText(context, " surfaceChanged()", Toast.LENGTH_SHORT).show();
+       //     Toast.makeText(context, " surfaceChanged()", Toast.LENGTH_SHORT).show();
         startPreview(holder);
     }
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
-        //    Toast.makeText(context, " surfaceCreated()", Toast.LENGTH_SHORT).show();
+       //     Toast.makeText(context, " surfaceCreated()", Toast.LENGTH_SHORT).show();
         if (mCamera != null){
         } else {
             //finish();
@@ -242,8 +265,9 @@ public class VideoRecorder implements SurfaceHolder.Callback {
 
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
-        //    Toast.makeText(context, " surfaceDestroyed()", Toast.LENGTH_SHORT).show();
+       //     Toast.makeText(context, " surfaceDestroyed()", Toast.LENGTH_SHORT).show();
     }
+
     /* --- */
 
     private void startPreview(SurfaceHolder holder) {
@@ -319,13 +343,13 @@ public class VideoRecorder implements SurfaceHolder.Callback {
     //    DisplayMetrics dm = Resources.getSystem().getDisplayMetrics();
     //    int height = dm.heightPixels;
     //    return height;
-        return surfaceView.getHeight();
+        return mSurfaceView.getHeight();
     }
     private int getWidth(){
     //    DisplayMetrics dm = Resources.getSystem().getDisplayMetrics();
     //    int width = dm.widthPixels;
     //    return width;
-        return surfaceView.getWidth();
+        return mSurfaceView.getWidth();
     }
     private boolean isLandscape(){
         if (resources.getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){

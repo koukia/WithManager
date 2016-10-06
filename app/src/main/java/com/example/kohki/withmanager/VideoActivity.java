@@ -22,6 +22,7 @@ import android.view.LayoutInflater;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -49,17 +50,17 @@ public class VideoActivity extends Activity {
 
     private EventDbHelper cDbHelper;
     protected static SQLiteDatabase mDB;
-    private VideoRecorder mRecorder = null;
+    public static VideoRecorder mRecorder = null;
     protected EventLogger mEventLogger;
-    private Camera mCamera;
 
     public static SurfaceView mMainSurface;
-    public static SurfaceHolder mMainHolder;
-    public static PreviewSurfaceViewCallback mMainSurfaceCallback;
 
     public static SurfaceView   mSubSurface;
     public static SurfaceHolder mSubHolder;
     public static PreviewSurfaceViewCallback mSubSurfaceCallback;
+
+    public static SurfaceView mSmallSurface;
+    public static SurfaceHolder mSmallHolder;
 
     private ListView lv_mOurTeamList;
     private ListView lv_mOppTeamList;
@@ -90,8 +91,8 @@ public class VideoActivity extends Activity {
     protected static boolean isSaving = false;
     protected int flg_eventMenu = 0;  //0:eventlog, 1:score, 2:foul
 
-    //private String sava_dir  = "/storage/emulated/legacy/WithManager/";
-    private String sava_dir = "sdcard/WithManager/";
+    //public static String saveDir  = "/storage/emulated/legacy/WithManager/";
+    public static String saveDir = "sdcard/WithManager/";
 
     /* Synchro only */
     private static final Handler handler = new Handler();
@@ -159,7 +160,8 @@ public class VideoActivity extends Activity {
 
         //main surfaceview
         mMainSurface = (SurfaceView) findViewById(R.id.main_surface);
-        mRecorder = new VideoRecorder(context, sava_dir, mMainSurface, getResources());
+        //mMainSurface.setVisibility(SurfaceView.INVISIBLE);
+        mRecorder = new VideoRecorder(context, saveDir, mMainSurface, getResources());
 
         //sub surfaceview
         mSubSurface = (SurfaceView) findViewById(R.id.sub_surface);
@@ -168,12 +170,23 @@ public class VideoActivity extends Activity {
         mSubSurfaceCallback = new PreviewSurfaceViewCallback(context);
         mSubHolder.addCallback(mSubSurfaceCallback);
         mSubSurface.setVisibility(SurfaceView.INVISIBLE);
+      //  mSmallHolder.setFixedSize(mSubSurface.getWidth()/2,
+       //         mSubSurface.getHeight()/2);
+
+        //small surface
+        mSmallSurface = (SurfaceView) findViewById(R.id.small_surface);
+        mSmallHolder = mSmallSurface.getHolder();
+     //   mSmallHolder.addCallback();
+     //   mSmallHolder.addCallback(new SimpleCameraCallback());
+        mSmallHolder.setFormat(PixelFormat.TRANSLUCENT);//ここで半透明にする
+        mSmallSurface.setVisibility(SurfaceView.INVISIBLE);
+    //    mSmallSurface.setZOrderOnTop(true);
 
         tv_ourScore    = (TextView) findViewById(R.id.our_score);
         tv_oppScore    = (TextView) findViewById(R.id.opposing_score);
 
         try {
-            File dir_save = new File(sava_dir);
+            File dir_save = new File(saveDir);
             if(!dir_save.exists())
                 dir_save.mkdir();
         } catch (Exception e) {
@@ -187,11 +200,12 @@ public class VideoActivity extends Activity {
             public void onClick(View v) {
                 //--- set
                 if (mRecorder != null) {
-                    isPlaying = true;
                     btn_start.setVisibility(View.INVISIBLE);
                     btn_stop.setVisibility(View.VISIBLE);
                     mRecorder.start();
+                    isPlaying = true;
                 }
+
             }
         });
 
@@ -482,16 +496,6 @@ public class VideoActivity extends Activity {
         sMovieName = mRecorder.save();
         mRecorder.start();
 
-        if (event_name.equals("shoot") && is_success == 1) {
-            tv_sMessageBar.setText("「" + point + "点シュート成功」記録。背番号をタップしてください");
-            tv_sMessageBar.setGravity(Gravity.CENTER);
-        } else if (event_name.equals("shoot") && is_success == 0) {
-            tv_sMessageBar.setText("「" + point + "点シュート失敗」記録。背番号をタップしてください");
-            tv_sMessageBar.setGravity(Gravity.CENTER);
-        } else if (event_name.equals("foul")) {
-            tv_sMessageBar.setText("「ファウル」記録。背番号をタップしてください");
-            tv_sMessageBar.setGravity(Gravity.CENTER);
-        }
         isSaving = true;
     }
 
@@ -499,17 +503,17 @@ public class VideoActivity extends Activity {
         isSaving = false;
         //---点数更新fromDB
         ArrayList column = EventDbHelper.getRowFromSuccessShoot(mDB, sGameStartDateTime);
-        Toast.makeText(context,"column:"+column.size(),Toast.LENGTH_SHORT).show();
+    //    Toast.makeText(context,"column:"+column.size(),Toast.LENGTH_SHORT).show();
         int our_score = 0;
         int opp_score = 0;
         for(int i=0;i<column.size();i++){
             try {
                 Integer[] row = (Integer[]) column.get(i);
-                Toast.makeText(context,row[0]+":"+row[1],Toast.LENGTH_SHORT).show();
-                if(row[0] == 0){
-                    our_score = our_score + row[1];
-                }else if(row[0] == 1){
-                    opp_score = opp_score + row[1];
+            //    Toast.makeText(context,"ID"+row[0]+",TEAM:"+row[1]+",POINT"+row[2],Toast.LENGTH_SHORT).show();
+                if(row[1] == 0){
+                    our_score = our_score + row[2];
+                }else if(row[1] == 1){
+                    opp_score = opp_score + row[2];
                 }
             }catch (NumberFormatException e){
                 Log.w(TAG,e+"");
@@ -519,14 +523,7 @@ public class VideoActivity extends Activity {
         tv_oppScore.setText(opp_score+"");
         //---
     }
-    public void changeEditView(HashMap<String,String> row){
-        LinearLayout eventlog = (LinearLayout) VideoActivity.lv_eventLog.getParent();
-        LinearLayout menu = (LinearLayout) eventlog.getParent();
-        menu.removeView(eventlog);
-        LayoutInflater LayoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        LayoutInflater.inflate(R.layout.event_editor_view, menu);
 
-    }
     @Override
     public void onResume(){
         super.onResume();

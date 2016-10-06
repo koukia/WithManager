@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -105,11 +106,18 @@ public class EventDbHelper extends SQLiteOpenHelper {
                 EventContract.Event.COL_EVENT+" = 'shoot' and "+
                 EventContract.Event.COL_DATETIME+" = ?", new String[]{String.valueOf(game_start_time)});
         ArrayList column = new ArrayList();
+        Integer[] row;
         try {
-            Integer[] row = new Integer[2];
-            if (cursor.moveToNext()) {
-                row[0] = cursor.getInt(cursor.getColumnIndex(EventContract.Event.COL_TEAM));
-                row[1] = cursor.getInt(cursor.getColumnIndex(EventContract.Event.COL_POINT));
+            while (cursor.moveToNext()) {
+                row = new Integer[3];
+                int id = cursor.getInt(cursor.getColumnIndex(EventContract.Event._ID));
+                int team = cursor.getInt(cursor.getColumnIndex(EventContract.Event.COL_TEAM));
+                int point = cursor.getInt(cursor.getColumnIndex(EventContract.Event.COL_POINT));
+                Log.d("getRowFromS","id:"+id+",team:"+team+",point:"+point);
+                row[0]=id;
+                row[1]=team;
+                row[2]=point;
+                column.add(row);
             }
         } finally {
             cursor.close();

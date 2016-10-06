@@ -15,7 +15,6 @@ public class PreviewSurfaceViewCallback implements SurfaceHolder.Callback {
         private static final String TAG = "PreviewCallback";
         private SurfaceHolder holder;
         private Context context;
-        private String preview_video_path;
         public MediaPlayer mMediaPlayer = null;
 
         public PreviewSurfaceViewCallback(Context context){
