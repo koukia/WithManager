@@ -98,11 +98,11 @@ public class VideoActivity extends Activity {
     private static final Handler handler = new Handler();
     private Button btnBluetoothSettiong;
     private BluetoothUtil bu;
-    private BluetoothDevice targetDevice = null;
+    protected static BluetoothDevice targetDevice = null;
     private BluetoothStatus bluetoothStatus;
     private BluetoothAdapter ba;
-    private BluetoothConnection bc;
-    private byte buf[];
+    protected BluetoothConnection bc;
+    protected static byte buf[];
     private enum BluetoothStatus{
         ERROR("Bluetooth接続に失敗しました"),
         CONNECTING("Bluetooth接続 : 接続中"),
@@ -172,15 +172,6 @@ public class VideoActivity extends Activity {
         mSubSurface.setVisibility(SurfaceView.INVISIBLE);
       //  mSmallHolder.setFixedSize(mSubSurface.getWidth()/2,
        //         mSubSurface.getHeight()/2);
-
-        //small surface
-        mSmallSurface = (SurfaceView) findViewById(R.id.small_surface);
-        mSmallHolder = mSmallSurface.getHolder();
-     //   mSmallHolder.addCallback();
-     //   mSmallHolder.addCallback(new SimpleCameraCallback());
-        mSmallHolder.setFormat(PixelFormat.TRANSLUCENT);//ここで半透明にする
-        mSmallSurface.setVisibility(SurfaceView.INVISIBLE);
-    //    mSmallSurface.setZOrderOnTop(true);
 
         tv_ourScore    = (TextView) findViewById(R.id.our_score);
         tv_oppScore    = (TextView) findViewById(R.id.opposing_score);
@@ -293,27 +284,24 @@ public class VideoActivity extends Activity {
                     @Override
                     public void onClick(View v) {
                         buf[2] = 1;
-                        Team.sEventName = "steal";
                         Toast.makeText(context, "スティール", Toast.LENGTH_SHORT).show();
-                        //recordEvent(0,1,"steal"); //1:point,2:is success?,3:event name
+                        recordEvent(0,1,"steal"); //1:point,2:is success?,3:event name
                     }
                 });
                 findViewById(R.id.rebound).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         buf[2] = 2;
-                        Team.sEventName = "rebound";
                         Toast.makeText(context, "リバウンド", Toast.LENGTH_SHORT).show();
-                        //recordEvent(0,1,"rebound"); //1:point,2:is success?,3:event name
+                        recordEvent(0,1,"rebound"); //1:point,2:is success?,3:event name
                     }
                 });
                 findViewById(R.id.foul).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         buf[2] = 3;
-                        Team.sEventName = "foul";
                         Toast.makeText(context, "ファウル", Toast.LENGTH_SHORT).show();
-                        //recordEvent(0,1,"foul");
+                        recordEvent(0,1,"foul");
                     }
                 });
                 showBluetoothSelectDialog();
@@ -787,5 +775,13 @@ public class VideoActivity extends Activity {
         }
         mEventLogger.addEvent(team, actor, point, is_success, "shoot",
                 file_name, sGameStartDateTime, sCurrentQuarterNum);
+        if (flg_eventMenu == 0) {
+            mEventLogger.updateEventLog(context, VideoActivity.lv_eventLog);
+        } else if (flg_eventMenu == 1){
+            setScoresheet();
+        }else if(flg_eventMenu == 2) {
+            setFoulsheet();
+        }
+        updateScoreView();
     }
 }

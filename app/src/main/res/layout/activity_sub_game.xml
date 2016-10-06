@@ -198,7 +198,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/enemies_team_list"
         android:listSelector="@drawable/p1_listselector"
-        android:background="#0033ff"
+        android:background="#00c4ff"
         />
 
 </LinearLayout>

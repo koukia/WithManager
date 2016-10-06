@@ -1,5 +1,6 @@
 package com.example.kohki.withmanager;
 
+import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.res.Resources;
@@ -17,6 +18,7 @@ import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
@@ -63,11 +65,43 @@ public class EventLogger {
                 if(cntDoubleClick >= 2) {
                     HashMap<String,String> row = EventDbHelper.getRowFromID(context,id_of_event_log);
               //      Toast.makeText(context,row+"",Toast.LENGTH_SHORT).show();
-               //     VideoActivity v = new VideoActivity();
-               //     v.changeEditView(row);
+                    //--- edit dialog
+
+                    // カスタムビューを設定
+                    LayoutInflater inflater = (LayoutInflater)context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
+                    final View layout = inflater.inflate(R.layout.event_editor_view,
+                            null);
+
+                    // アラーとダイアログ を生成
+                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                    builder.setTitle("イベント編集");
+                    builder.setView(layout);
+
+                    /*
+                    builder.setPositiveButton("OK", new OnClickListener () {
+                        public void onClick(DialogInterface dialog, int which) {
+                            // OK ボタンクリック処理
+                            // ID と PASSWORD を取得
+                            EditText id
+                                    = (EditText)layout.findViewById(R.id.customDlg_id);
+                            EditText pass
+                                    = (EditText)layout.findViewById(R.id.customDlg_pass);
+                            String strId   = id.getText().toString();
+                            String strPass = pass.getText().toString();
+                        }
+                    });
+                    builder.setNegativeButton("Cancel", new OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            // Cancel ボタンクリック処理
+                        }
+                    });*/
+
+                    // 表示
+                    builder.create().show();
 
 
 
+                    //---
                     cntDoubleClick=0;
                 }
             }else if (preId == -1){

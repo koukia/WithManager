@@ -60,7 +60,6 @@ public class SynchroVideoActivity extends Activity {
 
     private static TextView tv_ourScore;
     private static TextView tv_oppScore;
-    protected static TextView tv_sMessageBar;
     protected static ListView lv_EventLog;
 
     private SimpleDateFormat sdf;
@@ -91,7 +90,7 @@ public class SynchroVideoActivity extends Activity {
     private BluetoothStatus bluetoothStatus;
     private BluetoothAdapter ba;
     private BluetoothConnection bc;
-    private byte buf[];
+    protected byte buf[];
     private enum BluetoothStatus{
         ERROR("Bluetooth接続に失敗しました"),
         CONNECTING("Bluetooth接続 : 接続中"),
@@ -180,7 +179,7 @@ public class SynchroVideoActivity extends Activity {
             @Override
             public void onClick(View v) {
                 buf[2] = 1;
-                Team.sEventName = "steal";
+                sEventName = "steal";
                 Toast.makeText(context, "スティール", Toast.LENGTH_SHORT).show();
                 //recordEvent(0,1,"steal"); //1:point,2:is success?,3:event name
             }
@@ -189,7 +188,7 @@ public class SynchroVideoActivity extends Activity {
             @Override
             public void onClick(View v) {
                 buf[2] = 2;
-                Team.sEventName = "rebound";
+                sEventName = "rebound";
                 Toast.makeText(context, "リバウンド", Toast.LENGTH_SHORT).show();
                 //recordEvent(0,1,"rebound"); //1:point,2:is success?,3:event name
             }
@@ -198,7 +197,7 @@ public class SynchroVideoActivity extends Activity {
             @Override
             public void onClick(View v) {
                 buf[2] = 3;
-                Team.sEventName = "foul";
+                sEventName = "foul";
                 Toast.makeText(context, "ファウル", Toast.LENGTH_SHORT).show();
                 //recordEvent(0,1,"foul");
             }
@@ -382,16 +381,6 @@ public class SynchroVideoActivity extends Activity {
         sEventName = mRecorder.save();
         mRecorder.start();
 
-        if (event_name.equals("shoot") && is_success == 1) {
-            tv_sMessageBar.setText("「" + point + "点シュート成功」記録。背番号をタップしてください");
-            tv_sMessageBar.setGravity(Gravity.CENTER);
-        } else if (event_name.equals("shoot") && is_success == 0) {
-            tv_sMessageBar.setText("「" + point + "点シュート失敗」記録。背番号をタップしてください");
-            tv_sMessageBar.setGravity(Gravity.CENTER);
-        } else if (event_name.equals("foul")) {
-            tv_sMessageBar.setText("「ファウル」記録。背番号をタップしてください");
-            tv_sMessageBar.setGravity(Gravity.CENTER);
-        }
     }
     public static void updateScoreView(int team, int num){ //is accessed from Team.java
         //---点数更新fromDB

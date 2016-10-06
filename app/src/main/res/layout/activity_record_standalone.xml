@@ -61,11 +61,6 @@
                 android:id="@+id/event_log"
                 android:listSelector="@drawable/eventlog_selector" />
 
-            <SurfaceView
-                android:layout_width="match_parent"
-                android:layout_height="130dp"
-                android:id="@+id/small_surface"
-                android:layout_gravity="center_horizontal|bottom" />
         </FrameLayout>
     </LinearLayout>
 

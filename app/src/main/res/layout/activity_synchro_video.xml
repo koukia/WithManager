@@ -219,7 +219,7 @@
             android:id="@+id/opposing_team_list"
             android:listSelector="@drawable/p1_listselector"
             android:layout_weight="30"
-            android:background="#0000FF"
+            android:background="#00c4ff"
             android:textFilterEnabled="false" />
     </LinearLayout>
 

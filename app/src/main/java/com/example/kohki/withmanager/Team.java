@@ -79,7 +79,20 @@ public class Team extends VideoActivity {
                 }
                 //記録
                 mEventLogger = new EventLogger(context);
-                mEventLogger.addEvent(sTeamAndNum[0], sTeamAndNum[1]);
+                mEventLogger.addEvent(sTeamAndNum[0], sTeamAndNum[0]);
+
+                //send by bluetooth
+                if(sEventName.equals("steal") || sEventName.equals("rebound")
+                        || sEventName.equals("foul")){
+                    Toast.makeText(context,"---",Toast.LENGTH_SHORT).show();
+                    VideoActivity.buf[0] = Byte.parseByte(sTeamAndNum[0]+"");
+                    VideoActivity.buf[1] = Byte.parseByte(sTeamAndNum[1]+"");
+                    BluetoothConnection bc = new BluetoothConnection();
+                    bc.connectToServer(VideoActivity.targetDevice);
+                    bc.writeObject(VideoActivity.buf);
+                    bc.close();
+                }
+                //update View
                 if (flg_eventMenu == 0) {
                     mEventLogger.updateEventLog(context, VideoActivity.lv_eventLog);
                 } else if (flg_eventMenu == 1){

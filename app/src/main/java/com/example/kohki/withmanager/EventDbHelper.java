@@ -2,6 +2,7 @@ package com.example.kohki.withmanager;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
@@ -123,5 +124,23 @@ public class EventDbHelper extends SQLiteOpenHelper {
             cursor.close();
         }
         return column;
+    }
+    public static boolean updateColumn(SQLiteDatabase db, int id, int team, int num,
+                                       int point, int success, String event){
+
+        String sql = "UPDATE " + EventContract.Event.TABLE_NAME + " set "+
+                EventContract.Event.COL_TEAM+"='"+team+"', "+
+                EventContract.Event.COL_NUM+"='"+num+"', "+
+                EventContract.Event.COL_POINT+"='"+point+"', "+
+                EventContract.Event.COL_SUCCESS+"='"+success+"', "+
+                EventContract.Event.COL_EVENT+"='"+event+"'"+
+                " where "+ EventContract.Event._ID+"="+id+";";
+        try {
+            db.execSQL(sql);
+        } catch (SQLException e) {
+            Log.e("SQL", e.toString());
+            return false;
+        }
+        return true;
     }
 }
