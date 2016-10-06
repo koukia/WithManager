@@ -40,9 +40,9 @@ public class SettingOfGameActivity extends Activity {
         context = this;
 
         //num of team member Setting
-        pre_ourteam_num = VideoActivity.our_member_num;
-        pre_oppteam_num = VideoActivity.opp_member_num;
-        pre_rec_time    = VideoActivity.movie_time;
+        pre_ourteam_num = VideoActivity.sOurMemberNum;
+        pre_oppteam_num = VideoActivity.sOppMemberNum;
+        pre_rec_time    = VideoActivity.sMovieTime;
 
         tv_ourteam_num = (TextView) findViewById(R.id.ourteam_num);
         tv_oppteam_num = (TextView) findViewById(R.id.opposingteam_num);
@@ -83,7 +83,7 @@ public class SettingOfGameActivity extends Activity {
                     }
                 }else { // number of team member
                     int mem_num = Integer.parseInt(tv_num.getText()+"");
-                    if (mem_num > Team.min_team_members) {
+                    if (mem_num > Team.sMinMembers) {
                         tv_num.setText(mem_num - 1 + "");
                     }
                 }
@@ -100,7 +100,7 @@ public class SettingOfGameActivity extends Activity {
                     }
                 }else { // number of team member
                     int mem_num = Integer.parseInt(tv_num.getText()+"");
-                    if (mem_num < Team.max_team_members) {
+                    if (mem_num < Team.sMaxMembers) {
                         tv_num.setText(mem_num + 1 + "");
                     }
                 }
@@ -109,17 +109,16 @@ public class SettingOfGameActivity extends Activity {
     }
 
     private void savePreNum(){
-        VideoActivity.our_member_num = pre_ourteam_num;
-        VideoActivity.opp_member_num = pre_oppteam_num;
-        VideoActivity.movie_time     = pre_rec_time;
+        VideoActivity.sOurMemberNum = pre_ourteam_num;
+        VideoActivity.sOppMemberNum = pre_oppteam_num;
+        VideoActivity.sMovieTime     = pre_rec_time;
         finish();
     }
     private void saveNum(){
-        VideoActivity.our_member_num = Integer.parseInt(tv_ourteam_num.getText()+"");
-        VideoActivity.opp_member_num = Integer.parseInt(tv_oppteam_num.getText()+"");
-        VideoActivity.movie_time     = (int) Double.parseDouble(tv_rec_time.getText()+"")*1000;
+        VideoActivity.sOurMemberNum = Integer.parseInt(tv_ourteam_num.getText()+"");
+        VideoActivity.sOppMemberNum = Integer.parseInt(tv_oppteam_num.getText()+"");
+        VideoActivity.sMovieTime     = (int) Double.parseDouble(tv_rec_time.getText()+"")*1000;
         Toast.makeText(context,"保存しました",Toast.LENGTH_SHORT).show();
-
         finish();
     }
 }

@@ -101,7 +101,8 @@ public class Synchro extends AppCompatActivity {
             Intent itt_start;
             if (Bt.isEnabled() && isMain) {
                 System.out.println("Bluetoothがオン、メインで動きます");
-                itt_start = new Intent(getApplication(), SynchroVideoActivity.class);
+                itt_start = new Intent(getApplication(), VideoActivity.class);
+                itt_start.putExtra("mode","dual");
                 startActivity(itt_start);
 
             } else if (Bt.isEnabled() && isSub) {

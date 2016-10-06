@@ -64,8 +64,8 @@ public class FoulCounter {
     }
 */
     public List getFoulData() {
-        Integer[] our_memberfoul_counter = new Integer[Team.max_team_members];//[0] => num4,[1] => num5
-        Integer[] opp_memberfoul_counter = new Integer[Team.max_team_members];
+        Integer[] our_memberfoul_counter = new Integer[Team.sMaxMembers];//[0] => num4,[1] => num5
+        Integer[] opp_memberfoul_counter = new Integer[Team.sMaxMembers];
         Integer[] our_teamfoul_counter   = new Integer[4];
         Integer[] opp_teamfoul_counter   = new Integer[4];
         for(int i=0;i<our_memberfoul_counter.length;i++){

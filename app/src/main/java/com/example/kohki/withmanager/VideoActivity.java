@@ -3,6 +3,9 @@ package com.example.kohki.withmanager;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.database.sqlite.SQLiteDatabase;
@@ -11,136 +14,189 @@ import android.graphics.PixelFormat;
 import android.hardware.Camera;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Parcelable;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 /**
  * Created by Kohki on 2016/06/28.
  */
 public class VideoActivity extends Activity {
-    private SurfaceHolder surfaceHolder;
-    private SurfaceView surfaceView;
 
-    private ArrayAdapter<String> adptList;
+    private static final String TAG = "VideoAct";
+    private static Context context;
 
+    private EventDbHelper cDbHelper;
+    protected static SQLiteDatabase mDB;
+    public static VideoRecorder mRecorder = null;
+    protected EventLogger mEventLogger;
 
-    //to reset DB when start Activity
-    private EventDbHelper mDbHelper;
-    private SQLiteDatabase db;
+    public static SurfaceView mMainSurface;
 
-    private Camera mCamera;
-    private final static String TAG = "VideoActivity";
-    private Context context;
-    public static int movie_time = 5000;
+    public static SurfaceView   mSubSurface;
+    public static SurfaceHolder mSubHolder;
+    public static PreviewSurfaceViewCallback mSubSurfaceCallback;
 
-    private String sava_dir  = "/storage/emulated/legacy/WithManager/";
-//    private String sava_dir = "sdcard/WithManager/";
+    public static SurfaceView mSmallSurface;
+    public static SurfaceHolder mSmallHolder;
 
-    private int shoot_point;
-    private int is_success; //True:1, False:0
-
-    private VideoRecorder mRecorder = null;
-
-    public static SurfaceView mOverLaySurfaceView;
-    public static SurfaceHolder mOverLayHolder;
-    public static PreviewSurfaceViewCallback mPreviewCallback;
-
-    private boolean is_playing;
-    private int mode_of_menu = 0;  //0:eventlog, 1:score, 2:foul
-
-    private EventLogger mEventLogger;
-
-    public static int[] who_is_actor = {-1,-1};
-    //[0] is team.-1:? 0:myteam 1:enemyteam
-    //[1] is number, -1 is ? 4...
+    private ListView lv_mOurTeamList;
+    private ListView lv_mOppTeamList;
 
     private Button btn_start;
     private Button btn_stop;
-    private Button shoot_success1p;
-    private Button shoot_success2p;
-    private Button shoot_success3p;
-    private Button shoot_failed1p;
-    private Button shoot_failed2p;
-    private Button shoot_failed3p;
-    private Button foul;
+    protected static ListView lv_eventLog;
 
-    private ListView our_team;
-    private ListView opt_team;
+    private static TextView tv_ourScore;
+    private static TextView tv_oppScore;
+    protected static TextView tv_sMessageBar;
+
     private SimpleDateFormat sdf;
-    private String gameStartDateTime;
 
-    private Team mTeam1;
-    private Team mTeam2;
-    public static int our_member_num = 15;
-    public static int opp_member_num = 15;
-    public static int current_quarter_num = 1;
+    protected static int sPoint;
+    protected static int sSuccess;
+    protected static String sEventName;
+    protected static String sMovieName;
+
+    protected static String sGameStartDateTime;
+    protected static int sCurrentQuarterNum = 1;
+
+    public static int sMovieTime = 5000;
+    public static int sOurMemberNum = 15;
+    public static int sOppMemberNum = 15;
+
+    private boolean isPlaying;
+    protected static boolean isSaving = false;
+    protected int flg_eventMenu = 0;  //0:eventlog, 1:score, 2:foul
+
+    //public static String saveDir  = "/storage/emulated/legacy/WithManager/";
+    public static String saveDir = "sdcard/WithManager/";
+
+    /* Synchro only */
+    private static final Handler handler = new Handler();
+    private Button btnBluetoothSettiong;
+    private BluetoothUtil bu;
+    protected static BluetoothDevice targetDevice = null;
+    private BluetoothStatus bluetoothStatus;
+    private BluetoothAdapter ba;
+    protected BluetoothConnection bc;
+    protected static byte buf[];
+    private enum BluetoothStatus{
+        ERROR("Bluetooth接続に失敗しました"),
+        CONNECTING("Bluetooth接続 : 接続中"),
+        CONNECTED("Bluetooth接続 : OK");
+
+        private String message;
+
+        private BluetoothStatus(String message){
+            this.message = message;
+        }
+
+        public String toString(){
+            return this.message;
+        }
+    }
+
+    private String activityMode;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_record_standalone);
+        Intent itt =getIntent();
+        String mode = itt.getStringExtra("mode");
+        if(mode == null){
+            Toast.makeText(this,"a",Toast.LENGTH_SHORT).show();
+        }else {
+            activityMode = mode;
+        }
+
+        if (mode.equals("single")){
+            setContentView(R.layout.activity_record_standalone);
+        }else if(mode.equals("dual")){
+            setContentView(R.layout.activity_synchro_video);
+             /* Synchro only */
+            buf = new byte[4]; buf[3] = 111;
+        //    sdf = new SimpleDateFormat();
+            /* --- */
+        }
 
         context = this;
 
-        mDbHelper = new EventDbHelper(context);
-        db = mDbHelper.getWritableDatabase();
-        //TODO:
-        mDbHelper.onUpgrade(db, EventDbHelper.DATABASE_VERSION, EventDbHelper.DATABASE_VERSION);
-        //mDbHelper.createTableGame(db);
+        Date date = new Date();
+        sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+        sGameStartDateTime = sdf.format(date);
+        //    System.out.println("Game start at "+sGameStartDateTime);
+        mEventLogger = new EventLogger(context);
+        mEventLogger.addGameTime(sGameStartDateTime);
+        lv_eventLog = (ListView) findViewById(R.id.event_log);
+        mEventLogger.updateEventLog(context, lv_eventLog);
 
+        cDbHelper = new EventDbHelper(context);
+        mDB       = cDbHelper.getWritableDatabase();
+        //TODO:
+        cDbHelper.onUpgrade(mDB, EventDbHelper.DATABASE_VERSION, EventDbHelper.DATABASE_VERSION);
 
         //main surfaceview
-        SurfaceView main_surface = (SurfaceView) findViewById(R.id.main_surface);
-        mRecorder = new VideoRecorder(context, sava_dir, main_surface, getResources());
+        mMainSurface = (SurfaceView) findViewById(R.id.main_surface);
+        //mMainSurface.setVisibility(SurfaceView.INVISIBLE);
+        mRecorder = new VideoRecorder(context, saveDir, mMainSurface, getResources());
 
         //sub surfaceview
-        mOverLaySurfaceView = (SurfaceView) findViewById(R.id.sub_surface);
-        mOverLayHolder = mOverLaySurfaceView.getHolder();
-        mOverLayHolder.setFormat(PixelFormat.TRANSLUCENT);//ここで半透明にする
-        mPreviewCallback = new PreviewSurfaceViewCallback(context);
-        mOverLayHolder.addCallback(mPreviewCallback);
-        mOverLaySurfaceView.setVisibility(SurfaceView.INVISIBLE);
+        mSubSurface = (SurfaceView) findViewById(R.id.sub_surface);
+        mSubHolder = mSubSurface.getHolder();
+        mSubHolder.setFormat(PixelFormat.TRANSLUCENT);//ここで半透明にする
+        mSubSurfaceCallback = new PreviewSurfaceViewCallback(context);
+        mSubHolder.addCallback(mSubSurfaceCallback);
+        mSubSurface.setVisibility(SurfaceView.INVISIBLE);
+      //  mSmallHolder.setFixedSize(mSubSurface.getWidth()/2,
+       //         mSubSurface.getHeight()/2);
+
+        tv_ourScore    = (TextView) findViewById(R.id.our_score);
+        tv_oppScore    = (TextView) findViewById(R.id.opposing_score);
 
         try {
-            File dir_save = new File(sava_dir);
+            File dir_save = new File(saveDir);
             if(!dir_save.exists())
                 dir_save.mkdir();
         } catch (Exception e) {
             Toast.makeText(context, "e:" + e, Toast.LENGTH_SHORT).show();
         }
 
-        sdf = new SimpleDateFormat("yyyyMMddHHmmss");
         //Start button
         btn_start = (Button)findViewById(R.id.btn_start);
         btn_start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //--- set
                 if (mRecorder != null) {
-                    Date date = new Date();
-                    gameStartDateTime = sdf.format(date);
-                    System.out.println("Game start at "+gameStartDateTime);
-                    mEventLogger.addGameTime(gameStartDateTime);
-                    is_playing = true;
                     btn_start.setVisibility(View.INVISIBLE);
                     btn_stop.setVisibility(View.VISIBLE);
                     mRecorder.start();
+                    isPlaying = true;
                 }
+
             }
         });
 
@@ -149,122 +205,125 @@ public class VideoActivity extends Activity {
         btn_stop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                is_playing = false;
+                isPlaying = false;
                 btn_start.setVisibility(View.VISIBLE);
                 btn_stop.setVisibility(View.INVISIBLE);
                 mRecorder.stop();
             }
         });
 
-        mEventLogger = new EventLogger(context, (ListView) findViewById(R.id.event_log), gameStartDateTime);
-
-        shoot_success1p = (Button)findViewById(R.id.shoot_success_1p);
-        shoot_success1p.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(is_playing) {
-                    Toast.makeText(context, "1P成功", Toast.LENGTH_SHORT).show();
-                    //recordEvent(1,1,"shoot");//1:point,2:is success?,3:event name
-                    Team.event_name = "shoot";
-                    shoot_point = 1;
-                    is_success = 1;
-                }
-            }
-        });
-        shoot_success2p = (Button)findViewById(R.id.shoot_success_2p);
-        shoot_success2p.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(is_playing) {
-                    Toast.makeText(context, "2P成功", Toast.LENGTH_SHORT).show();
-                    //recordEvent(2,1,"shoot");//1:point,2:is success?,3:event name
-                    Team.event_name = "shoot";
-                    shoot_point = 2;
-                    is_success = 1;
-                }
-            }
-        });
-        shoot_success3p = (Button)findViewById(R.id.shoot_success_3p);
-        shoot_success3p.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(is_playing) {
-                    Toast.makeText(context, "3P成功", Toast.LENGTH_SHORT).show();
-                    //recordEvent(3,1,"shoot");//1:point,2:is success?,3:event name
-                    Team.event_name = "shoot";
-                    shoot_point = 3;
-                    is_success = 1;
-                }
-            }
-        });
-        shoot_failed1p = (Button)findViewById(R.id.shoot_failed_1p);
-        shoot_failed1p.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(is_playing) {
-                    Toast.makeText(context, "1P失敗", Toast.LENGTH_SHORT).show();
-                    //recordEvent(1,0,"shoot");//1:point,2:is success?,3:event name
-                    Team.event_name = "shoot";
-                    shoot_point = 1;
-                    is_success = 0;
-                }
-            }
-        });
-        shoot_failed2p = (Button)findViewById(R.id.shoot_failed_2p);
-        shoot_failed2p.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(is_playing) {
-                    Toast.makeText(context, "2P失敗", Toast.LENGTH_SHORT).show();
-                    //recordEvent(2,0,"shoot");//1:point,2:is success?,3:event name
-                    Team.event_name = "shoot";
-                    shoot_point = 2;
-                    is_success = 0;
-                }
-            }
-        });
-        shoot_failed3p = (Button)findViewById(R.id.shoot_failed_3p);
-        shoot_failed3p.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(is_playing) {
-                    Toast.makeText(context, "3P失敗", Toast.LENGTH_SHORT).show();
-                    //recordEvent(3,0,"shoot");//1:point,2:is success?,3:event name
-                    Team.event_name = "shoot";
-                    shoot_point = 3;
-                    is_success = 0;
-                }
-            }
-        });
-        foul = (Button)findViewById(R.id.foul);
-        foul.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(is_playing) {
-                    Toast.makeText(context, "ファウル", Toast.LENGTH_SHORT).show();
-                    //recordEvent(0,1,"foul");
-                    Team.event_name = "foul";
-                    shoot_point = 0;
-                    is_success = 1;
-                }
-            }
-        });
+        switch (activityMode){
+            case "single":
+                findViewById(R.id.shoot_success_1p).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(isPlaying && !isSaving) {
+                            Toast.makeText(context, "1P成功", Toast.LENGTH_SHORT).show();
+                            //recordEvent(1,1,"shoot");//1:point,2:is success?,3:event name
+                            recordEvent(1,1,"shoot");
+                        }
+                    }
+                });
+                findViewById(R.id.shoot_success_2p).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(isPlaying && !isSaving) {
+                            Toast.makeText(context, "2P成功", Toast.LENGTH_SHORT).show();
+                            recordEvent(2,1,"shoot");
+                        }
+                    }
+                });
+                findViewById(R.id.shoot_success_3p).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(isPlaying && !isSaving) {
+                            Toast.makeText(context, "3P成功", Toast.LENGTH_SHORT).show();
+                            recordEvent(3,1,"shoot");
+                        }
+                    }
+                });
+                findViewById(R.id.shoot_failed_1p).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(isPlaying && !isSaving) {
+                            Toast.makeText(context, "1P失敗", Toast.LENGTH_SHORT).show();
+                            recordEvent(1,0,"shoot");
+                        }
+                    }
+                });
+                findViewById(R.id.shoot_failed_2p).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(isPlaying && !isSaving) {
+                            Toast.makeText(context, "2P失敗", Toast.LENGTH_SHORT).show();
+                            recordEvent(2,0,"shoot");
+                        }
+                    }
+                });
+                findViewById(R.id.shoot_failed_3p).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(isPlaying && !isSaving) {
+                            Toast.makeText(context, "3P失敗", Toast.LENGTH_SHORT).show();
+                            recordEvent(3,0,"shoot");
+                        }
+                    }
+                });
+                findViewById(R.id.foul).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(isPlaying && !isSaving) {
+                            Toast.makeText(context, "ファウル", Toast.LENGTH_SHORT).show();
+                            recordEvent(0,1,"foul");
+                        }
+                    }
+                });
+                break;
+            case "dual":
+                findViewById(R.id.steal).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        buf[2] = 1;
+                        Toast.makeText(context, "スティール", Toast.LENGTH_SHORT).show();
+                        recordEvent(0,1,"steal"); //1:point,2:is success?,3:event name
+                    }
+                });
+                findViewById(R.id.rebound).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        buf[2] = 2;
+                        Toast.makeText(context, "リバウンド", Toast.LENGTH_SHORT).show();
+                        recordEvent(0,1,"rebound"); //1:point,2:is success?,3:event name
+                    }
+                });
+                findViewById(R.id.foul).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        buf[2] = 3;
+                        Toast.makeText(context, "ファウル", Toast.LENGTH_SHORT).show();
+                        recordEvent(0,1,"foul");
+                    }
+                });
+                showBluetoothSelectDialog();
+                //startConnect();
+                break;
+        }
 
         findViewById(R.id.btn_chenge_scoresheet_and_eventlog).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 LinearLayout menu = (LinearLayout) findViewById(R.id.menu);
-                mode_of_menu++;
-                if(mode_of_menu >= 3)
-                    mode_of_menu = 0;
+                flg_eventMenu++;
+                if(flg_eventMenu >= 3)
+                    flg_eventMenu = 0;
 
-                switch (mode_of_menu){
+                switch (flg_eventMenu){
                     case 0://eventlog
                         LinearLayout foulsheet = (LinearLayout) findViewById(R.id.foulsheet);
                         menu.removeView(foulsheet);
                         getLayoutInflater().inflate(R.layout.event_log, menu);
-                        mEventLogger = new EventLogger(context, (ListView) findViewById(R.id.event_log), gameStartDateTime);
-
+                        lv_eventLog = (ListView) findViewById(R.id.event_log);
+                        mEventLogger.updateEventLog(context, lv_eventLog);
                         break;
                     case 1://scoresheet
                         LinearLayout eventlog = (LinearLayout) findViewById(R.id.menu_log);
@@ -293,7 +352,7 @@ public class VideoActivity extends Activity {
                     Intent itt_setting = new Intent(context, SettingOfGameActivity.class);
                     startActivity(itt_setting);
                 }catch (Exception e) {
-                    Log.v("IntentErr:", e.getMessage() + "," + e);
+                    Log.v(TAG, e.getMessage() + "," + e);
                 }
             }
         });
@@ -302,16 +361,16 @@ public class VideoActivity extends Activity {
             @Override
             public void onClick(View v) {
                 AlertDialog.Builder ADB_quarter_save = new AlertDialog.Builder(context);
-                ADB_quarter_save.setTitle("第"+current_quarter_num+"Q の記録を完了しますか？");
+                ADB_quarter_save.setTitle("第"+sCurrentQuarterNum+"Q の記録を完了しますか？");
             //    alertDialogBuilder.setMessage("メッセージ");
-                if(current_quarter_num == 4) {
-                    current_quarter_num = 1;
-                }else if(current_quarter_num <= 3) {
-                    ADB_quarter_save.setNeutralButton("第"+(current_quarter_num+1)+"Qの記録をする", new DialogInterface.OnClickListener() {
+                if(sCurrentQuarterNum == 4) {
+                    sCurrentQuarterNum = 1;
+                }else if(sCurrentQuarterNum <= 3) {
+                    ADB_quarter_save.setNeutralButton("第"+(sCurrentQuarterNum+1)+"Qの記録をする", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            current_quarter_num++;
-                            Toast.makeText(context,"第"+current_quarter_num+"Q 記録開始",Toast.LENGTH_SHORT).show();
+                            sCurrentQuarterNum++;
+                            Toast.makeText(context,"第"+sCurrentQuarterNum+"Q 記録開始",Toast.LENGTH_SHORT).show();
                         }
                     });
                 }
@@ -321,7 +380,7 @@ public class VideoActivity extends Activity {
 
                         Intent itt = new Intent(context, GameResultActivity.class);
                         itt.putExtra("record_mode", "single");
-                        itt.putExtra("game_start_date_time", gameStartDateTime);
+                        itt.putExtra("game_start_date_time", sGameStartDateTime);
                         startActivity(itt);
                     }
                 });
@@ -339,7 +398,7 @@ public class VideoActivity extends Activity {
         });
     }
 
-    private void setScoresheet(){
+    protected void setScoresheet(){
         ListView listView_our, listView_opt;
         ItemArrayAdapter adpt_our, adpt_opt;
 
@@ -358,7 +417,7 @@ public class VideoActivity extends Activity {
         listView_opt.setAdapter(adpt_opt);
         listView_opt.onRestoreInstanceState(state_opt);
 
-        ScoreDataGenerater cScoreData = new ScoreDataGenerater(context, gameStartDateTime);
+        ScoreDataGenerater cScoreData = new ScoreDataGenerater(context, sGameStartDateTime);
         List<String[]> scoreList = cScoreData.getScoreData();
         for (String[] scoreData : scoreList) {
             if (scoreData[0].equals("0")) {
@@ -374,7 +433,7 @@ public class VideoActivity extends Activity {
         //(TextView)findViewById(R.id.name).setBackgroundColor();
     }
 
-    private void setFoulsheet(){
+    protected void setFoulsheet(){
 
         ListView lv_ourfoul = (ListView) findViewById(R.id.our_foul_list);
         ListView lv_oppfoul = (ListView) findViewById(R.id.opp_foul_list);
@@ -391,7 +450,7 @@ public class VideoActivity extends Activity {
         lv_oppfoul.setAdapter(adpt_opp_foulsheet);
         lv_oppfoul.onRestoreInstanceState(state_opt);
 
-        FoulCounter cFoulCounter = new FoulCounter(context, gameStartDateTime);
+        FoulCounter cFoulCounter = new FoulCounter(context, sGameStartDateTime);
         List<Integer[]> foulList = cFoulCounter.getFoulData();
 
         Integer[] ourmember_foul = foulList.get(0);//[0]is?,[1]is4,[2]is5...
@@ -401,64 +460,56 @@ public class VideoActivity extends Activity {
 
         //ourteam
         adpt_our_foulsheet.add(new String[]{"team_kind","ourteam"});
-        adpt_our_foulsheet.add(new String[]{"T", String.valueOf(ourteam_foul[current_quarter_num-1])});
+        adpt_our_foulsheet.add(new String[]{"T", String.valueOf(ourteam_foul[sCurrentQuarterNum-1])});
         for(int i=0; i<ourmember_foul.length; i++){
             adpt_our_foulsheet.add(new String[]{String.valueOf(i+4), String.valueOf(ourmember_foul[i])});
         }
 
         //oppteam
         adpt_opp_foulsheet.add(new String[]{"team_kind","oppteam"});
-        adpt_opp_foulsheet.add(new String[]{"T", String.valueOf(oppteam_foul[current_quarter_num-1]) });
+        adpt_opp_foulsheet.add(new String[]{"T", String.valueOf(oppteam_foul[sCurrentQuarterNum-1]) });
         for(int i=0;i<oppmember_foul.length;i++){
             adpt_opp_foulsheet.add(new String[]{String.valueOf(i+4), String.valueOf(oppmember_foul[i])});
         }
     }
 
     public void recordEvent(int point, int is_success,String event_name) {
-        if (!is_playing) return;
-        //TODO:録画中でないとエラー
-        String file_name = "no file";
-        //   if(mRecorder.mCamera != null) {
+        if (!isPlaying) return;
+
+        sPoint       = point;
+        sSuccess     = is_success;
+        sEventName   = event_name;
+
         mRecorder.stop();
-        file_name = mRecorder.save();
+        sMovieName = mRecorder.save();
         mRecorder.start();
-        //   }
-        if (event_name.equals("shoot") && is_success == 1) {
-            final TextView tv_our_score = (TextView) findViewById(R.id.our_score);
-            int our_score = Integer.parseInt(tv_our_score.getText().toString());
 
-            final TextView tv_opp_score = (TextView) findViewById(R.id.opposing_score);
-            int opp_score = Integer.parseInt(tv_opp_score.getText().toString());
+        isSaving = true;
+    }
 
-            switch (Team.who_is_actor[0]) {
-                case 0:
-                    int our_point = our_score + point;
-                    tv_our_score.setText(Integer.toString(our_point));
-                    //    Toast.makeText(context,"味方チーム"+ who_is_acter[1]+"番 得点！",Toast.LENGTH_SHORT).show();
-                    break;
-                case 1:
-                    int opp_point = opp_score + point;
-                    tv_opp_score.setText(Integer.toString(opp_point));
-                    //    Toast.makeText(context,"敵チーム"+who_is_acter[1]+"番 得点！",Toast.LENGTH_SHORT).show();
-                    break;
-                /*case -1:
-                    Toast.makeText(context, "(score)team isnt be selected", Toast.LENGTH_SHORT).show();
-                    return ;
-                default:
-                    Toast.makeText(context, "(score)team cant be specified", Toast.LENGTH_SHORT).show();
-                    return ; */
+    public static void updateScoreView(){ //is accessed from Team.java
+        isSaving = false;
+        //---点数更新fromDB
+        ArrayList column = EventDbHelper.getRowFromSuccessShoot(mDB, sGameStartDateTime);
+    //    Toast.makeText(context,"column:"+column.size(),Toast.LENGTH_SHORT).show();
+        int our_score = 0;
+        int opp_score = 0;
+        for(int i=0;i<column.size();i++){
+            try {
+                Integer[] row = (Integer[]) column.get(i);
+            //    Toast.makeText(context,"ID"+row[0]+",TEAM:"+row[1]+",POINT"+row[2],Toast.LENGTH_SHORT).show();
+                if(row[1] == 0){
+                    our_score = our_score + row[2];
+                }else if(row[1] == 1){
+                    opp_score = opp_score + row[2];
+                }
+            }catch (NumberFormatException e){
+                Log.w(TAG,e+"");
             }
         }
-        mEventLogger.addEvent(Team.who_is_actor[0], Team.who_is_actor[1],
-                point, is_success, event_name, file_name, gameStartDateTime);
-        Team.resetWhoIsAct();
-        if (mode_of_menu == 1) {
-            setScoresheet();
-        } else if (mode_of_menu == 2){
-            setFoulsheet();
-        }
-
-        //mEventLogger.getFoul();
+        tv_ourScore.setText(our_score+"");
+        tv_oppScore.setText(opp_score+"");
+        //---
     }
 
     @Override
@@ -466,14 +517,19 @@ public class VideoActivity extends Activity {
         super.onResume();
         mRecorder.resume();
 
-        our_team = (ListView) findViewById(R.id.our_team_list);
-        mTeam1 = new Team(context, our_team, our_member_num);
-        opt_team = (ListView) findViewById(R.id.opposing_team_list);
-        mTeam2 = new Team(context, opt_team , opp_member_num);
+        //---Team 更新
+        lv_mOurTeamList = (ListView) findViewById(R.id.our_team_list);
+        lv_mOppTeamList = (ListView) findViewById(R.id.opposing_team_list);
 
-        our_team.setOnItemClickListener(adptSelectListener1);
-        opt_team.setOnItemClickListener(adptSelectListener2);
+        Team cOurTeam = new Team(context, lv_mOurTeamList,  sOurMemberNum);
+        Team cOppTeam = new Team(context, lv_mOppTeamList , sOppMemberNum);
 
+        Team.TeamSelectListener our_team_lisener = cOurTeam.new TeamSelectListener();
+        Team.TeamSelectListener opp_team_lisener = cOppTeam.new TeamSelectListener();
+
+        lv_mOurTeamList.setOnItemClickListener(our_team_lisener);
+        lv_mOppTeamList.setOnItemClickListener(opp_team_lisener);
+        //---
     }
     @Override
     protected void onPause() { //別アクティビティ起動時
@@ -481,89 +537,251 @@ public class VideoActivity extends Activity {
         super.onPause();
     }
 
-    private AdapterView.OnItemClickListener adptSelectListener1 = new AdapterView.OnItemClickListener(){
+    /*
+    *
+    * bluetoot method
+    *
+    *
+    * */
+
+    private void showBluetoothSelectDialog(){
+        this.bu = new BluetoothUtil();
+
+        if (!this.bu.isSpported()) // 非対応デバイス
+            DialogBuilder.showErrorDialog(this, "Bluetooth非対応デバイスです。");
+        else if (!this.bu.isEnabled()) // 設定無効
+            DialogBuilder.showErrorDialog(this, "Bluetooth有効にしてください。");
+        else if (this.bu.getPairingCount() == 0) // ペアリング済みデバイスなし
+            DialogBuilder.showErrorDialog(this, "ペアリング済みのBluetooth設定がありません。");
+        else{
+            new DialogBuilder(this)
+                    .setIcon(android.R.drawable.ic_dialog_info)
+                    .setTitle("Bluetoothデバイス選択")
+                    .setItems(bu.getDeviceNames(), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            decideBluetoothDevice(bu.getDevices()[which]);
+                        }
+                    })
+                    .setNegativeButton("キャンセル", null)
+                    .show("Bluetoothデバイス選択");
+
+        }
+    }
+    private void decideBluetoothDevice(BluetoothDevice bluetoothDevice) {
+        this.targetDevice = bluetoothDevice;
+        Toast.makeText(context, targetDevice.getName() + "が選択されました", Toast.LENGTH_SHORT).show();
+
+        new android.support.v7.app.AlertDialog.Builder(this)
+                .setTitle(targetDevice.getName() + "が選択されました")
+                .setMessage("同期を開始します")
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        startConnect();
+                    }
+                }).show();
+    }
+    private void startConnect() {
+        bluetoothStatus = BluetoothStatus.CONNECTING;
+
+        bc = new BluetoothConnection();
+
+        final ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setTitle("接続中");
+        progressDialog.setCancelable(true);
+        progressDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "キャンセル", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                if (bc != null) {
+                    bc.close();
+                    bc = null;
+                }
+            }
+        });
+        progressDialog.show();
+        //Bluetooth接続スレッド
+        new Thread(new Runnable(){
+            @Override
+            public void run(){
+
+            }
+        }).start();
+
+        //接続待機
+        new Thread(new Runnable(){
+            @Override
+            public void run(){
+                ba = BluetoothAdapter.getDefaultAdapter();
+                bluetoothStatus = bc.makeServer(ba) ? BluetoothStatus.CONNECTED : BluetoothStatus.ERROR;
+
+                System.out.println("refresh");
+                refreshProgressMessage(progressDialog);
+            }
+        }).start();
+    }
+    private void startSendConnect(){
+        bluetoothStatus = BluetoothStatus.CONNECTING;
+
+        bc = new BluetoothConnection();
+        final ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setTitle("接続中");
+        progressDialog.setCancelable(true);
+        progressDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "キャンセル", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                if(bc != null){
+                    bc.close();
+                    bc = null;
+                }
+            }
+        });
+        progressDialog.show();
+
+        //Bluetooth接続スレッド
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                //接続
+                while(progressDialog.isShowing() && bluetoothStatus != BluetoothStatus.CONNECTED){
+
+                    bluetoothStatus = bc.connectToServer(targetDevice) ? BluetoothStatus.CONNECTED : BluetoothStatus.CONNECTING;
+
+                    if(bluetoothStatus == BluetoothStatus.CONNECTED)
+                        refreshProgressMessage(progressDialog);
+                    else
+                        Util.sleep(2000);
+                }
+            }
+        }).start();
+    }
+    private void refreshProgressMessage(final ProgressDialog dialog) {
+        System.out.println("refreshきたよ");
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                synchronized (dialog) {
+                    if(!dialog.isShowing()){
+
+                    }
+                    else if(bluetoothStatus == BluetoothStatus.CONNECTED){ //両方接続完了
+                        dialog.dismiss();
+                        new Thread(bluetoothReceiveRunnable).start();
+                        //startInside();
+                    }
+                    else if(bluetoothStatus == BluetoothStatus.ERROR){ //Bluetooth接続エラー
+                        dialog.cancel();
+                        showErrorDialog(bluetoothStatus.toString());
+                    }
+                    else{ //接続中
+                        dialog.setMessage(bluetoothStatus.toString());
+                    }
+                }
+            }
+        });
+    }
+    private final Runnable bluetoothReceiveRunnable = new Runnable() {
         @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            ListView listView = (ListView) parent;
-            String item = (String) listView.getItemAtPosition(position);
-            String id_name = context.getResources().getResourceEntryName(listView.getId());
-
-            switch (id_name){
-                case "our_team_list":
-                    //    Toast.makeText(context_, item+"@"+id_name , Toast.LENGTH_SHORT).show();
-                    //    VideoActivity.who_is_acter[0] = 0;
-                    Team.who_is_actor[0] = 0;
-                    break;
-                case "opposing_team_list":
-                    //    Toast.makeText(context_, item+"@"+id_name , Toast.LENGTH_SHORT).show();
-                    //    VideoActivity.who_is_acter[0] = 1;
-                    Team.who_is_actor[0] = 1;
-                    break;
-                default:
-                    Toast.makeText(context, "e:"+item+"@"+id_name , Toast.LENGTH_SHORT).show();
-                    //   VideoActivity.who_is_acter[0] = -1;
-                    Team.who_is_actor[0] = -1;
-                    break;
+        public void run() {
+            try{
+                Log.d("MaA","El03");
+                while(true){
+                    bluetoothReceive();
+                }
             }
-            if(item.equals("?"))
-                //   VideoActivity.who_is_acter[1] = 0;
-                Team.who_is_actor[1] = 0;
-            else
-                //    VideoActivity.who_is_acter[1] = Integer.parseInt(item);
-                Team.who_is_actor[1] = Integer.parseInt(item);
-
-            if(Team.event_name != null) recordEvent(shoot_point, is_success, Team.event_name);
-
-            if(!item.equals("?")) {
-                adptList = mTeam1.getAdapter();
-                adptList.remove(item);
-                adptList.insert(item, 1);
-                listView.setAdapter(adptList);
-                mTeam1.sortAdapater();
+            catch(Exception e){
+                Log.d("MaA","El01");
             }
+            //endCheck();
         }
     };
-    private AdapterView.OnItemClickListener adptSelectListener2 = new AdapterView.OnItemClickListener(){
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            ListView listView = (ListView) parent;
-            String item = (String) listView.getItemAtPosition(position);
+    public void bluetoothReceive(){
+        int i;
+        int[] j = new int[5];
+        int x = 0;
+        while((i = bc.readObject()) != -1){
+            System.out.println(i);
+            j[x] = i;
+            if(i == 111){
+                final int[] t = j;
+                handler.post(new Runnable(){
+                    @Override
+                    public void run(){
+                        bluetoothRecordScore(t);
+                    }
+                });
 
-            String id_name = context.getResources().getResourceEntryName(listView.getId());
-
-            switch (id_name){
-                case "our_team_list":
-                    //    Toast.makeText(context_, item+"@"+id_name , Toast.LENGTH_SHORT).show();
-                    //    VideoActivity.who_is_acter[0] = 0;
-                    Team.who_is_actor[0] = 0;
-                    break;
-                case "opposing_team_list":
-                    //    Toast.makeText(context_, item+"@"+id_name , Toast.LENGTH_SHORT).show();
-                    //    VideoActivity.who_is_acter[0] = 1;
-                    Team.who_is_actor[0] = 1;
-                    break;
-                default:
-                    Toast.makeText(context, "e:"+item+"@"+id_name , Toast.LENGTH_SHORT).show();
-                    //   VideoActivity.who_is_acter[0] = -1;
-                    Team.who_is_actor[0] = -1;
-                    break;
+                break;
             }
-            if(item.equals("?"))
-                //   VideoActivity.who_is_acter[1] = 0;
-                Team.who_is_actor[1] = 0;
-            else
-                //    VideoActivity.who_is_acter[1] = Integer.parseInt(item);
-                Team.who_is_actor[1] = Integer.parseInt(item);
+            x++;
+        }
+    }
+    private void showErrorDialog(String message){
+        DialogBuilder.showErrorDialog(this, message);
+    }
 
-            if(Team.event_name != null) recordEvent(shoot_point, is_success, Team.event_name);
+    public void bluetoothRecordScore(int[] buf){
+        //buf[0] = team: 0 or 1, buf[1] = actor: 4 ~ 18 , buf[2] = point: 1 or 2 or 3, buf[3] = is_success: 0,1
+        if(!isPlaying) return ;
+        //TODO:録画中でないとエラー
+        String file_name = "no file";
+        //   if(mRecorder.mCamera != null) {
+        mRecorder.stop();
+        file_name = mRecorder.save();
+        mRecorder.start();
 
-            if(!item.equals("?")) {
-                adptList = mTeam2.getAdapter();
-                adptList.remove(item);
-                adptList.insert(item, 1);
-                listView.setAdapter(adptList);
-                mTeam2.sortAdapater();
+        int team  = buf[0];
+        int actor = buf[1];
+        int point = buf[2];
+        int is_success = buf[3];
+
+        if(is_success == 1) {
+            final TextView tv_our_score = (TextView) findViewById(R.id.our_score);
+            int our_score = Integer.parseInt(tv_our_score.getText().toString());
+
+            final TextView tv_opp_score = (TextView) findViewById(R.id.opposing_score);
+            int opp_score = Integer.parseInt(tv_opp_score.getText().toString());
+
+            switch (team) {
+                case 0:
+                    int our_point = our_score + point;
+                    tv_our_score.setText(Integer.toString(our_point));//intをsetText()すると落ちる
+                    //    Toast.makeText(context,"味方チーム"+ who_is_acter[1]+"番 得点！",Toast.LENGTH_SHORT).show();
+                    break;
+                case 1:
+                    int opp_point = opp_score + point;
+                    tv_opp_score.setText(Integer.toString(opp_point));
+                    //    Toast.makeText(context,"敵チーム"+who_is_acter[1]+"番 得点！",Toast.LENGTH_SHORT).show();
+                    break;
+            /*case -1:
+                Toast.makeText(context, "(score)team isnt be selected", Toast.LENGTH_SHORT).show();
+                return ;
+            default:
+                Toast.makeText(context, "(score)team cant be specified", Toast.LENGTH_SHORT).show();
+                return ;  */
             }
         }
-    };
+        mEventLogger.addEvent(team, actor, point, is_success, "shoot",
+                file_name, sGameStartDateTime, sCurrentQuarterNum);
+        if (flg_eventMenu == 0) {
+            mEventLogger.updateEventLog(context, VideoActivity.lv_eventLog);
+        } else if (flg_eventMenu == 1){
+            setScoresheet();
+        }else if(flg_eventMenu == 2) {
+            setFoulsheet();
+        }
+        updateScoreView();
+    }
 }

@@ -2,9 +2,12 @@ package com.example.kohki.withmanager;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -71,7 +74,7 @@ public class EventDbHelper extends SQLiteOpenHelper {
     public static HashMap<String,String> getRowFromID(Context context, int id){
         EventDbHelper mDbHelper = new EventDbHelper(context);
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM "+ EventContract.Event.TABLE_NAME+" WHERE _id=?", new String[]{String.valueOf(id)});
+        Cursor cursor = db.rawQuery("SELECT * FROM "+ EventContract.Event.TABLE_NAME+" WHERE _id = ?", new String[]{String.valueOf(id)});
         HashMap<String,String> row = new HashMap<>();
         try {
             if (cursor.moveToNext()) {
@@ -96,5 +99,48 @@ public class EventDbHelper extends SQLiteOpenHelper {
             cursor.close();
         }
         return row;
+    }
+    
+    public static ArrayList<String> getRowFromSuccessShoot(SQLiteDatabase db, String game_start_time){
+        Cursor cursor = db.rawQuery("SELECT * FROM "+ EventContract.Event.TABLE_NAME+" WHERE "+
+                EventContract.Event.COL_SUCCESS+" = '1' and "+
+                EventContract.Event.COL_EVENT+" = 'shoot' and "+
+                EventContract.Event.COL_DATETIME+" = ?", new String[]{String.valueOf(game_start_time)});
+        ArrayList column = new ArrayList();
+        Integer[] row;
+        try {
+            while (cursor.moveToNext()) {
+                row = new Integer[3];
+                int id = cursor.getInt(cursor.getColumnIndex(EventContract.Event._ID));
+                int team = cursor.getInt(cursor.getColumnIndex(EventContract.Event.COL_TEAM));
+                int point = cursor.getInt(cursor.getColumnIndex(EventContract.Event.COL_POINT));
+                Log.d("getRowFromS","id:"+id+",team:"+team+",point:"+point);
+                row[0]=id;
+                row[1]=team;
+                row[2]=point;
+                column.add(row);
+            }
+        } finally {
+            cursor.close();
+        }
+        return column;
+    }
+    public static boolean updateColumn(SQLiteDatabase db, int id, int team, int num,
+                                       int point, int success, String event){
+
+        String sql = "UPDATE " + EventContract.Event.TABLE_NAME + " set "+
+                EventContract.Event.COL_TEAM+"='"+team+"', "+
+                EventContract.Event.COL_NUM+"='"+num+"', "+
+                EventContract.Event.COL_POINT+"='"+point+"', "+
+                EventContract.Event.COL_SUCCESS+"='"+success+"', "+
+                EventContract.Event.COL_EVENT+"='"+event+"'"+
+                " where "+ EventContract.Event._ID+"="+id+";";
+        try {
+            db.execSQL(sql);
+        } catch (SQLException e) {
+            Log.e("SQL", e.toString());
+            return false;
+        }
+        return true;
     }
 }

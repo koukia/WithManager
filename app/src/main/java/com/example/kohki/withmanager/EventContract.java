@@ -2,10 +2,13 @@ package com.example.kohki.withmanager;
 
 import android.provider.BaseColumns;
 
+import java.util.HashMap;
+
 /**
  * Created by kohki on 16/09/05.
  */
 public final class EventContract {
+    public static final HashMap<String,String> word_changer_jp = new HashMap<>();
 
     public EventContract(){}
 

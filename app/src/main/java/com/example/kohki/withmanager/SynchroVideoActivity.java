@@ -17,6 +17,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -30,56 +31,66 @@ import android.widget.Toast;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
 public class SynchroVideoActivity extends Activity {
-    private static final Handler handler = new Handler();
-    private SurfaceHolder surfaceHolder;
-    private SurfaceView surfaceView;
-
-    //to reset DB when start Activity
-    private EventDbHelper mDbHelper;
-    private SQLiteDatabase db;
-
-    private Camera mCamera;
     private final static String TAG = "SynchroVideoActivity";
-    private Context context;
-    private int movie_time = 5000;
+    private static Context context;
 
-    //    private String sava_path  = "/storage/emulated/legacy/WithManager/";
-    private String sava_dir = "/storage/emulated/legacy/WithManager/";
-
+    private EventDbHelper cDbHelper;
+    public static SQLiteDatabase mDB;
     private VideoRecorder mRecorder = null;
+    private EventLogger mEventLogger;
+    private Camera mCamera;
 
-    public static SurfaceView mOverLaySurfaceView;
-    public static SurfaceHolder mOverLayHolder;
+    public static SurfaceView main_surface;
+
+    public static SurfaceView   sv_sPlayBackView;
+    public static SurfaceHolder sh_sPlayBackHolder;
     public static PreviewSurfaceViewCallback mPreviewCallback;
 
-    private boolean is_playing;
-    private boolean is_scoresheetview;
-
-    private EventLogger mEventLogger;
-    ListView our_team;
-    ListView opt_team;
-
-    public static int[] who_is_acter = {-1,-1};
-    //[0] is team.-1:? 0:myteam 1:enemyteam
-    //[1] is number, -1 is ? 4...
+    private ListView lv_mOurTeamList;
+    private ListView lv_mOppTeamList;
 
     private Button btn_start;
     private Button btn_stop;
-    private String dateTime;
+
+    private static TextView tv_ourScore;
+    private static TextView tv_oppScore;
+    protected static ListView lv_EventLog;
+
     private SimpleDateFormat sdf;
 
+    protected static int sPoint;
+    protected static int sSuccess;
+    protected static String sEventName;
+    protected static String sMovieName;
+
+    protected static String sGameStartDateTime;
+    protected static int sCurrentQuarterNum = 1;
+
+    public static int sMovieTime = 5000;
+    public static int sOurMemberNum = 15;
+    public static int sOppMemberNum = 15;
+
+    private boolean isPlaying;
+    private int flg_menu = 0;  //0:eventlog, 1:score, 2:foul
+
+    private String sava_dir  = "/storage/emulated/legacy/WithManager/";
+    //    private String sava_dir = "sdcard/WithManager/";
+
+    /* Synchro only */
+    private static final Handler handler = new Handler();
     private Button btnBluetoothSettiong;
     private BluetoothUtil bu;
     private BluetoothDevice targetDevice = null;
     private BluetoothStatus bluetoothStatus;
     private BluetoothAdapter ba;
     private BluetoothConnection bc;
-    private byte buf[];
+    protected byte buf[];
     private enum BluetoothStatus{
         ERROR("Bluetooth接続に失敗しました"),
         CONNECTING("Bluetooth接続 : 接続中"),
@@ -96,44 +107,43 @@ public class SynchroVideoActivity extends Activity {
         }
     }
 
-    Team mTeam1;
-    Team mTeam2;
-    private ArrayAdapter<String> adptList;
-    public static int our_member_num = 15;
-    public static int opp_member_num = 15;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_synchro_video);
 
         context = this;
+
+         /* Synchro only */
         buf = new byte[4]; buf[3] = 111;
         sdf = new SimpleDateFormat();
+         /* --- */
 
         //main surfaceview
-        SurfaceView main_surface = (SurfaceView) findViewById(R.id.main_surface);
-        mRecorder = new VideoRecorder(this, sava_dir, main_surface, getResources());
+        main_surface = (SurfaceView) findViewById(R.id.main_surface);
+        mRecorder = new VideoRecorder(context, sava_dir, main_surface, getResources());
 
         //sub surfaceview
-        mOverLaySurfaceView = (SurfaceView) findViewById(R.id.sub_surface);
-        mOverLayHolder = mOverLaySurfaceView.getHolder();
-        mOverLayHolder.setFormat(PixelFormat.TRANSLUCENT);//ここで半透明にする
+        sv_sPlayBackView = (SurfaceView) findViewById(R.id.sub_surface);
+        sh_sPlayBackHolder = sv_sPlayBackView.getHolder();
+        sh_sPlayBackHolder.setFormat(PixelFormat.TRANSLUCENT);//ここで半透明にする
         mPreviewCallback = new PreviewSurfaceViewCallback(context);
-        mOverLayHolder.addCallback(mPreviewCallback);
-        mOverLaySurfaceView.setVisibility(SurfaceView.INVISIBLE);
+        sh_sPlayBackHolder.addCallback(mPreviewCallback);
+        sv_sPlayBackView.setVisibility(SurfaceView.INVISIBLE);
 
-        mDbHelper = new EventDbHelper(context);
-        db = mDbHelper.getWritableDatabase();
-        mDbHelper.onUpgrade(db, EventDbHelper.DATABASE_VERSION, EventDbHelper.DATABASE_VERSION);
+        cDbHelper = new EventDbHelper(context);
+        mDB       = cDbHelper.getWritableDatabase();
 
         try {
             File dir_save = new File(sava_dir);
-            dir_save.mkdir();
+            if(!dir_save.exists())
+                dir_save.mkdir();
         } catch (Exception e) {
             Toast.makeText(context, "e:" + e, Toast.LENGTH_SHORT).show();
         }
+        mEventLogger = new EventLogger(context);
 
+        sdf = new SimpleDateFormat("yyyyMMddHHmmss");
         //Start button
         btn_start = (Button)findViewById(R.id.btn_start);
         btn_start.setOnClickListener(new View.OnClickListener() {
@@ -141,10 +151,10 @@ public class SynchroVideoActivity extends Activity {
             public void onClick(View v) {
                 if (mRecorder != null) {
                     Date date = new Date();
-                    dateTime = sdf.format(date);
-                    System.out.println(dateTime);
-                    mEventLogger.addGameTime(dateTime);
-                    is_playing = true;
+                    sGameStartDateTime = sdf.format(date);
+                    //    System.out.println("Game start at "+str_gameStartDateTime);
+                    mEventLogger.addGameTime(sGameStartDateTime);
+                    isPlaying = true;
                     btn_start.setVisibility(View.INVISIBLE);
                     btn_stop.setVisibility(View.VISIBLE);
                     mRecorder.start();
@@ -157,37 +167,19 @@ public class SynchroVideoActivity extends Activity {
         btn_stop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                is_playing = false;
+                isPlaying = false;
                 btn_start.setVisibility(View.VISIBLE);
                 btn_stop.setVisibility(View.INVISIBLE);
                 mRecorder.stop();
             }
         });
 
-        mTeam1 = new Team(context, (ListView) findViewById(R.id.our_team_list), our_member_num);
-        mTeam2 = new Team(context, (ListView) findViewById(R.id.opposing_team_list), opp_member_num);
-
-        mEventLogger = new EventLogger(context,(ListView) findViewById(R.id.event_log), dateTime);
-
-        our_team = (ListView)findViewById(R.id.our_team_list);
-        ArrayAdapter<String> adapter_our = new ArrayAdapter<String>(context,
-                android.R.layout.simple_list_item_1, mTeam1.members);
-        our_team.setAdapter(adapter_our);
-
-        opt_team = (ListView)findViewById(R.id.opposing_team_list);
-        ArrayAdapter<String> adapter_opp = new ArrayAdapter<String>(context,
-                android.R.layout.simple_list_item_1, mTeam2.members);
-        opt_team.setAdapter(adapter_opp);
-
-        our_team.setOnItemClickListener(adptSelectListener1);
-        opt_team.setOnItemClickListener(adptSelectListener2);
-
-
+        /* only */
         findViewById(R.id.steal).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 buf[2] = 1;
-                Team.event_name = "steal";
+                sEventName = "steal";
                 Toast.makeText(context, "スティール", Toast.LENGTH_SHORT).show();
                 //recordEvent(0,1,"steal"); //1:point,2:is success?,3:event name
             }
@@ -196,7 +188,7 @@ public class SynchroVideoActivity extends Activity {
             @Override
             public void onClick(View v) {
                 buf[2] = 2;
-                Team.event_name = "rebound";
+                sEventName = "rebound";
                 Toast.makeText(context, "リバウンド", Toast.LENGTH_SHORT).show();
                 //recordEvent(0,1,"rebound"); //1:point,2:is success?,3:event name
             }
@@ -205,31 +197,99 @@ public class SynchroVideoActivity extends Activity {
             @Override
             public void onClick(View v) {
                 buf[2] = 3;
-                Team.event_name = "foul";
+                sEventName = "foul";
                 Toast.makeText(context, "ファウル", Toast.LENGTH_SHORT).show();
                 //recordEvent(0,1,"foul");
             }
         });
 
-        is_scoresheetview = false;
         findViewById(R.id.btn_chenge_scoresheet_and_eventlog).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 LinearLayout menu = (LinearLayout) findViewById(R.id.menu);
-                if(!is_scoresheetview) {
-                    LinearLayout eventlog = (LinearLayout) findViewById(R.id.menu_log);
-                    menu.removeView(eventlog);
-                    getLayoutInflater().inflate(R.layout.score_sheet, menu);
+                flg_menu++;
+                if(flg_menu >= 3)
+                    flg_menu = 0;
 
-                    setScoresheet();
-                    is_scoresheetview = true;
-                }else{
-                    LinearLayout scoresheet = (LinearLayout) findViewById(R.id.scoresheet);
-                    menu.removeView(scoresheet);
-                    getLayoutInflater().inflate(R.layout.event_log, menu);
-                    mEventLogger = new EventLogger(context,(ListView) findViewById(R.id.event_log), dateTime);
-                    is_scoresheetview = false;
+                switch (flg_menu){
+                    case 0://eventlog
+                        LinearLayout foulsheet = (LinearLayout) findViewById(R.id.foulsheet);
+                        menu.removeView(foulsheet);
+                        getLayoutInflater().inflate(R.layout.event_log, menu);
+                        mEventLogger = new EventLogger(context);
+                        mEventLogger.updateEventLog(context, (ListView)findViewById(R.id.event_log));
+
+                        break;
+                    case 1://scoresheet
+                        LinearLayout eventlog = (LinearLayout) findViewById(R.id.menu_log);
+                        menu.removeView(eventlog);
+                        getLayoutInflater().inflate(R.layout.score_sheet, menu);
+                        setScoresheet();
+
+                        break;
+                    case 2:
+                        LinearLayout scoresheet = (LinearLayout) findViewById(R.id.scoresheet);
+                        menu.removeView(scoresheet);
+                        getLayoutInflater().inflate(R.layout.foul_sheet, menu);
+                        setFoulsheet();
+
+                        break;
+                    default:
+                        break;
                 }
+            }
+        });
+
+        findViewById(R.id.btn_setting).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    Intent itt_setting = new Intent(context, SettingOfGameActivity.class);
+                    startActivity(itt_setting);
+                }catch (Exception e) {
+                    Log.v(TAG, e.getMessage() + "," + e);
+                }
+            }
+        });
+
+        findViewById(R.id.btn_save_or_delete).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                android.app.AlertDialog.Builder ADB_quarter_save = new android.app.AlertDialog.Builder(context);
+                ADB_quarter_save.setTitle("第" + sCurrentQuarterNum + "Q の記録を完了しますか？");
+                //    alertDialogBuilder.setMessage("メッセージ");
+                if (sCurrentQuarterNum == 4) {
+                    sCurrentQuarterNum = 1;
+                } else if (sCurrentQuarterNum <= 3) {
+                    ADB_quarter_save.setNeutralButton("第" + (sCurrentQuarterNum + 1) + "Qの記録をする", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            sCurrentQuarterNum++;
+                            Toast.makeText(context, "第" + sCurrentQuarterNum + "Q 記録開始", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+                ADB_quarter_save.setNegativeButton("保存して終了する", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        Intent itt = new Intent(context, GameResultActivity.class);
+                        itt.putExtra("record_mode", "single");
+                        itt.putExtra("game_start_date_time", sGameStartDateTime);
+                        startActivity(itt);
+                    }
+                });
+                ADB_quarter_save.setPositiveButton("いいえ", new DialogInterface.OnClickListener() {
+                    // 何もしなくていい
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                });
+                // アラートダイアログのキャンセルが可能かどうかを設定します
+                ADB_quarter_save.setCancelable(true);
+                android.app.AlertDialog alertDialog = ADB_quarter_save.create();
+                // アラートダイアログを表示します
+                alertDialog.show();
             }
         });
         showBluetoothSelectDialog();
@@ -246,7 +306,6 @@ public class SynchroVideoActivity extends Activity {
         adpt_our = new ItemArrayAdapter(getApplicationContext(), R.layout.item_rusult);
         adpt_opt = new ItemArrayAdapter(getApplicationContext(), R.layout.item_rusult);
 
-
         Parcelable state_our = listView_our.onSaveInstanceState();
         Parcelable state_opt = listView_opt.onSaveInstanceState();
 
@@ -255,136 +314,120 @@ public class SynchroVideoActivity extends Activity {
         listView_opt.setAdapter(adpt_opt);
         listView_opt.onRestoreInstanceState(state_opt);
 
-        ScoreDataGenerater cScoreData = new ScoreDataGenerater(context, dateTime);
+        ScoreDataGenerater cScoreData = new ScoreDataGenerater(context, sGameStartDateTime);
         List<String[]> scoreList = cScoreData.getScoreData();
         for (String[] scoreData : scoreList) {
             if (scoreData[0].equals("0")) {
                 adpt_our.add(scoreData);
 
             } else if (scoreData[0].equals("1")) {
-                String tmp = scoreData[1];
+                String tmp   = scoreData[1];
                 scoreData[1] = scoreData[2];
                 scoreData[2] = tmp;
                 adpt_opt.add(scoreData);
             }
         }
+        //(TextView)findViewById(R.id.name).setBackgroundColor();
     }
+
     private void setFoulsheet(){
 
-        ListView listView_our = (ListView) findViewById(R.id.our_foul_list);
-        ListView listView_opt = (ListView) findViewById(R.id.opp_foul_list);
+        ListView lv_ourfoul = (ListView) findViewById(R.id.our_foul_list);
+        ListView lv_oppfoul = (ListView) findViewById(R.id.opp_foul_list);
         //リストに追加するためのアダプタ
-        FoulsheetArrayAdapter adpt_our = new FoulsheetArrayAdapter(getApplicationContext(), R.layout.foul_sheet_row);
-        FoulsheetArrayAdapter adpt_opt = new FoulsheetArrayAdapter(getApplicationContext(), R.layout.foul_sheet_row);
+        FoulsheetArrayAdapter adpt_our_foulsheet = new FoulsheetArrayAdapter(getApplicationContext(), R.layout.foul_sheet_row);
+        FoulsheetArrayAdapter adpt_opp_foulsheet = new FoulsheetArrayAdapter(getApplicationContext(), R.layout.foul_sheet_row);
 
-        Parcelable state_our = listView_our.onSaveInstanceState();
-        Parcelable state_opt = listView_opt.onSaveInstanceState();
+        //REVIEW: Instance state is needed ?
+        Parcelable state_our = lv_ourfoul.onSaveInstanceState();
+        lv_ourfoul.setAdapter(adpt_our_foulsheet);
+        lv_ourfoul.onRestoreInstanceState(state_our);
 
-        listView_our.setAdapter(adpt_our);
-        listView_our.onRestoreInstanceState(state_our);
-        listView_opt.setAdapter(adpt_opt);
-        listView_opt.onRestoreInstanceState(state_opt);
+        Parcelable state_opt = lv_oppfoul.onSaveInstanceState();
+        lv_oppfoul.setAdapter(adpt_opp_foulsheet);
+        lv_oppfoul.onRestoreInstanceState(state_opt);
 
-        FoulCounter cFoulCounter = new FoulCounter(context, dateTime);
+        FoulCounter cFoulCounter = new FoulCounter(context, sGameStartDateTime);
         List<Integer[]> foulList = cFoulCounter.getFoulData();
-        Integer[] ourteam_foul = foulList.get(0);//[0]is?,[1]is4,[2]is5...
-        Integer[] oppteam_foul = foulList.get(1);
+
+        Integer[] ourmember_foul = foulList.get(0);//[0]is?,[1]is4,[2]is5...
+        Integer[] ourteam_foul   = foulList.get(1);
+        Integer[] oppmember_foul = foulList.get(2);
+        Integer[] oppteam_foul   = foulList.get(3);
+
         //ourteam
-        int foulsum=0;
-        for(int foulcount : ourteam_foul){//先にチームファウルを出力
-            foulsum += foulcount;
-        }
-        adpt_our.add(new String[]{"team_kind","ourteam"});
-        adpt_our.add(new String[]{"T", String.valueOf(foulsum)});
-        for(int i=1;i<ourteam_foul.length;i++){
-            adpt_our.add(new String[]{String.valueOf(i+3), String.valueOf(ourteam_foul[i])});
+        adpt_our_foulsheet.add(new String[]{"team_kind","ourteam"});
+        adpt_our_foulsheet.add(new String[]{"T", String.valueOf(ourteam_foul[sCurrentQuarterNum-1])});
+        for(int i=0; i<ourmember_foul.length; i++){
+            adpt_our_foulsheet.add(new String[]{String.valueOf(i+4), String.valueOf(ourmember_foul[i])});
         }
 
         //oppteam
-        foulsum=0;
-        for(int foulcount : oppteam_foul){
-            foulsum += foulcount;
-        }
-        adpt_opt.add(new String[]{"team_kind","oppteam"});
-        adpt_opt.add(new String[]{"T",String.valueOf(foulsum)});
-        for(int i=1;i<ourteam_foul.length;i++){
-            adpt_opt.add(new String[]{String.valueOf(i+3),String.valueOf(oppteam_foul[i])});
+        adpt_opp_foulsheet.add(new String[]{"team_kind","oppteam"});
+        adpt_opp_foulsheet.add(new String[]{"T", String.valueOf(oppteam_foul[sCurrentQuarterNum-1]) });
+        for(int i=0;i<oppmember_foul.length;i++){
+            adpt_opp_foulsheet.add(new String[]{String.valueOf(i+4), String.valueOf(oppmember_foul[i])});
         }
     }
 
-    public boolean replay(String movie_name){
-        mOverLaySurfaceView.setVisibility(SurfaceView.VISIBLE);
-        try {
-            if (mPreviewCallback.mMediaPlayer != null) {
-                mPreviewCallback.mMediaPlayer.release();
-                mPreviewCallback.mMediaPlayer = null;
-            }
-            mPreviewCallback.palyVideo(movie_name);
-            mPreviewCallback.mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                @Override
-                public void onCompletion(MediaPlayer mp) {
-                    mOverLaySurfaceView.setVisibility(SurfaceView.INVISIBLE);
-                }
-            });
-        } catch (NullPointerException e) {
-            Toast.makeText(context, "ぬるぽ", Toast.LENGTH_LONG).show();
-            return false;
-        }
-        return true;
-    }
-    public void recordEvent(int point, int is_success, String event_name) {
-        if(!is_playing || !(bluetoothStatus == BluetoothStatus.CONNECTED)) return ;
-        //録画中でないとエラー
-        //Bluetooth接続していない状態で実行できない
+    public void recordEvent(int point, int is_success,String event_name) {
+        if (!isPlaying) return;
 
-        String file_name = "no file";
-        //   if(mRecorder.mCamera != null) {
+        sPoint       = point;
+        sSuccess     = is_success;
+        sEventName   = event_name;
+
         mRecorder.stop();
-        file_name = mRecorder.save();
+        sEventName = mRecorder.save();
         mRecorder.start();
-        //   }
-        if (event_name.equals("shoot") && is_success == 1) {
-            final TextView tv_our_score = (TextView)findViewById(R.id.our_score);
-            int our_score = Integer.parseInt(tv_our_score.getText().toString());
 
-            final TextView tv_opp_score = (TextView)findViewById(R.id.opposing_score);
-            int opp_score = Integer.parseInt(tv_opp_score.getText().toString());
+    }
+    public static void updateScoreView(int team, int num){ //is accessed from Team.java
+        //---点数更新fromDB
+        ArrayList column = EventDbHelper.getRowFromSuccessShoot(mDB, sGameStartDateTime);
 
-            switch (Team.who_is_actor[0]) {
-                case 0:
-                    int our_point = our_score + point;
-                    tv_our_score.setText(Integer.toString(our_point));//intをsetText()すると落ちる
-                    //    Toast.makeText(context,"味方チーム"+ who_is_acter[1]+"番 得点！",Toast.LENGTH_SHORT).show();
-                    break;
-                case 1:
-                    int opp_point = opp_score + point;
-                    tv_opp_score.setText(Integer.toString(opp_point));
-                    //    Toast.makeText(context,"敵チーム"+who_is_acter[1]+"番 得点！",Toast.LENGTH_SHORT).show();
-                    break;
-                case -1:
-                    Toast.makeText(context, "(score)team isnt be selected", Toast.LENGTH_SHORT).show();
-                    return ;
-                default:
-                    Toast.makeText(context, "(score)team cant be specified", Toast.LENGTH_SHORT).show();
-                    return ;
+        int our_score = 0;
+        int opp_score = 0;
+        for(int i=0;i<column.size()-1;i++){
+            try {
+                Integer[] row = (Integer[]) column.get(i);
+                if(row[0] == 0){
+                    our_score = our_score + row[1];
+                }else if(row[0] == 1){
+                    opp_score = opp_score + row[1];
+                }
+            }catch (NumberFormatException e){
+                Log.w(TAG,e+"");
             }
-        }else{
-            buf[0] = Byte.parseByte(Integer.toString(Team.who_is_actor[0]));
-            buf[1] = Byte.parseByte(Integer.toString(Team.who_is_actor[1]));
-            bc.writeObject(buf);
         }
-        mEventLogger.addEvent(Team.who_is_actor[0], Team.who_is_actor[1], point , is_success, event_name, file_name, dateTime);
-        Team.resetWhoIsAct();
-
+        tv_ourScore.setText(our_score+"");
+        tv_oppScore.setText(opp_score+"");
+        //---
     }
 
-    private static class FileSort implements Comparator<File> {
-        public int compare(File src, File target) {
-            int diff = src.getName().compareTo(target.getName());
-            return diff;
-        }
-    }
+    @Override
+    public void onResume(){
+        super.onResume();
+        mRecorder.resume();
 
+        lv_mOurTeamList = (ListView) findViewById(R.id.our_team_list);
+        lv_mOppTeamList = (ListView) findViewById(R.id.opposing_team_list);
+
+        Team cOurTeam = new Team(context, lv_mOurTeamList,  sOurMemberNum);
+        Team cOppTeam = new Team(context, lv_mOppTeamList , sOppMemberNum);
+
+        Team.TeamSelectListener our_team_lisener = cOurTeam.new TeamSelectListener();
+        Team.TeamSelectListener opp_team_lisener = cOppTeam.new TeamSelectListener();
+
+        lv_mOppTeamList.setOnItemClickListener(our_team_lisener);
+        lv_mOppTeamList.setOnItemClickListener(opp_team_lisener);
+
+    }
+    @Override
+    protected void onPause() { //別アクティビティ起動時
+        mRecorder.pause();
+        super.onPause();
+    }
 
     private void showBluetoothSelectDialog(){
         this.bu = new BluetoothUtil();
@@ -576,7 +619,7 @@ public class SynchroVideoActivity extends Activity {
 
     public void bluetoothRecordScore(int[] buf){
         //buf[0] = team: 0 or 1, buf[1] = actor: 4 ~ 18 , buf[2] = point: 1 or 2 or 3, buf[3] = is_success: 0,1
-        if(!is_playing) return ;
+        if(!isPlaying) return ;
         //TODO:録画中でないとエラー
         String file_name = "no file";
         //   if(mRecorder.mCamera != null) {
@@ -615,104 +658,7 @@ public class SynchroVideoActivity extends Activity {
                 return ;  */
             }
         }
-        mEventLogger.addEvent(team, actor, point, is_success, "shoot", file_name, dateTime);
+        mEventLogger.addEvent(team, actor, point, is_success, "shoot",
+                file_name, sGameStartDateTime, sCurrentQuarterNum);
     }
-    @Override
-    public void onResume(){ //アクティビティ再び表示されたとき
-        mRecorder.resume();
-        super.onResume();
-    }
-    @Override
-    protected void onPause() { //別アクティビティ起動時
-        mRecorder.pause();
-        super.onPause();
-    }
-
-
-    private AdapterView.OnItemClickListener adptSelectListener1 = new AdapterView.OnItemClickListener() {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            ListView listView = (ListView) parent;
-            String item = (String) listView.getItemAtPosition(position);
-
-            String id_name = context.getResources().getResourceEntryName(listView.getId());
-
-            switch (id_name) {
-                case "our_team_list":
-                    //    Toast.makeText(context_, item+"@"+id_name , Toast.LENGTH_SHORT).show();
-                    //    VideoActivity.who_is_acter[0] = 0;
-                    Team.who_is_actor[0] = 0;
-                    break;
-                case "opposing_team_list":
-                    //    Toast.makeText(context_, item+"@"+id_name , Toast.LENGTH_SHORT).show();
-                    //    VideoActivity.who_is_acter[0] = 1;
-                    Team.who_is_actor[0] = 1;
-                    break;
-                default:
-                    Toast.makeText(context, "e:" + item + "@" + id_name, Toast.LENGTH_SHORT).show();
-                    //   VideoActivity.who_is_acter[0] = -1;
-                    Team.who_is_actor[0] = -1;
-                    break;
-            }
-            if (item.equals("?"))
-                //   VideoActivity.who_is_acter[1] = 0;
-                Team.who_is_actor[1] = 0;
-            else
-                //    VideoActivity.who_is_acter[1] = Integer.parseInt(item);
-                Team.who_is_actor[1] = Integer.parseInt(item);
-
-            if (Team.event_name != null) recordEvent(0, 1, Team.event_name);
-
-            if (!item.equals("?")) {
-                adptList = mTeam1.getAdapter();
-                adptList.remove(item);
-                adptList.insert(item, 1);
-                listView.setAdapter(adptList);
-                mTeam1.sortAdapater();
-            }
-        }
-    };
-    private AdapterView.OnItemClickListener adptSelectListener2 = new AdapterView.OnItemClickListener() {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            ListView listView = (ListView) parent;
-            String item = (String) listView.getItemAtPosition(position);
-
-            String id_name = context.getResources().getResourceEntryName(listView.getId());
-
-            switch (id_name) {
-                case "our_team_list":
-                    //    Toast.makeText(context_, item+"@"+id_name , Toast.LENGTH_SHORT).show();
-                    //    VideoActivity.who_is_acter[0] = 0;
-                    Team.who_is_actor[0] = 0;
-                    break;
-                case "opposing_team_list":
-                    //    Toast.makeText(context_, item+"@"+id_name , Toast.LENGTH_SHORT).show();
-                    //    VideoActivity.who_is_acter[0] = 1;
-                    Team.who_is_actor[0] = 1;
-                    break;
-                default:
-                    Toast.makeText(context, "e:" + item + "@" + id_name, Toast.LENGTH_SHORT).show();
-                    //   VideoActivity.who_is_acter[0] = -1;
-                    Team.who_is_actor[0] = -1;
-                    break;
-            }
-            if (item.equals("?"))
-                //   VideoActivity.who_is_acter[1] = 0;
-                Team.who_is_actor[1] = 0;
-            else
-                //    VideoActivity.who_is_acter[1] = Integer.parseInt(item);
-                Team.who_is_actor[1] = Integer.parseInt(item);
-
-            if (Team.event_name != null) recordEvent(0, 1, Team.event_name);
-
-            if (!item.equals("?")) {
-                adptList = mTeam2.getAdapter();
-                adptList.remove(item);
-                adptList.insert(item, 1);
-                listView.setAdapter(adptList);
-                mTeam2.sortAdapater();
-            }
-        }
-    };
 }

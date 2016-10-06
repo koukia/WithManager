@@ -12,5 +12,6 @@
     <color name="colorLightGreen">#B4F9D0</color>
 
     <color name="colorText">#4059FA</color>
+    <color name="colorWater">#00c4ff</color>
     <color name="colorDrawerHeader">#FFFE86</color>
 </resources>

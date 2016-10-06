@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="10"
+    android:id="@+id/event_editor_view"
+    android:orientation="vertical"
+    android:paddingLeft="20dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RadioGroup
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="味方チーム"
+                android:id="@+id/radioButton"
+                android:textSize="14dp" />
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="相手チーム"
+                android:id="@+id/radioButton2"
+                android:textSize="14dp" />
+        </RadioGroup>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ユニフォームNo:"
+                android:id="@+id/textView8"
+                android:textSize="14dp" />
+
+            <Spinner
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/spinner"
+                android:paddingLeft="10dp" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="イベント項目"
+        android:id="@+id/tv_edit_event"
+        android:textSize="12dp"
+        android:textIsSelectable="false" />
+
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="10dp">
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ファウル"
+            android:id="@+id/rdobtn_foul"
+            android:textSize="12dp" />
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="スティール"
+            android:id="@+id/rdobtn_steal"
+            android:textSize="12dp" />
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="シュート"
+            android:id="@+id/rdobtn_shoot"
+            android:textSize="12dp" />
+    </RadioGroup>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="シュートのみ："
+            android:id="@+id/textView9"
+            android:textSize="12dp"
+            android:paddingBottom="10dp" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <RadioGroup
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="成功"
+                    android:id="@+id/rdobtn_success"
+                    android:textSize="12dp" />
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:id="@+id/rdobtn_failed"
+                    android:text="失敗"
+                    android:textSize="12dp" />
+            </RadioGroup>
+
+            <RadioGroup
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="1P"
+                    android:id="@+id/rdobtn_shoot01"
+                    android:textSize="12dp" />
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="2P"
+                    android:id="@+id/rdobtn_shoot02"
+                    android:textSize="12dp" />
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="3P"
+                    android:id="@+id/rdobtn_shoot03"
+                    android:textSize="12dp" />
+            </RadioGroup>
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:layout_weight="2">
+
+        <Button
+            android:layout_width="60dp"
+            android:layout_height="40dp"
+            android:text="戻る"
+            android:id="@+id/btn_edit_return" />
+        <Button
+            android:layout_width="60dp"
+            android:layout_height="40dp"
+            android:text="保存"
+            android:id="@+id/btn_edit_save" />
+        <Button
+            android:layout_width="60dp"
+            android:layout_height="40dp"
+            android:text="削除"
+            android:id="@+id/btn_evevnt_delete" />
+    </LinearLayout>
+
+</LinearLayout>
