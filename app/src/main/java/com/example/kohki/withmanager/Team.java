@@ -79,7 +79,7 @@ public class Team extends VideoActivity {
                 }
                 //記録
                 mEventLogger = new EventLogger(context);
-                mEventLogger.addEvent(sTeamAndNum[0], sTeamAndNum[0]);
+                mEventLogger.addEvent(sTeamAndNum[0], sTeamAndNum[1]);
 
                 //send by bluetooth
             /*    if(sEventName.equals("steal") || sEventName.equals("rebound")
