@@ -36,6 +36,9 @@ public class Player extends AppCompatActivity implements NavigationView.OnNaviga
 
         myWebView = (WebView)findViewById(R.id.webView);
         myWebView.setWebViewClient(new WebViewClient());
+        myWebView.loadUrl("https://with-manager.herokuapp.com/members/");
+        myWebView.getSettings().setJavaScriptEnabled(true);
+
 
         // new add
         mPlayerManage = new PlayerDBManager(this);
@@ -84,36 +87,48 @@ public class Player extends AppCompatActivity implements NavigationView.OnNaviga
 //                playerName = new ArrayAdapter<String>(this,android.R.layout.simple_expandable_list_item_1,
 //                                                        getResources().getStringArray(R.array.grade1));
 
-               playerName = new ArrayAdapter<String>(this,android.R.layout.simple_expandable_list_item_1,
+/*               playerName = new ArrayAdapter<String>(this,android.R.layout.simple_expandable_list_item_1,
                        mPlayerManage.getPlayers(1));
 
 
-                player.setAdapter(playerName);
+                player.setAdapter(playerName);*/
+
+               myWebView.loadUrl("https://with-manager.herokuapp.com/members/1");
+               myWebView.getSettings().setJavaScriptEnabled(true);
+
                 break;
 
             case R.id.menu_grade2:  //Second Gradeが押された時
 //                playerName = new ArrayAdapter<String>(this,android.R.layout.simple_expandable_list_item_1,
 //                                                        getResources().getStringArray(R.array.grade2));
 
-                playerName = new ArrayAdapter<String>(this,android.R.layout.simple_expandable_list_item_1,
+/*                playerName = new ArrayAdapter<String>(this,android.R.layout.simple_expandable_list_item_1,
                         mPlayerManage.getPlayers(2));
 
-                player.setAdapter(playerName);
+                player.setAdapter(playerName);*/
+
+                myWebView.loadUrl("https://with-manager.herokuapp.com/members/2");
+                myWebView.getSettings().setJavaScriptEnabled(true);
+
                 break;
 
             case R.id.menu_grade3: //Third Gradeが押された時
 //                playerName = new ArrayAdapter<String>(this,android.R.layout.simple_expandable_list_item_1,
 //                                                        getResources().getStringArray(R.array.grade1));
 
-                playerName = new ArrayAdapter<String>(this,android.R.layout.simple_expandable_list_item_1,
+/*                playerName = new ArrayAdapter<String>(this,android.R.layout.simple_expandable_list_item_1,
                         mPlayerManage.getPlayers(3));
 
-                player.setAdapter(playerName);
+                player.setAdapter(playerName);*/
+
+                myWebView.loadUrl("https://with-manager.herokuapp.com/members/3");
+                myWebView.getSettings().setJavaScriptEnabled(true);
+
                 break;
 
             case R.id.review_page:
-                myWebView.loadUrl("https://with-manager.herokuapp.com/");
-                myWebView.getSettings().setJavaScriptEnabled(true);
+                Intent Webview = new Intent(getApplication(), Webview.class);
+                startActivity(Webview);
                 break;
 
             case R.id.add_player:

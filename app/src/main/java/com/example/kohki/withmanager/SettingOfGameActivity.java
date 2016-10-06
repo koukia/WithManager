@@ -47,8 +47,8 @@ public class SettingOfGameActivity extends Activity {
         tv_ourteam_num = (TextView) findViewById(R.id.ourteam_num);
         tv_oppteam_num = (TextView) findViewById(R.id.opposingteam_num);
         tv_rec_time    = (TextView) findViewById(R.id.rec_time);
-        tv_ourteam_num.setText(pre_ourteam_num+"");
-        tv_oppteam_num.setText(pre_oppteam_num+"");
+        tv_ourteam_num.setText(Integer.toString(pre_ourteam_num));
+        tv_oppteam_num.setText(Integer.toString(pre_oppteam_num));
         tv_rec_time.setText(((double)pre_rec_time/1000)+"");
 
 
@@ -100,7 +100,7 @@ public class SettingOfGameActivity extends Activity {
                     }
                 }else { // number of team member
                     int mem_num = Integer.parseInt(tv_num.getText()+"");
-                    if (mem_num < Team.sMinMembers) {
+                    if (mem_num < Team.sMaxMembers) {
                         tv_num.setText(mem_num + 1 + "");
                     }
                 }

@@ -82,7 +82,7 @@ public class Team extends VideoActivity {
                 mEventLogger.addEvent(sTeamAndNum[0], sTeamAndNum[0]);
 
                 //send by bluetooth
-                if(sEventName.equals("steal") || sEventName.equals("rebound")
+            /*    if(sEventName.equals("steal") || sEventName.equals("rebound")
                         || sEventName.equals("foul")){
                     Toast.makeText(context,"---",Toast.LENGTH_SHORT).show();
                     VideoActivity.buf[0] = Byte.parseByte(sTeamAndNum[0]+"");
@@ -92,6 +92,7 @@ public class Team extends VideoActivity {
                     bc.writeObject(VideoActivity.buf);
                     bc.close();
                 }
+                */
                 //update View
                 if (flg_eventMenu == 0) {
                     mEventLogger.updateEventLog(context, VideoActivity.lv_eventLog);
