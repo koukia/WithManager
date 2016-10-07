@@ -28,6 +28,8 @@ public class GameResultActivity extends AppCompatActivity {
 
     private String gameStartDateTime;
     private static Context context;
+    private EventDbHelper mEventDbHlpr;
+    private SQLiteDatabase mDb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +64,7 @@ public class GameResultActivity extends AppCompatActivity {
             getLayoutInflater().inflate(R.layout.score_sheet, score_sheet);
             getLayoutInflater().inflate(R.layout.foul_sheet,  foul_sheet);
             EventDbHelper  cDbHelper = new EventDbHelper(context);
-            SQLiteDatabase mDB       = cDbHelper.getWritableDatabase();
+            mDb       = cDbHelper.getWritableDatabase();
             EventLogger m_event_loger = new EventLogger(context);
             m_event_loger.updateEventLog(context, (ListView) findViewById(R.id.event_log));
             setScoresheet();
@@ -123,18 +125,17 @@ public class GameResultActivity extends AppCompatActivity {
         lv_oppfoul.setAdapter(adpt_opp_foulsheet);
         lv_oppfoul.onRestoreInstanceState(state_opt);
 
-        FoulCounter cFoulCounter = new FoulCounter(context, gameStartDateTime);
-        List<Integer[]> foulList = cFoulCounter.getFoulData();
+        List<Integer[]> foulList = FoulCounter.getFoulData(mDb,gameStartDateTime);
         Integer[] ourmember_foul = foulList.get(0);//[0]is?,[1]is4,[2]is5...
         Integer[] ourteam_foul   = foulList.get(1);
         Integer[] oppmember_foul = foulList.get(2);
         Integer[] oppteam_foul   = foulList.get(3);
 
         //ourteam
-        adpt_our_foulsheet.add(new String[]{"team_kind","ourteam"});
+        adpt_our_foulsheet.add(new String[]{"0","ourteam"});
         int quarter_num=1;
         while (ourteam_foul[quarter_num-1] != 0) {
-            adpt_our_foulsheet.add(new String[]{"T", String.valueOf(ourteam_foul[quarter_num-1])});
+            adpt_our_foulsheet.add(new String[]{"1", String.valueOf(ourteam_foul[quarter_num-1])});
             quarter_num++;
         }
         for(int i=0; i<ourmember_foul.length; i++){
@@ -142,10 +143,10 @@ public class GameResultActivity extends AppCompatActivity {
         }
 
         //oppteam
-        adpt_opp_foulsheet.add(new String[]{"team_kind","oppteam"});
+        adpt_opp_foulsheet.add(new String[]{"0","oppteam"});
         quarter_num=1;
         while (oppteam_foul[quarter_num-1] != 0) {
-            adpt_our_foulsheet.add(new String[]{"T", String.valueOf(oppteam_foul[quarter_num-1])});
+            adpt_opp_foulsheet.add(new String[]{"1", String.valueOf(oppteam_foul[quarter_num-1])});
             quarter_num++;
         }
         for(int i=0;i<oppmember_foul.length;i++){

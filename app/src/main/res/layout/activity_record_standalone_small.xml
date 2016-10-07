@@ -1,73 +1,124 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:layout_weight="100">
 
     <ListView
-        android:layout_width="100dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/our_team_list"
         android:listSelector="@drawable/p2_listselector"
-        android:background="#ffffff"
-        />
+        android:layout_weight="30.5"
+        android:background="#ffffff" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_weight="24"
+        android:id="@+id/menu">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="100"
+            android:gravity="left|clip_vertical">
+            <ImageButton
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:id="@+id/btn_setting"
+                android:src="@drawable/ico_btn_setting"
+                android:cropToPadding="false"
+                android:contextClickable="false"
+                android:scaleType="centerCrop"
+                android:clickable="true" />
+            <ImageButton
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:id="@+id/btn_chenge_scoresheet_and_eventlog"
+                android:src="@drawable/ico_btn_change_scoresheet"
+                android:scaleType="centerCrop"
+                android:clickable="true" />
+            <ImageButton
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:id="@+id/btn_save_or_delete"
+                android:src="@android:drawable/ic_menu_save"
+                android:clickable="true" />
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/menu_log"
+            android:weightSum="10">
+
+            <ListView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:id="@+id/event_log"
+                android:listSelector="@drawable/eventlog_selector" />
+
+        </LinearLayout>
+    </LinearLayout>
 
     <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="8">
+        android:layout_weight="15">
 
-        <ImageView
+        <SurfaceView
+            android:id="@+id/sub_surface"
+            android:layout_width="300dp"
+            android:layout_height="225dp"
+            android:layout_gravity="right|top" />
+
+        <SurfaceView
+            android:id="@+id/main_surface"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@drawable/coat"/>
+            android:layout_weight="9"
+            android:visibility="visible" />
 
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="right"
-            android:layout_gravity="center_horizontal|bottom">
+            android:layout_gravity="center_horizontal|bottom"
+            android:gravity="right">
 
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Start"
                 android:id="@+id/btn_start"
-                android:enabled="false"
-                android:clickable="false"
+                android:enabled="true"
+                android:clickable="true"
                 android:textColor="#0015ff"
-                android:contextClickable="false"
                 android:longClickable="false"
-                android:visibility="invisible"
-
-                />
+                android:visibility="visible" />
 
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="シュート"
-                android:id="@+id/btn_record"
-                android:enabled="true"
-                android:clickable="false"
-                android:textColor="#ff0000"
-                android:visibility="invisible" />
-
-
+                android:text="ストップ"
+                android:id="@+id/btn_stop"
+                android:visibility="invisible"/>
 
 
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="score "
                 android:id="@+id/score_label"
-                android:layout_gravity="left|top"
                 android:textSize="20dp"
                 android:background="#ffffff"
                 android:textColor="#000000" />
@@ -91,10 +142,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="0"
-                android:id="@+id/enemies_score"
+                android:id="@+id/opposing_score"
                 android:textSize="20dp"
                 android:background="#ffffff"
-                android:textColor="#000000" />
+                android:textColor="#000000"
+                android:paddingRight="5dp" />
+
         </LinearLayout>
 
         <RelativeLayout
@@ -103,6 +156,19 @@
             android:layout_gravity="center"
             android:id="@+id/image_layout"
             android:gravity="center_vertical|center_horizontal">
+
+            <!--
+            <ImageView
+                android:layout_width="300dp"
+                android:layout_height="300dp"
+                android:id="@+id/play_and_stop_image"
+                android:layout_gravity="center"
+                android:gravity=""
+                android:visibility="visible"
+                android:src="@android:drawable/ic_media_play"
+                android:alpha="0"
+                android:background="#ff0505" />
+             -->
 
         </RelativeLayout>
 
@@ -116,7 +182,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="1P(成功)"
-                android:id="@+id/shoot_succes_free"
+                android:id="@+id/shoot_success_1p"
                 android:enabled="true"
                 android:clickable="false"
                 android:textColor="#0033ff"
@@ -140,19 +206,23 @@
                 android:textColor="#0033ff"
                 />
 
+
+
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_gravity="center_vertical|left">
+            android:layout_gravity="left|center_vertical">
+
 
 
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="1P(失敗)"
-                android:id="@+id/shoot_failed_free"
+                android:id="@+id/shoot_failed_1p"
                 android:enabled="true"
                 android:clickable="false"
                 android:textColor="#0033ff"
@@ -165,7 +235,6 @@
                 android:enabled="true"
                 android:clickable="false"
                 android:textColor="#0033ff" />
-
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -179,27 +248,24 @@
         </LinearLayout>
 
         <Button
-            android:text="Undo"
-            android:id="@+id/miss_undo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="ファウル"
+            android:id="@+id/foul"
             android:enabled="true"
             android:clickable="false"
             android:textColor="#0033ff"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_gravity="left|bottom"
-            android:visibility="invisible" />
-        />
+            android:layout_gravity="left|bottom" />
+
     </FrameLayout>
 
     <ListView
-        android:layout_width="100dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/enemies_team_list"
+        android:id="@+id/opposing_team_list"
         android:listSelector="@drawable/p1_listselector"
+        android:layout_weight="30.5"
         android:background="#00c4ff"
-        />
+        android:textFilterEnabled="false" />
 
 </LinearLayout>

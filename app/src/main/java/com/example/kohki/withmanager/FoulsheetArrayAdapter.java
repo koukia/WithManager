@@ -71,7 +71,7 @@ public class FoulsheetArrayAdapter extends ArrayAdapter {
         viewHolder.tv_mem_num.setTextColor(Color.BLACK);
         viewHolder.tv_foul_sum.setTextColor(Color.BLACK);
 
-        if (stat[0].equals("team_kind")) {
+        if (Integer.parseInt(stat[0]) == 0) {
             if (stat[1].equals("ourteam")) {
                 viewHolder.tv_mem_num.setText("味方");
                 viewHolder.tv_mem_num.setGravity(Gravity.CENTER);
@@ -83,7 +83,8 @@ public class FoulsheetArrayAdapter extends ArrayAdapter {
                 viewHolder.tv_foul_sum.setText("Foul");
                 viewHolder.tv_foul_sum.setGravity(Gravity.CENTER);
             }
-        }else if (stat[0].equals("T")) {
+        }
+        if (Integer.parseInt(stat[0]) == 1) {
             viewHolder.tv_mem_num.setText("T");
             viewHolder.tv_mem_num.setGravity(Gravity.CENTER);
             try {
@@ -91,7 +92,8 @@ public class FoulsheetArrayAdapter extends ArrayAdapter {
             } catch (NumberFormatException e) {
                 Log.d(TAG, e + "");
             }
-        }else if (!stat[0].equals("?")) {
+        }
+        if (Integer.parseInt(stat[0]) >= 4) {
             viewHolder.left.setBackgroundColor(Color.parseColor("#ffc0cb"));
             viewHolder.tv_mem_num.setBackgroundColor(Color.parseColor("#ffc0cb"));
             viewHolder.right.setBackgroundColor(Color.parseColor("#98fb98"));

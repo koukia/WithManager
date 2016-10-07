@@ -347,8 +347,7 @@ public class SynchroVideoActivity extends Activity {
         lv_oppfoul.setAdapter(adpt_opp_foulsheet);
         lv_oppfoul.onRestoreInstanceState(state_opt);
 
-        FoulCounter cFoulCounter = new FoulCounter(context, sGameStartDateTime);
-        List<Integer[]> foulList = cFoulCounter.getFoulData();
+        List<Integer[]> foulList = FoulCounter.getFoulData(mDB,sGameStartDateTime);
 
         Integer[] ourmember_foul = foulList.get(0);//[0]is?,[1]is4,[2]is5...
         Integer[] ourteam_foul   = foulList.get(1);

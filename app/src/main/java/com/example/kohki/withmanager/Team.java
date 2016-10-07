@@ -94,14 +94,13 @@ public class Team extends VideoActivity {
                 }
                 */
                 //update View
-                if (flg_eventMenu == 0) {
+                if (VideoActivity.flg_eventMenu == 0) {
                     mEventLogger.updateEventLog(context, VideoActivity.lv_eventLog);
-                } else if (flg_eventMenu == 1){
-                    VideoActivity v = new VideoActivity();
-                    v.setScoresheet();
-                }else if(flg_eventMenu == 2) {
-                    VideoActivity v = new VideoActivity();
-                    v.setFoulsheet();
+                } else if (VideoActivity.flg_eventMenu == 1 && VideoActivity.sEventName == "shoot"){
+             //TODO:
+                    //       setScoresheet();
+                }else if(VideoActivity.flg_eventMenu == 2 && VideoActivity.sEventName == "foul") {
+             //       setFoulsheet();
                 }
                 updateScoreView();
             }else{

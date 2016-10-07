@@ -1,5 +1,6 @@
 package com.example.kohki.withmanager;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
@@ -7,6 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -127,20 +129,78 @@ public class EventDbHelper extends SQLiteOpenHelper {
     }
     public static boolean updateColumn(SQLiteDatabase db, int id, int team, int num,
                                        int point, int success, String event){
-
-        String sql = "UPDATE " + EventContract.Event.TABLE_NAME + " set "+
-                EventContract.Event.COL_TEAM+"='"+team+"', "+
-                EventContract.Event.COL_NUM+"='"+num+"', "+
-                EventContract.Event.COL_POINT+"='"+point+"', "+
-                EventContract.Event.COL_SUCCESS+"='"+success+"', "+
-                EventContract.Event.COL_EVENT+"='"+event+"'"+
-                " where "+ EventContract.Event._ID+"="+id+";";
-        try {
-            db.execSQL(sql);
+        Log.d("update","id:"+id+",team:"+team+"num:"+num+",point:"+point+",event:"+event);
+        ContentValues values = new ContentValues();
+        values.put(EventContract.Event.COL_TEAM,    team);
+        values.put(EventContract.Event.COL_NUM,     num);
+        values.put(EventContract.Event.COL_POINT,   point);
+        values.put(EventContract.Event.COL_SUCCESS, success);
+        values.put(EventContract.Event.COL_EVENT,   event);
+     /*   String sql = "update " + EventContract.Event.TABLE_NAME + " set "+
+                EventContract.Event.COL_TEAM+"="+team+", "+
+                EventContract.Event.COL_NUM+"="+num+", "+
+                EventContract.Event.COL_POINT+"="+point+", "+
+                EventContract.Event.COL_SUCCESS+"="+success+", "+
+                EventContract.Event.COL_EVENT+"='"+event+
+                "' where "+ EventContract.Event._ID+"="+id+";";
+     */   try {
+         //   db.execSQL(sql);
+            int result = db.update(EventContract.Event.TABLE_NAME,values,
+                    EventContract.Event._ID+" = ?",new String[]{String.valueOf(id)});
+            if(result == -1)
+                Log.e("SQL_update", "failed");
+            else
+                Log.e("SQL_update", "success:"+result);
         } catch (SQLException e) {
-            Log.e("SQL", e.toString());
+            Log.e("SQL_update", e.toString());
             return false;
         }
         return true;
+    }
+    public static boolean deleteRow(Context context, int id){
+        EventDbHelper dbHelper = null;
+        SQLiteDatabase db = null;
+        try {
+            dbHelper = new EventDbHelper(context);
+            db = dbHelper.getWritableDatabase();
+            db.delete(EventContract.Event.TABLE_NAME, "_id=?", new String[]{id + ""});
+        }catch (SQLException e){
+            Log.w("deleteRow",e);
+            return false;
+        }finally {
+            if (db != null) {
+                db.close();
+            }
+            if (dbHelper != null) {
+                dbHelper.close();
+            }
+            return true;
+        }
+    }
+    public static ArrayList<String> getRowFromFoul(SQLiteDatabase db, String game_start_time){
+        Cursor cursor = db.rawQuery("SELECT * FROM "+ EventContract.Event.TABLE_NAME+" WHERE "+
+                EventContract.Event.COL_SUCCESS+" = '1' and "+
+                EventContract.Event.COL_EVENT+" = 'foul' and "+
+                EventContract.Event.COL_DATETIME+" = ?", new String[]{String.valueOf(game_start_time)});
+        ArrayList column = new ArrayList();
+        Integer[] row;
+        try {
+            while (cursor.moveToNext()) {
+                row = new Integer[4];
+                int id = cursor.getInt(cursor.getColumnIndex(EventContract.Event._ID));
+                int team = cursor.getInt(cursor.getColumnIndex(EventContract.Event.COL_TEAM));
+                int num = cursor.getInt(cursor.getColumnIndex(EventContract.Event.COL_NUM));
+                int quo = cursor.getInt(cursor.getColumnIndex(EventContract.Event.COL_QUARTER_NUM));
+                Log.d("getRowFromS","id:"+id+",team:"+team+",num:"+num);
+                row[0]=id;
+                row[1]=team;
+                row[2]=num;
+                row[3]=quo;
+                column.add(row);
+            }
+        } finally {
+            cursor.close();
+        }
+        return column;
     }
 }

@@ -8,6 +8,7 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.res.Resources;
 import android.database.sqlite.SQLiteDatabase;
 import android.content.Intent;
 import android.graphics.PixelFormat;
@@ -16,7 +17,9 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.SurfaceHolder;
@@ -89,7 +92,7 @@ public class VideoActivity extends Activity {
 
     private boolean isPlaying;
     protected static boolean isSaving = false;
-    protected int flg_eventMenu = 0;  //0:eventlog, 1:score, 2:foul
+    protected static int flg_eventMenu = 0;  //0:eventlog, 1:score, 2:foul
 
     //public static String saveDir  = "/storage/emulated/legacy/WithManager/";
     public static String saveDir = "sdcard/WithManager/";
@@ -121,6 +124,7 @@ public class VideoActivity extends Activity {
 
     private String activityMode;
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -131,14 +135,79 @@ public class VideoActivity extends Activity {
         }else {
             activityMode = mode;
         }
+        WindowManager windowManager = getWindowManager();
+        Display display = windowManager.getDefaultDisplay();
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        display.getMetrics(displayMetrics);
 
-        if (mode.equals("single")){
-            setContentView(R.layout.activity_record_standalone);
+        Log.v("widthPixels",    String.valueOf(displayMetrics.widthPixels));
+        Log.v("heightPixels",   String.valueOf(displayMetrics.heightPixels));
+        Log.v("xdpi",           String.valueOf(displayMetrics.xdpi));
+        Log.v("ydpi",           String.valueOf(displayMetrics.ydpi));
+        Log.v("density",        String.valueOf(displayMetrics.density));
+        Log.v("scaledDensity",  String.valueOf(displayMetrics.scaledDensity));
+
+        Log.v("width",          String.valueOf(display.getWidth()));       // 非推奨
+        Log.v("height",         String.valueOf(display.getHeight()));      // 非推奨
+        Log.v("orientation",    String.valueOf(display.getOrientation())); // 非推奨
+        Log.v("refreshRate",    String.valueOf(display.getRefreshRate()));
+        Log.v("pixelFormat",    String.valueOf(display.getPixelFormat()));
+        Log.v("rotation",       String.valueOf(display.getRotation()));
+        /* zenpad7
+        V/widthPixels: 1280
+        V/heightPixels: 736
+10-07 14:12:55.512 16292-16292/com.example.kohki.withmanager V/xdpi: 160.0
+10-07 14:12:55.512 16292-16292/com.example.kohki.withmanager V/ydpi: 160.15764
+10-07 14:12:55.512 16292-16292/com.example.kohki.withmanager V/density: 1.3312501
+10-07 14:12:55.512 16292-16292/com.example.kohki.withmanager V/scaledDensity: 1.3312501
+10-07 14:12:55.513 16292-16292/com.example.kohki.withmanager V/width: 1280
+10-07 14:12:55.514 16292-16292/com.example.kohki.withmanager V/height: 736
+10-07 14:12:55.515 16292-16292/com.example.kohki.withmanager V/orientation: 1
+10-07 14:12:55.517 16292-16292/com.example.kohki.withmanager V/refreshRate: 60.003002
+10-07 14:12:55.517 16292-16292/com.example.kohki.withmanager V/pixelFormat: 1
+10-07 14:12:55.519 16292-16292/com.example.kohki.withmanager V/rotation: 1
+    */
+        /*
+        * phonepad6
+          V/widthPixels: 1800
+          /heightPixels: 1080
+10-07 14:15:39.451 2066-2066/com.example.kohki.withmanager V/xdpi: 365.76
+10-07 14:15:39.451 2066-2066/com.example.kohki.withmanager V/ydpi: 366.676
+10-07 14:15:39.451 2066-2066/com.example.kohki.withmanager V/density: 3.0
+10-07 14:15:39.451 2066-2066/com.example.kohki.withmanager V/scaledDensity: 3.0
+10-07 14:15:39.451 2066-2066/com.example.kohki.withmanager V/width: 1800
+10-07 14:15:39.451 2066-2066/com.example.kohki.withmanager V/height: 1080
+10-07 14:15:39.451 2066-2066/com.example.kohki.withmanager V/orientation: 1
+10-07 14:15:39.451 2066-2066/com.example.kohki.withmanager V/refreshRate: 60.000004
+10-07 14:15:39.451 2066-2066/com.example.kohki.withmanager V/pixelFormat: 1
+10-07 14:15:39.451 2066-2066/com.example.kohki.withmanager V/rotation: 1
+
+         */
+/*
+        Log.d("---screen_size_to:",(double)width*0.8+":"+(double)height*0.8);
+        mSubHolder.setFixedSize((int)((double)width*0.8),(int)((double)height*0.8));
+        Log.d("---mSubHolder:",":"+width);
+
+        phonepad6: 1800,1080
+        zenpad7:
+*/
+
+        if (mode.equals("single")) {
+            if (displayMetrics.widthPixels > 1500 && displayMetrics.heightPixels > 900){
+                Log.d("---single--",">>>>>>>>>>");
+                setContentView(R.layout.activity_record_standalone_small);
+            }else {
+                Log.d("---single--","<<<<<<<<<<");
+                setContentView(R.layout.activity_record_standalone);
+            }
         }else if(mode.equals("dual")){
-            setContentView(R.layout.activity_synchro_video);
+            if(displayMetrics.widthPixels > 1500 && displayMetrics.heightPixels > 900)
+                setContentView(R.layout.activity_synchro_video);
+            else
+                setContentView(R.layout.activity_synchro_video);
              /* Synchro only */
-            buf = new byte[4]; buf[3] = 111;
-        //    sdf = new SimpleDateFormat();
+            buf = new byte[4];
+            buf[3] = 111;
             /* --- */
         }
 
@@ -166,12 +235,11 @@ public class VideoActivity extends Activity {
         //sub surfaceview
         mSubSurface = (SurfaceView) findViewById(R.id.sub_surface);
         mSubHolder = mSubSurface.getHolder();
-        mSubHolder.setFormat(PixelFormat.TRANSLUCENT);//ここで半透明にする
         mSubSurfaceCallback = new PreviewSurfaceViewCallback(context);
         mSubHolder.addCallback(mSubSurfaceCallback);
+        mSubHolder.setFormat(PixelFormat.TRANSLUCENT);//ここで半透明にする
         mSubSurface.setVisibility(SurfaceView.INVISIBLE);
-      //  mSmallHolder.setFixedSize(mSubSurface.getWidth()/2,
-       //         mSubSurface.getHeight()/2);
+
 
         tv_ourScore    = (TextView) findViewById(R.id.our_score);
         tv_oppScore    = (TextView) findViewById(R.id.opposing_score);
@@ -434,9 +502,11 @@ public class VideoActivity extends Activity {
     }
 
     protected void setFoulsheet(){
+        ListView lv_ourfoul;
+        ListView lv_oppfoul;
 
-        ListView lv_ourfoul = (ListView) findViewById(R.id.our_foul_list);
-        ListView lv_oppfoul = (ListView) findViewById(R.id.opp_foul_list);
+        lv_ourfoul = (ListView) findViewById(R.id.our_foul_list);
+        lv_oppfoul = (ListView) findViewById(R.id.opp_foul_list);
         //リストに追加するためのアダプタ
         FoulsheetArrayAdapter adpt_our_foulsheet = new FoulsheetArrayAdapter(getApplicationContext(), R.layout.foul_sheet_row);
         FoulsheetArrayAdapter adpt_opp_foulsheet = new FoulsheetArrayAdapter(getApplicationContext(), R.layout.foul_sheet_row);
@@ -450,8 +520,7 @@ public class VideoActivity extends Activity {
         lv_oppfoul.setAdapter(adpt_opp_foulsheet);
         lv_oppfoul.onRestoreInstanceState(state_opt);
 
-        FoulCounter cFoulCounter = new FoulCounter(context, sGameStartDateTime);
-        List<Integer[]> foulList = cFoulCounter.getFoulData();
+        List<Integer[]> foulList = FoulCounter.getFoulData(mDB, sGameStartDateTime);
 
         Integer[] ourmember_foul = foulList.get(0);//[0]is?,[1]is4,[2]is5...
         Integer[] ourteam_foul   = foulList.get(1);
@@ -459,16 +528,16 @@ public class VideoActivity extends Activity {
         Integer[] oppteam_foul   = foulList.get(3);
 
         //ourteam
-        adpt_our_foulsheet.add(new String[]{"team_kind","ourteam"});
-        adpt_our_foulsheet.add(new String[]{"T", String.valueOf(ourteam_foul[sCurrentQuarterNum-1])});
+        adpt_our_foulsheet.add(new String[]{"0","ourteam"});
+        adpt_opp_foulsheet.add(new String[]{"0","oppteam"});
+
+        adpt_our_foulsheet.add(new String[]{"1", String.valueOf(ourteam_foul[sCurrentQuarterNum-1])});
+        adpt_opp_foulsheet.add(new String[]{"1", String.valueOf(oppteam_foul[sCurrentQuarterNum-1]) });
+
         for(int i=0; i<ourmember_foul.length; i++){
             adpt_our_foulsheet.add(new String[]{String.valueOf(i+4), String.valueOf(ourmember_foul[i])});
         }
-
-        //oppteam
-        adpt_opp_foulsheet.add(new String[]{"team_kind","oppteam"});
-        adpt_opp_foulsheet.add(new String[]{"T", String.valueOf(oppteam_foul[sCurrentQuarterNum-1]) });
-        for(int i=0;i<oppmember_foul.length;i++){
+        for(int i=0; i<oppmember_foul.length; i++){
             adpt_opp_foulsheet.add(new String[]{String.valueOf(i+4), String.valueOf(oppmember_foul[i])});
         }
     }
