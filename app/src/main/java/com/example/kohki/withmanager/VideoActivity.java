@@ -92,7 +92,7 @@ public class VideoActivity extends Activity {
 
     private boolean isPlaying;
     protected static boolean isSaving = false;
-    protected int flg_eventMenu = 0;  //0:eventlog, 1:score, 2:foul
+    protected static int flg_eventMenu = 0;  //0:eventlog, 1:score, 2:foul
 
     //public static String saveDir  = "/storage/emulated/legacy/WithManager/";
     public static String saveDir = "sdcard/WithManager/";
@@ -123,6 +123,7 @@ public class VideoActivity extends Activity {
     }
 
     private String activityMode;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -501,9 +502,11 @@ public class VideoActivity extends Activity {
     }
 
     protected void setFoulsheet(){
+        ListView lv_ourfoul;
+        ListView lv_oppfoul;
 
-        ListView lv_ourfoul = (ListView) findViewById(R.id.our_foul_list);
-        ListView lv_oppfoul = (ListView) findViewById(R.id.opp_foul_list);
+        lv_ourfoul = (ListView) findViewById(R.id.our_foul_list);
+        lv_oppfoul = (ListView) findViewById(R.id.opp_foul_list);
         //リストに追加するためのアダプタ
         FoulsheetArrayAdapter adpt_our_foulsheet = new FoulsheetArrayAdapter(getApplicationContext(), R.layout.foul_sheet_row);
         FoulsheetArrayAdapter adpt_opp_foulsheet = new FoulsheetArrayAdapter(getApplicationContext(), R.layout.foul_sheet_row);
@@ -517,8 +520,7 @@ public class VideoActivity extends Activity {
         lv_oppfoul.setAdapter(adpt_opp_foulsheet);
         lv_oppfoul.onRestoreInstanceState(state_opt);
 
-        FoulCounter cFoulCounter = new FoulCounter(context, sGameStartDateTime);
-        List<Integer[]> foulList = cFoulCounter.getFoulData();
+        List<Integer[]> foulList = FoulCounter.getFoulData(mDB, sGameStartDateTime);
 
         Integer[] ourmember_foul = foulList.get(0);//[0]is?,[1]is4,[2]is5...
         Integer[] ourteam_foul   = foulList.get(1);
@@ -526,16 +528,16 @@ public class VideoActivity extends Activity {
         Integer[] oppteam_foul   = foulList.get(3);
 
         //ourteam
-        adpt_our_foulsheet.add(new String[]{"team_kind","ourteam"});
-        adpt_our_foulsheet.add(new String[]{"T", String.valueOf(ourteam_foul[sCurrentQuarterNum-1])});
+        adpt_our_foulsheet.add(new String[]{"0","ourteam"});
+        adpt_opp_foulsheet.add(new String[]{"0","oppteam"});
+
+        adpt_our_foulsheet.add(new String[]{"1", String.valueOf(ourteam_foul[sCurrentQuarterNum-1])});
+        adpt_opp_foulsheet.add(new String[]{"1", String.valueOf(oppteam_foul[sCurrentQuarterNum-1]) });
+
         for(int i=0; i<ourmember_foul.length; i++){
             adpt_our_foulsheet.add(new String[]{String.valueOf(i+4), String.valueOf(ourmember_foul[i])});
         }
-
-        //oppteam
-        adpt_opp_foulsheet.add(new String[]{"team_kind","oppteam"});
-        adpt_opp_foulsheet.add(new String[]{"T", String.valueOf(oppteam_foul[sCurrentQuarterNum-1]) });
-        for(int i=0;i<oppmember_foul.length;i++){
+        for(int i=0; i<oppmember_foul.length; i++){
             adpt_opp_foulsheet.add(new String[]{String.valueOf(i+4), String.valueOf(oppmember_foul[i])});
         }
     }

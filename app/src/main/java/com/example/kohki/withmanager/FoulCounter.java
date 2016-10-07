@@ -1,6 +1,7 @@
 package com.example.kohki.withmanager;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteCursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -63,7 +64,7 @@ public class FoulCounter {
         }
     }
 */
-    public List getFoulData() {
+    public static List getFoulData(SQLiteDatabase db, String gameStartDateTime) {
         Integer[] our_memberfoul_counter = new Integer[Team.sMaxMembers];//[0] => num4,[1] => num5
         Integer[] opp_memberfoul_counter = new Integer[Team.sMaxMembers];
         Integer[] our_teamfoul_counter   = new Integer[4];
@@ -81,42 +82,27 @@ public class FoulCounter {
             opp_teamfoul_counter[i]=0;
         }
         /*get all data from DB*/
-        try {
-            SQLiteCursor c = (SQLiteCursor) db.query(
-                    true, EventContract.Event.TABLE_NAME,
-                    null, null, null, null, null, null, null);
-
-            int rowcount = c.getCount();
-            c.moveToFirst();
-            for (int i = 0; i < rowcount; i++) {
-                String event_name = c.getString(c.getColumnIndex(EventContract.Event.COL_EVENT));
-                String is_success = c.getString(c.getColumnIndex(EventContract.Event.COL_SUCCESS));
-                String start_time = c.getString(c.getColumnIndex(EventContract.Event.COL_DATETIME));
-
-                if(event_name.equals("foul") && is_success.equals("1") && start_time.equals(gameStartDateTime)){
-                    int team        = c.getInt(c.getColumnIndex(EventContract.Event.COL_TEAM));
-                    int num         = c.getInt(c.getColumnIndex(EventContract.Event.COL_NUM));
-                    int quarter_num = c.getInt(c.getColumnIndex(EventContract.Event.COL_QUARTER_NUM));
-
-                    if(team == 0){//ourteam
-                    //    if(num == 0)//num is ?
-                    //        ourteam_counter[num] = ourteam_counter[num] + 1;
-                        if(num >= 4) {
-                            our_memberfoul_counter[num-4] = our_memberfoul_counter[num-4] + 1;
-                        }
-                        our_teamfoul_counter[quarter_num-1] = our_teamfoul_counter[quarter_num-1] + 1;
-                    }else if(team == 1){//oppteam
-                        if(num >= 4) {
-                            opp_memberfoul_counter[num-4] = opp_memberfoul_counter[num-4] + 1;
-                        }
-                        opp_teamfoul_counter[quarter_num-1] = opp_teamfoul_counter[quarter_num-1] + 1;
-                    }
+        ArrayList column = EventDbHelper.getRowFromFoul(db,gameStartDateTime);
+        for(int i=0;i<column.size();i++){
+            Integer[] row = (Integer[]) column.get(i);
+            int team = row[1];
+            int num = row[2];
+            int quarter_num = row[3];
+            if(team == 0){//ourteam
+                //    if(num == 0)//num is ?
+                //        ourteam_counter[num] = ourteam_counter[num] + 1;
+                if(num >= 4) {
+                    our_memberfoul_counter[num-4] = our_memberfoul_counter[num-4] + 1;
                 }
-                c.moveToNext();
+                our_teamfoul_counter[quarter_num-1] = our_teamfoul_counter[quarter_num-1] + 1;
+            }else if(team == 1){//oppteam
+                if(num >= 4) {
+                    opp_memberfoul_counter[num-4] = opp_memberfoul_counter[num-4] + 1;
+                }
+                opp_teamfoul_counter[quarter_num-1] = opp_teamfoul_counter[quarter_num-1] + 1;
             }
-        } catch (SQLException e) {
-            Log.e(TAG, e.toString());
         }
+
         ArrayList<Integer[]> foul_data_list = new ArrayList<>();
         foul_data_list.add(our_memberfoul_counter);
         foul_data_list.add(our_teamfoul_counter);

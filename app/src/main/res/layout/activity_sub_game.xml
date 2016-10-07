@@ -189,7 +189,8 @@
             android:layout_alignParentBottom="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_gravity="left|bottom" />
+            android:layout_gravity="left|bottom"
+            android:visibility="invisible" />
         />
     </FrameLayout>
 

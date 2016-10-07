@@ -177,4 +177,30 @@ public class EventDbHelper extends SQLiteOpenHelper {
             return true;
         }
     }
+    public static ArrayList<String> getRowFromFoul(SQLiteDatabase db, String game_start_time){
+        Cursor cursor = db.rawQuery("SELECT * FROM "+ EventContract.Event.TABLE_NAME+" WHERE "+
+                EventContract.Event.COL_SUCCESS+" = '1' and "+
+                EventContract.Event.COL_EVENT+" = 'foul' and "+
+                EventContract.Event.COL_DATETIME+" = ?", new String[]{String.valueOf(game_start_time)});
+        ArrayList column = new ArrayList();
+        Integer[] row;
+        try {
+            while (cursor.moveToNext()) {
+                row = new Integer[4];
+                int id = cursor.getInt(cursor.getColumnIndex(EventContract.Event._ID));
+                int team = cursor.getInt(cursor.getColumnIndex(EventContract.Event.COL_TEAM));
+                int num = cursor.getInt(cursor.getColumnIndex(EventContract.Event.COL_NUM));
+                int quo = cursor.getInt(cursor.getColumnIndex(EventContract.Event.COL_QUARTER_NUM));
+                Log.d("getRowFromS","id:"+id+",team:"+team+",num:"+num);
+                row[0]=id;
+                row[1]=team;
+                row[2]=num;
+                row[3]=quo;
+                column.add(row);
+            }
+        } finally {
+            cursor.close();
+        }
+        return column;
+    }
 }

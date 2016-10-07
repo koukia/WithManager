@@ -75,14 +75,14 @@ public class EventLogger {
         lv_event_list.setOnItemClickListener(new EventLogListItemClickListener());
         //    lv_event_list.setOnTouchListener(new EventLogListItemTouchListener());
         lv_event_list.setOnItemLongClickListener(new EventLogListItemLongClickListener());
-        gestureDetector = new GestureDetector(new MyGestureDetector());
+  /*      gestureDetector = new GestureDetector(new MyGestureDetector());
         gestureListener = new View.OnTouchListener() {
             public boolean onTouch(View v, MotionEvent event) {
                 return gestureDetector.onTouchEvent(event);
             }
         };
         lv_event_list.setOnTouchListener(gestureListener);
-
+*/
         CardListAdapter adpt_eventlog = new CardListAdapter(context);
         EventDbHelper mDbHelper = new EventDbHelper(context);
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
