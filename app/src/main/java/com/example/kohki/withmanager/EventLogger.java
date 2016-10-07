@@ -72,141 +72,7 @@ public class EventLogger {
             if(id_of_event_log == preId){
                 cntDoubleClick++;
                 if(cntDoubleClick >= 2) {
-                    HashMap<String,String> row = EventDbHelper.getRowFromID(context,id_of_event_log);
-              //      Toast.makeText(context,row+"",Toast.LENGTH_SHORT).show();
-                    //--- edit eventlog
-                    LayoutInflater inflater = (LayoutInflater)context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
-                    final View layout = inflater.inflate(R.layout.event_editor_view,null);
 
-                    final AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                    builder.setTitle("イベント編集");
-                    builder.setView(layout);
-                    builder.setCancelable(true);
-
-                    record_id = id_of_event_log;
-                    team      = Integer.parseInt(row.get(EventContract.Event.COL_TEAM));
-                    num       = Integer.parseInt(row.get(EventContract.Event.COL_NUM));
-                    point     = Integer.parseInt(row.get(EventContract.Event.COL_POINT));
-                    success   = Integer.parseInt(row.get(EventContract.Event.COL_SUCCESS));
-                    event     = row.get(EventContract.Event.COL_EVENT);
-                    Log.d("edit","id:"+record_id+",team:"+team+",num:"+num+",point:"+point+
-                    ",success:"+success+",event:"+event);
-
-                    RadioButton rdobtn;
-                    if(team == 0) {
-                        rdobtn = (RadioButton)layout.findViewById(R.id.rdobtn_ourteam);
-                        rdobtn.setChecked(true);
-                    }else if(team == 1){
-                        rdobtn = (RadioButton)layout.findViewById(R.id.rdobtn_oppteam);
-                        rdobtn.setChecked(true);
-                    }
-                    if(event.equals("foul")){
-                        rdobtn = (RadioButton)layout.findViewById(R.id.rdobtn_foul);
-                        rdobtn.setChecked(true);
-                    }else if(event.equals("rebound")){
-                        rdobtn = (RadioButton)layout.findViewById(R.id.rdobtn_rebound);
-                        rdobtn.setChecked(true);
-                    }else if(event.equals("shoot")){
-                        rdobtn = (RadioButton)layout.findViewById(R.id.rdobtn_shoot);
-                        rdobtn.setChecked(true);
-                        if(point == 1){
-                            rdobtn = (RadioButton)layout.findViewById(R.id.rdobtn_shoot01);
-                            rdobtn.setChecked(true);
-                        }else if(point == 2){
-                            rdobtn = (RadioButton)layout.findViewById(R.id.rdobtn_shoot02);
-                            rdobtn.setChecked(true);
-                        }else if(point == 3){
-                            rdobtn = (RadioButton)layout.findViewById(R.id.rdobtn_shoot03);
-                            rdobtn.setChecked(true);
-                        }
-                    }
-                    if(success == 1){
-                        rdobtn = (RadioButton)layout.findViewById(R.id.rdobtn_success);
-                        rdobtn.setChecked(true);
-                    }else if(success == 0){
-                        rdobtn = (RadioButton)layout.findViewById(R.id.rdobtn_failed);
-                        rdobtn.setChecked(true);
-                    }
-
-                    builder.setNeutralButton("戻る", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-
-                        }
-                    });
-                    builder.setPositiveButton("保存", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            RadioGroup rg = (RadioGroup) layout.findViewById(R.id.rdog_team);
-                            int id = rg.getCheckedRadioButtonId();
-                            if(id == R.id.rdobtn_ourteam) {
-                                team = 0;
-                            }else if(id == R.id.rdobtn_oppteam){
-                                    team = 1;
-                            }
-
-                            rg = (RadioGroup) layout.findViewById(R.id.rdog_event);
-                            id = rg.getCheckedRadioButtonId();
-                            switch (id){
-                                case R.id.rdobtn_foul:
-                                    event = "foul";
-                                    point=0;
-                                    success=1;
-                                    break;
-                                case R.id.rdobtn_steal:
-                                    event = "steal";
-                                    point=0;
-                                    success=1;
-                                    break;
-                                case R.id.rdobtn_rebound:
-                                    event = "rebound";
-                                    point=0;
-                                    success=1;
-                                    break;
-                                case R.id.rdobtn_shoot:
-                                    event = "shoot";
-                                    rg = (RadioGroup) layout.findViewById(R.id.rdog_success);
-                                    id = rg.getCheckedRadioButtonId();
-                                    if(id == R.id.rdobtn_success){
-                                        success = 1;
-                                    }else if(id == R.id.rdobtn_failed){
-                                        success = 0;
-                                    }
-                                    rg = (RadioGroup) layout.findViewById(R.id.rdog_shoot);
-                                    id = rg.getCheckedRadioButtonId();
-                                    if(id == R.id.rdobtn_shoot01){
-                                        point = 1;
-                                    }else if(id == R.id.rdobtn_shoot02){
-                                        point = 2;
-                                    }else if(id == R.id.rdobtn_shoot03) {
-                                        point = 3;
-                                    }
-                                    break;
-                            }
-                            EventDbHelper mDbHelper = new EventDbHelper(context);
-                            SQLiteDatabase db = mDbHelper.getWritableDatabase();
-                            Log.d("---from edit save btn", "id:"+id+",team:"+team+",num:"+num
-                                    +",point:"+point+",success:"+success+",event:"+event);
-                            Boolean result = EventDbHelper.updateColumn(db,id,team,num,point,success,event);
-                            Log.d("---edit_save_result:",""+result);
-
-                            EventLogger ev = new EventLogger(context);
-
-                            ev.updateEventLog(context, VideoActivity.lv_eventLog);
-                            VideoActivity.updateScoreView();
-                        }
-                    });
-                    builder.setNegativeButton("削除", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            Boolean result = EventDbHelper.deleteRow(context,record_id);
-                            Log.d("btn_edit_delete",result+"");
-                            EventLogger ev = new EventLogger(context);
-                            ev.updateEventLog(context, VideoActivity.lv_eventLog);
-                            VideoActivity.updateScoreView();
-                        }
-                    });
-                    builder.show();
                     cntDoubleClick=0;
                 }
             }else if (preId == -1){
@@ -274,6 +140,12 @@ public class EventLogger {
             return false;
         }
     }
+    class EventLogListItemTouchListener implements View.OnTouchListener{
+        @Override
+        View.OnTouchListener(){
+
+        }
+    }
 
     public void addEvent(int team, int number){
          /* DB insert*/
@@ -325,6 +197,7 @@ public class EventLogger {
 
     public void updateEventLog(Context context, ListView lv_event_list) {
         lv_event_list.setOnItemClickListener(new EventLogListItemClickListener());
+        lv_event_list.setOnTouchListener(new EventLogListItemTouchListener());
         lv_event_list.setOnItemLongClickListener(new EventLogListItemLongClickListener());
 
         CardListAdapter adpt_eventlog = new CardListAdapter(context);
@@ -397,5 +270,169 @@ public class EventLogger {
             Log.e("ERROR", e.toString());
         }
         return games;
+    }
+    private void editEvent(int evevt_id){
+        HashMap<String,String> row = EventDbHelper.getRowFromID(context,evevt_id);
+        //      Toast.makeText(context,row+"",Toast.LENGTH_SHORT).show();
+        //--- edit eventlog
+        LayoutInflater inflater = (LayoutInflater)context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
+        final View layout = inflater.inflate(R.layout.event_editor_view,null);
+
+        final AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("イベント編集");
+        builder.setView(layout);
+        builder.setCancelable(true);
+
+        record_id = evevt_id;
+        team      = Integer.parseInt(row.get(EventContract.Event.COL_TEAM));
+        num       = Integer.parseInt(row.get(EventContract.Event.COL_NUM));
+        point     = Integer.parseInt(row.get(EventContract.Event.COL_POINT));
+        success   = Integer.parseInt(row.get(EventContract.Event.COL_SUCCESS));
+        event     = row.get(EventContract.Event.COL_EVENT);
+        Log.d("edit","id:"+record_id+",team:"+team+",num:"+num+",point:"+point+
+                ",success:"+success+",event:"+event);
+
+        RadioButton rdobtn;
+        if(team == 0) {
+            rdobtn = (RadioButton)layout.findViewById(R.id.rdobtn_ourteam);
+            rdobtn.setChecked(true);
+        }else if(team == 1){
+            rdobtn = (RadioButton)layout.findViewById(R.id.rdobtn_oppteam);
+            rdobtn.setChecked(true);
+        }
+        if(event.equals("foul")){
+            rdobtn = (RadioButton)layout.findViewById(R.id.rdobtn_foul);
+            rdobtn.setChecked(true);
+        }else if(event.equals("rebound")){
+            rdobtn = (RadioButton)layout.findViewById(R.id.rdobtn_rebound);
+            rdobtn.setChecked(true);
+        }else if(event.equals("shoot")){
+            rdobtn = (RadioButton)layout.findViewById(R.id.rdobtn_shoot);
+            rdobtn.setChecked(true);
+            if(point == 1){
+                rdobtn = (RadioButton)layout.findViewById(R.id.rdobtn_shoot01);
+                rdobtn.setChecked(true);
+            }else if(point == 2){
+                rdobtn = (RadioButton)layout.findViewById(R.id.rdobtn_shoot02);
+                rdobtn.setChecked(true);
+            }else if(point == 3){
+                rdobtn = (RadioButton)layout.findViewById(R.id.rdobtn_shoot03);
+                rdobtn.setChecked(true);
+            }
+        }
+        if(success == 1){
+            rdobtn = (RadioButton)layout.findViewById(R.id.rdobtn_success);
+            rdobtn.setChecked(true);
+        }else if(success == 0){
+            rdobtn = (RadioButton)layout.findViewById(R.id.rdobtn_failed);
+            rdobtn.setChecked(true);
+        }
+
+        Spinner spinner = (Spinner) layout.findViewById(R.id.spn_num);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        for(int i=0;i<Team.sMaxMembers;i++){
+            adapter.add((i+4)+"");
+        }
+        spinner.setAdapter(adapter);
+        spinner.setSelection(adapter.getPosition(String.valueOf(num)));
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view,
+                                       int position, long id) {
+                Spinner spinner = (Spinner) parent;
+                // 選択されたアイテムを取得します
+                String item = (String) spinner.getSelectedItem();
+                try {
+                    num = Integer.parseInt(item);
+                }catch (NumberFormatException e){
+                    Log.d("edit_spinerlistener",e+"");
+                }
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> arg0) {
+            }
+        });
+
+        //--- radiobtn listenner---
+        builder.setNeutralButton("戻る", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+        builder.setPositiveButton("保存", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                RadioGroup rg = (RadioGroup) layout.findViewById(R.id.rdog_team);
+                int id = rg.getCheckedRadioButtonId();
+                if(id == R.id.rdobtn_ourteam) {
+                    team = 0;
+                }else if(id == R.id.rdobtn_oppteam){
+                    team = 1;
+                }
+
+                rg = (RadioGroup) layout.findViewById(R.id.rdog_event);
+                id = rg.getCheckedRadioButtonId();
+                switch (id){
+                    case R.id.rdobtn_foul:
+                        event = "foul";
+                        point=0;
+                        success=1;
+                        break;
+                    case R.id.rdobtn_steal:
+                        event = "steal";
+                        point=0;
+                        success=1;
+                        break;
+                    case R.id.rdobtn_rebound:
+                        event = "rebound";
+                        point=0;
+                        success=1;
+                        break;
+                    case R.id.rdobtn_shoot:
+                        event = "shoot";
+                        rg = (RadioGroup) layout.findViewById(R.id.rdog_success);
+                        id = rg.getCheckedRadioButtonId();
+                        if(id == R.id.rdobtn_success){
+                            success = 1;
+                        }else if(id == R.id.rdobtn_failed){
+                            success = 0;
+                        }
+                        rg = (RadioGroup) layout.findViewById(R.id.rdog_shoot);
+                        id = rg.getCheckedRadioButtonId();
+                        if(id == R.id.rdobtn_shoot01){
+                            point = 1;
+                        }else if(id == R.id.rdobtn_shoot02){
+                            point = 2;
+                        }else if(id == R.id.rdobtn_shoot03) {
+                            point = 3;
+                        }
+                        break;
+                }
+                EventDbHelper mDbHelper = new EventDbHelper(context);
+                SQLiteDatabase db = mDbHelper.getWritableDatabase();
+                Log.d("---from edit save btn", "id:"+record_id+",team:"+team+",num:"+num
+                        +",point:"+point+",success:"+success+",event:"+event);
+                Boolean result = EventDbHelper.updateColumn(db,record_id,team,num,point,success,event);
+                Log.d("---edit_save_result:",""+result);
+
+                EventLogger ev = new EventLogger(context);
+
+                ev.updateEventLog(context, VideoActivity.lv_eventLog);
+                VideoActivity.updateScoreView();
+            }
+        });
+        builder.setNegativeButton("削除", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Boolean result = EventDbHelper.deleteRow(context,record_id);
+                Log.d("btn_edit_delete",result+"");
+                EventLogger ev = new EventLogger(context);
+                ev.updateEventLog(context, VideoActivity.lv_eventLog);
+                VideoActivity.updateScoreView();
+            }
+        });
+        builder.show();
     }
 }

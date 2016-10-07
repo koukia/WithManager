@@ -103,6 +103,20 @@ public class VideoRecorder implements SurfaceHolder.Callback {
                 }
             }
         }
+        /*
+        if(mCamera != null){
+            Camera.Parameters params = mCamera.getParameters();
+            // サポートモード取得
+            List<String> focusList = params.getSupportedFocusModes();
+            for (int i=0; i < focusList.size();i++) {
+                Log.v("CameraFocus", "Mode = " + focusList.get(i));
+            }
+            // フォーカスモード：マクロモードに設定
+            params.setFocusMode(Camera.Parameters.FOCUS_MODE_MACRO);
+            // パラメータ設定
+            mCamera.setParameters(params);
+        }
+        */
 
     }
 
@@ -130,7 +144,6 @@ public class VideoRecorder implements SurfaceHolder.Callback {
             CamcorderProfile camcorderProfile = CamcorderProfile.get(CamcorderProfile.QUALITY_480P);
             //    Toast.makeText(context,Integer.toString(camcorderProfile.videoCodec),Toast.LENGTH_SHORT).show();
             camcorderProfile.videoCodec = MediaRecorder.VideoEncoder.DEFAULT;
-            Log.d(TAG+"start()","default"+MediaRecorder.VideoEncoder.DEFAULT);
             mMediaRecorder.setProfile(camcorderProfile);
             Log.d(TAG+"start()","6");
 
@@ -150,7 +163,8 @@ public class VideoRecorder implements SurfaceHolder.Callback {
             mMediaRecorder.start();
             Log.d(TAG+"start()","9");
 
-            is_recording = true;
+
+                    is_recording = true;
         }catch (IOException e) {
             Log.e(TAG+"start()",""+e);
             Toast.makeText(context, "IOe:" + e, Toast.LENGTH_SHORT).show();
@@ -300,12 +314,6 @@ public class VideoRecorder implements SurfaceHolder.Callback {
 
             Camera.CameraInfo camInfo = new Camera.CameraInfo();
 
-            /*
-               if(params.getSupportedFocusModes().contains(
-                    params.FOCUS_MODE_CONTINUOUS_VIDEO)){
-                params.setFocusMode(params.FOCUS_MODE_CONTINUOUS_VIDEO);
-            }
-         */
             int camera_id = findFrontFacingCameraID();
             Camera.getCameraInfo(camera_id, camInfo);
             int cameraRotationOffset = camInfo.orientation;

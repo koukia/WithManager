@@ -68,31 +68,31 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:paddingLeft="10dp"
-        android:id="@+id/rdog_event">
+        android:id="@+id/rdog_event"
+        android:paddingLeft="10dp">
 
         <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="ファウル"
+            android:text="ﾌｧｳﾙ"
             android:id="@+id/rdobtn_foul"
             android:textSize="12dp" />
         <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="スティール"
+            android:text="ｽﾃｨｰﾙ"
             android:id="@+id/rdobtn_steal"
             android:textSize="12dp" />
         <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="リバウンド"
+            android:text="ﾘﾊﾞｳﾝﾄﾞ"
             android:id="@+id/rdobtn_rebound"
             android:textSize="12dp" />
         <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="シュート"
+            android:text="ｼｭｰﾄ"
             android:id="@+id/rdobtn_shoot"
             android:textSize="12dp" />
     </RadioGroup>

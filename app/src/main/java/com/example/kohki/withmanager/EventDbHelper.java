@@ -129,13 +129,13 @@ public class EventDbHelper extends SQLiteOpenHelper {
     }
     public static boolean updateColumn(SQLiteDatabase db, int id, int team, int num,
                                        int point, int success, String event){
-        Log.d("update","team:"+team+"num:"+num+",point:"+point+",event:"+event);
+        Log.d("update","id:"+id+",team:"+team+"num:"+num+",point:"+point+",event:"+event);
         ContentValues values = new ContentValues();
-        values.put(EventContract.Event.COL_TEAM, team);
-        values.put(EventContract.Event.COL_NUM, num);
-        values.put(EventContract.Event.COL_POINT, point);
+        values.put(EventContract.Event.COL_TEAM,    team);
+        values.put(EventContract.Event.COL_NUM,     num);
+        values.put(EventContract.Event.COL_POINT,   point);
         values.put(EventContract.Event.COL_SUCCESS, success);
-        values.put(EventContract.Event.COL_EVENT, event);
+        values.put(EventContract.Event.COL_EVENT,   event);
      /*   String sql = "update " + EventContract.Event.TABLE_NAME + " set "+
                 EventContract.Event.COL_TEAM+"="+team+", "+
                 EventContract.Event.COL_NUM+"="+num+", "+
@@ -145,10 +145,14 @@ public class EventDbHelper extends SQLiteOpenHelper {
                 "' where "+ EventContract.Event._ID+"="+id+";";
      */   try {
          //   db.execSQL(sql);
-            db.update(EventContract.Event.TABLE_NAME,values,
-                    EventContract.Event._ID+"=?",new String[]{id+""});
+            int result = db.update(EventContract.Event.TABLE_NAME,values,
+                    EventContract.Event._ID+" = ?",new String[]{String.valueOf(id)});
+            if(result == -1)
+                Log.e("SQL_update", "failed");
+            else
+                Log.e("SQL_update", "success:"+result);
         } catch (SQLException e) {
-            Log.e("SQL", e.toString());
+            Log.e("SQL_update", e.toString());
             return false;
         }
         return true;

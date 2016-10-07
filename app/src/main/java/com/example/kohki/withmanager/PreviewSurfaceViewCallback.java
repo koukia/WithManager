@@ -3,7 +3,10 @@ package com.example.kohki.withmanager;
 import android.content.Context;
 import android.media.MediaPlayer;
 import android.util.Log;
+import android.view.Display;
 import android.view.SurfaceHolder;
+import android.view.SurfaceView;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import java.io.IOException;
@@ -42,7 +45,6 @@ public class PreviewSurfaceViewCallback implements SurfaceHolder.Callback {
                 Log.e(TAG,e+"");
                 Toast.makeText(context, "IOException:"+e, Toast.LENGTH_LONG).show();
             } finally {
-
             }
         }
 
@@ -55,6 +57,9 @@ public class PreviewSurfaceViewCallback implements SurfaceHolder.Callback {
         @Override
         public void surfaceCreated(SurfaceHolder holder) {
             this.holder = holder;
+          //  WindowManager wm = (WindowManager)getSystemService(WINDOW_SERVICE);
+          //  Display dp = wm.getDefaultDisplay();
+
         //    Toast.makeText(context,"surfaceCreated()",Toast.LENGTH_SHORT).show();
         }
 

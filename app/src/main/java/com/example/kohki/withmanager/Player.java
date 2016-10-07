@@ -36,7 +36,7 @@ public class Player extends AppCompatActivity implements NavigationView.OnNaviga
 
         myWebView = (WebView)findViewById(R.id.webView);
         myWebView.setWebViewClient(new WebViewClient());
-        myWebView.loadUrl("https://with-manager.herokuapp.com/members/");
+        myWebView.loadUrl("https://with-manager.herokuapp.com/members/all");
         myWebView.getSettings().setJavaScriptEnabled(true);
 
 
