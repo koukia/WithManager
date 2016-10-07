@@ -191,11 +191,14 @@ public class VideoActivity extends Activity {
         zenpad7:
 */
 
-        if (mode.equals("single")){
-            if(displayMetrics.widthPixels > 1500 && displayMetrics.heightPixels > 900)
+        if (mode.equals("single")) {
+            if (displayMetrics.widthPixels > 1500 && displayMetrics.heightPixels > 900){
+                Log.d("---single--",">>>>>>>>>>");
                 setContentView(R.layout.activity_record_standalone_small);
-            else
+            }else {
+                Log.d("---single--","<<<<<<<<<<");
                 setContentView(R.layout.activity_record_standalone);
+            }
         }else if(mode.equals("dual")){
             if(displayMetrics.widthPixels > 1500 && displayMetrics.heightPixels > 900)
                 setContentView(R.layout.activity_synchro_video);

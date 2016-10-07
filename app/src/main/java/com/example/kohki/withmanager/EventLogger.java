@@ -14,8 +14,10 @@ import android.media.MediaPlayer;
 import android.os.Build;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -54,21 +56,66 @@ public class EventLogger {
     private int success;
     private String event;
     private AlertDialog.Builder mADBuilder;
+
+    private static float preLat =0;
+    private int cntLat = 0;
+    private static int trgNum = 5;
+
+    private GestureDetector gestureDetector;
+    private View.OnTouchListener gestureListener;
+    private static boolean flg_edit = true;
+
     public EventLogger(Context context){
         this.context = context;
 
         mDbHelper = new EventDbHelper(context);
         mDb = mDbHelper.getWritableDatabase();
     }
+    public void updateEventLog(Context context, ListView lv_event_list) {
+        lv_event_list.setOnItemClickListener(new EventLogListItemClickListener());
+        //    lv_event_list.setOnTouchListener(new EventLogListItemTouchListener());
+        lv_event_list.setOnItemLongClickListener(new EventLogListItemLongClickListener());
+        gestureDetector = new GestureDetector(new MyGestureDetector());
+        gestureListener = new View.OnTouchListener() {
+            public boolean onTouch(View v, MotionEvent event) {
+                return gestureDetector.onTouchEvent(event);
+            }
+        };
+        lv_event_list.setOnTouchListener(gestureListener);
+
+        CardListAdapter adpt_eventlog = new CardListAdapter(context);
+        EventDbHelper mDbHelper = new EventDbHelper(context);
+        SQLiteDatabase db = mDbHelper.getWritableDatabase();
+        try {
+            //SQLiteCursor c = (SQLiteCursor)mDb.rawQuery(sql, null);
+            SQLiteCursor c = (SQLiteCursor)db.query(
+                    true,EventContract.Event.TABLE_NAME,
+                    null,null,null,null,null,null,null);
+
+            int rowcount = c.getCount();
+            c.moveToFirst();
+            for (int i = 0; i < rowcount ; i++) {
+                int id_event_db = c.getInt(c.getColumnIndex(EventContract.Event._ID));
+                adpt_eventlog.insert(id_event_db, 0);//adapterにセットするしておいてclicklistenerで使う
+                c.moveToNext();
+            }
+        } catch (SQLException e) {
+            Log.e("ERROR", e.toString());
+        }
+        lv_event_list.setAdapter(adpt_eventlog);
+    }
+
     class EventLogListItemClickListener implements ListView.OnItemClickListener {
 
-        EventLogListItemClickListener() {
-        }
+        EventLogListItemClickListener() {}
 
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             ListView lv_event_log      = (ListView) parent;
             int   id_of_event_log = (int)lv_event_log.getItemAtPosition(position);
+            if(flg_edit)
+                editEvent(id_of_event_log);
+            /*
             if(id_of_event_log == preId){
                 cntDoubleClick++;
                 if(cntDoubleClick >= 2) {
@@ -79,23 +126,24 @@ public class EventLogger {
                 cntDoubleClick++;
             }
             preId = id_of_event_log;
+            */
+            flg_edit = true;
         }
     }
     static class EventLogListItemLongClickListener  implements ListView.OnItemLongClickListener {
 
         VideoRecorder mRecorder;
 
-        EventLogListItemLongClickListener() {
-        }
+        EventLogListItemLongClickListener() {}
 
-        @Override
+            @Override
         public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
             ListView lv_event_log      = (ListView) parent;
             int   item_of_event_log = (int)lv_event_log.getItemAtPosition(position);
             HashMap<String,String> row =  EventDbHelper.getRowFromID(context,item_of_event_log);
             String   movie_name = row.get(EventContract.Event.COL_MOVIE_NAME);
             Log.d(TAG,movie_name+"を再生");
-
+                flg_edit=false;
             try { //スタンドアローンかBluetooth通信中か
                 if(VideoActivity.mSubSurface != null) {
 
@@ -140,13 +188,39 @@ public class EventLogger {
             return false;
         }
     }
-    class EventLogListItemTouchListener implements View.OnTouchListener{
+    /*
+    class EventLogListItemTouchListener implements ListView.OnTouchListener{
         @Override
-        View.OnTouchListener(){
+        public boolean onTouch(View v, MotionEvent event) {
+            if(event.getAction() == MotionEvent.ACTION_MOVE){
+                float crt_lat = event.getX();
+                if(preLat == 0)
+                    preLat = event.getX();
+                if(crt_lat < preLat ){
+                    cntLat++;
+                }
+                if(cntLat > trgNum)
+                    editEvent();
+            }
 
         }
-    }
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            ListView lv_event_log      = (ListView) parent;
+            int   id_of_event_log = (int)lv_event_log.getItemAtPosition(position);
+            if(id_of_event_log == preId){
+                cntDoubleClick++;
+                if(cntDoubleClick >= 2) {
 
+                    cntDoubleClick=0;
+                }
+            }else if (preId == -1){
+                cntDoubleClick++;
+            }
+            preId = id_of_event_log;
+        }
+    }
+*/
     public void addEvent(int team, int number){
          /* DB insert*/
         ContentValues values = new ContentValues();
@@ -195,32 +269,6 @@ public class EventLogger {
         );
     }
 
-    public void updateEventLog(Context context, ListView lv_event_list) {
-        lv_event_list.setOnItemClickListener(new EventLogListItemClickListener());
-        lv_event_list.setOnTouchListener(new EventLogListItemTouchListener());
-        lv_event_list.setOnItemLongClickListener(new EventLogListItemLongClickListener());
-
-        CardListAdapter adpt_eventlog = new CardListAdapter(context);
-        EventDbHelper mDbHelper = new EventDbHelper(context);
-        SQLiteDatabase db = mDbHelper.getWritableDatabase();
-        try {
-            //SQLiteCursor c = (SQLiteCursor)mDb.rawQuery(sql, null);
-            SQLiteCursor c = (SQLiteCursor)db.query(
-                    true,EventContract.Event.TABLE_NAME,
-                    null,null,null,null,null,null,null);
-
-            int rowcount = c.getCount();
-            c.moveToFirst();
-            for (int i = 0; i < rowcount ; i++) {
-                int id_event_db = c.getInt(c.getColumnIndex(EventContract.Event._ID));
-                adpt_eventlog.insert(id_event_db, 0);//adapterにセットするしておいてclicklistenerで使う
-                c.moveToNext();
-            }
-        } catch (SQLException e) {
-            Log.e("ERROR", e.toString());
-        }
-        lv_event_list.setAdapter(adpt_eventlog);
-    }
 
     public ArrayList<Integer[]> getFoul(){
         ArrayList<Integer[]> foulList = new ArrayList<>();
@@ -434,5 +482,14 @@ public class EventLogger {
             }
         });
         builder.show();
+    }
+    class MyGestureDetector extends GestureDetector.SimpleOnGestureListener {
+
+        @Override
+        public boolean onDoubleTap(MotionEvent event) {
+            Log.d("TAG", "ダブルタップが発生した。");
+
+            return super.onDoubleTap(event);
+        }
     }
 }
