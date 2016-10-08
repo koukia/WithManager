@@ -42,7 +42,7 @@ public class HomeActivity extends AppCompatActivity {
         public void onClick(View v) {
             //    if (Build.VERSION.SDK_INT >= SDKVER_LOLLIPOP) {
             try {
-                Intent ittView_video = new Intent(context, SelectSynchro.class);
+                Intent ittView_video = new Intent(context, SelectRecordModeActivity.class);
                 startActivity(ittView_video);
             }catch (Exception e) {
                 Log.v("IntentErr:", e.getMessage() + "," + e);

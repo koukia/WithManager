@@ -25,7 +25,7 @@ import java.util.List;
  * Created by Kohki on 2016/07/02.
  */
 public class VideoEdit {
-
+    private static final String TAG = "VideoEditor";
     /**
      * ビデオをトリミングする
      * @param src トリミングするもともとのファイル
@@ -44,7 +44,7 @@ public class VideoEdit {
         List<Track> tracks = movie.getTracks();
         movie.setTracks(new LinkedList<Track>());
         double startTime = startMs / 1000;
-        double endTime   = endMs / 1000;
+        double endTime   = endMs   / 1000;
         boolean timeCorrected = false;
 
         // Here we try to find a track that has sync samples. Since we can only
@@ -70,10 +70,10 @@ public class VideoEdit {
             }
         }
         for (Track track : tracks) {
-            long currentSample = 0;
-            double currentTime = 0;
-            long startSample = -1;
-            long endSample = -1;
+            long   currentSample = 0;
+            double currentTime   = 0;
+            long   startSample   = -1;
+            long   endSample     = -1;
             for (int i = 0; i < track.getSampleDurations().length; i++) {
                 if (currentTime <= startTime) {
 
@@ -170,10 +170,9 @@ public class VideoEdit {
             out.writeContainer(fos.getChannel());
             fos.close();
         } catch (Exception e) {
-            Log.v("Err","appendException");
+            Log.v(TAG,"appendException");
             return false;
         }
-
         return true;
     }
 }

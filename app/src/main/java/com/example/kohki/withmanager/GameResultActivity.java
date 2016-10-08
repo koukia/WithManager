@@ -65,11 +65,10 @@ public class GameResultActivity extends AppCompatActivity {
             getLayoutInflater().inflate(R.layout.foul_sheet,  foul_sheet);
             EventDbHelper  cDbHelper = new EventDbHelper(context);
             mDb       = cDbHelper.getWritableDatabase();
-            EventLogger m_event_loger = new EventLogger(context);
-            m_event_loger.updateEventLog(context, (ListView) findViewById(R.id.event_log));
+            EventLogger m_event_loger = new EventLogger(context, gameStartDateTime);
+            m_event_loger.updateEventLog(context, (ListView) findViewById(R.id.event_log),gameStartDateTime);
             setScoresheet();
             setFoulsheet();
-
         }
     }
 

@@ -31,7 +31,7 @@
             android:label="選手一覧"
             android:theme="@style/NavigationDrawerTheme" />
         <activity android:name=".NewPlayer" />
-        <activity android:name=".SelectSynchro" />
+        <activity android:name=".SelectRecordModeActivity" />
         <activity android:name=".Synchro" />
         <activity
             android:name=".DeviceListActivity"
@@ -47,10 +47,6 @@
         <activity
             android:name=".Status"
             android:label="ステータス"
-            />
-        <activity
-            android:name=".SynchroVideoActivity"
-            android:screenOrientation="landscape"
             />
         <activity
             android:name=".SettingOfGameActivity"

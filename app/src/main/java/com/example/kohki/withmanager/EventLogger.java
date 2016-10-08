@@ -44,8 +44,6 @@ import java.util.HashMap;
 public class EventLogger {
     private static final String TAG = "EventLogger";
     private static Context context;
-    private EventDbHelper mDbHelper;
-    private SQLiteDatabase mDb;
     private static int cntDoubleClick=0;
     private static int preId =-1;
 
@@ -64,14 +62,14 @@ public class EventLogger {
     private GestureDetector gestureDetector;
     private View.OnTouchListener gestureListener;
     private static boolean flg_edit = true;
+    private String mGameStartTime;
 
-    public EventLogger(Context context){
+    public EventLogger(Context context, String start_time){
         this.context = context;
-
-        mDbHelper = new EventDbHelper(context);
-        mDb = mDbHelper.getWritableDatabase();
+        mGameStartTime = start_time;
     }
-    public void updateEventLog(Context context, ListView lv_event_list) {
+
+    public void updateEventLog(Context context, ListView lv_event_list,String mGameStartTime) {
         lv_event_list.setOnItemClickListener(new EventLogListItemClickListener());
         //    lv_event_list.setOnTouchListener(new EventLogListItemTouchListener());
         lv_event_list.setOnItemLongClickListener(new EventLogListItemLongClickListener());
@@ -83,9 +81,22 @@ public class EventLogger {
         };
         lv_event_list.setOnTouchListener(gestureListener);
 */
+        EventDbHelper  mDbHelper = new EventDbHelper(context);
+        SQLiteDatabase mDb       = mDbHelper.getWritableDatabase();
         CardListAdapter adpt_eventlog = new CardListAdapter(context);
-        EventDbHelper mDbHelper = new EventDbHelper(context);
-        SQLiteDatabase db = mDbHelper.getWritableDatabase();
+        ArrayList eventIds = mDbHelper.getRowFromDateTime(mDb,mGameStartTime);
+        Log.d("-------------",eventIds.size()+"");
+        if(eventIds.size() != 0){
+            for(int i=0;i<eventIds.size();i++) {
+                try {
+                    int id = (int) eventIds.get(i);
+                    adpt_eventlog.insert(id, 0);//adapterにセットするしておいてclicklistenerで使う
+                }catch (NumberFormatException e){
+                    Log.d(TAG, "NumberFormatException");
+                }
+            }
+        }
+        /*
         try {
             //SQLiteCursor c = (SQLiteCursor)mDb.rawQuery(sql, null);
             SQLiteCursor c = (SQLiteCursor)db.query(
@@ -102,6 +113,7 @@ public class EventLogger {
         } catch (SQLException e) {
             Log.e("ERROR", e.toString());
         }
+        */
         lv_event_list.setAdapter(adpt_eventlog);
     }
 
@@ -167,19 +179,6 @@ public class EventLogger {
                     });
 
 
-                }else if(SynchroVideoActivity.sv_sPlayBackView != null){
-                    SynchroVideoActivity.sv_sPlayBackView.setVisibility(SurfaceView.VISIBLE);
-                    if (SynchroVideoActivity.mPreviewCallback.mMediaPlayer != null) {
-                        SynchroVideoActivity.mPreviewCallback.mMediaPlayer.release();
-                        SynchroVideoActivity.mPreviewCallback.mMediaPlayer = null;
-                    }
-                    SynchroVideoActivity.mPreviewCallback.palyVideo(movie_name);
-                    SynchroVideoActivity.mPreviewCallback.mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                        @Override
-                        public void onCompletion(MediaPlayer mp) {
-                            SynchroVideoActivity.sv_sPlayBackView.setVisibility(SurfaceView.INVISIBLE);
-                        }
-                    });
                 }
             } catch (NullPointerException e) {
                 Toast.makeText(context, "ぬるぽ"+e, Toast.LENGTH_LONG).show();
@@ -233,6 +232,8 @@ public class EventLogger {
         values.put(EventContract.Event.COL_DATETIME,    VideoActivity.sGameStartDateTime);
         values.put(EventContract.Event.COL_QUARTER_NUM, VideoActivity.sCurrentQuarterNum);
         Log.d(TAG,"insert_values:"+values);
+        EventDbHelper mDbHelper = new EventDbHelper(context);
+        SQLiteDatabase mDb = mDbHelper.getWritableDatabase();
         mDb.insert(
                 EventContract.Event.TABLE_NAME,
                 null,
@@ -251,7 +252,10 @@ public class EventLogger {
         values.put(EventContract.Event.COL_DATETIME,    start_time);
         values.put(EventContract.Event.COL_QUARTER_NUM, quarter_num);
 
+
         long newRowId;
+        EventDbHelper  mDbHelper = new EventDbHelper(context);
+        SQLiteDatabase mDb       = mDbHelper.getWritableDatabase();
         newRowId = mDb.insert(
                 EventContract.Event.TABLE_NAME,
                 null,
@@ -262,6 +266,8 @@ public class EventLogger {
         ContentValues values = new ContentValues();
         values.put(EventContract.Game.COL_DATE_TIME, dateTime);
         System.out.println(dateTime + "を追加しました");
+        EventDbHelper  mDbHelper = new EventDbHelper(context);
+        SQLiteDatabase mDb       = mDbHelper.getWritableDatabase();
         mDb.insert(
             EventContract.Game.TABLE_NAME,
             null,
@@ -275,6 +281,8 @@ public class EventLogger {
 
         try {
             //SQLiteCursor c = (SQLiteCursor).rawQuery(sql, null);
+            EventDbHelper  mDbHelper = new EventDbHelper(context);
+            SQLiteDatabase mDb       = mDbHelper.getWritableDatabase();
             SQLiteCursor c = (SQLiteCursor) mDb.query(
                     EventContract.Event.TABLE_NAME,
                     new String[] {EventContract.Event.COL_TEAM, EventContract.Event.COL_NUM},
@@ -301,6 +309,8 @@ public class EventLogger {
 
         try{
             //SQLiteCursor c = (SQLiteCursor)mDb.rawQuery(sql, null);
+            EventDbHelper  mDbHelper = new EventDbHelper(context);
+            SQLiteDatabase mDb       = mDbHelper.getWritableDatabase();
             SQLiteCursor c = (SQLiteCursor) mDb.query(
                     EventContract.Event.TABLE_NAME,
                     new String[] {EventContract.Event.COL_DATETIME},
@@ -465,9 +475,9 @@ public class EventLogger {
                 Boolean result = EventDbHelper.updateColumn(db,record_id,team,num,point,success,event);
                 Log.d("---edit_save_result:",""+result);
 
-                EventLogger ev = new EventLogger(context);
+                EventLogger ev = new EventLogger(context,mGameStartTime);
 
-                ev.updateEventLog(context, VideoActivity.lv_eventLog);
+                ev.updateEventLog(context, VideoActivity.lv_eventLog, mGameStartTime);
                 VideoActivity.updateScoreView();
             }
         });
@@ -476,8 +486,8 @@ public class EventLogger {
             public void onClick(DialogInterface dialog, int which) {
                 Boolean result = EventDbHelper.deleteRow(context,record_id);
                 Log.d("btn_edit_delete",result+"");
-                EventLogger ev = new EventLogger(context);
-                ev.updateEventLog(context, VideoActivity.lv_eventLog);
+                EventLogger ev = new EventLogger(context,mGameStartTime);
+                ev.updateEventLog(context, VideoActivity.lv_eventLog,mGameStartTime);
                 VideoActivity.updateScoreView();
             }
         });
