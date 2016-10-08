@@ -167,10 +167,10 @@ public class VideoRecorder implements SurfaceHolder.Callback {
                     is_recording = true;
         }catch (IOException e) {
             Log.e(TAG+"start()",""+e);
-            Toast.makeText(context, "IOe:" + e, Toast.LENGTH_SHORT).show();
+        //    Toast.makeText(context, "IOe:" + e, Toast.LENGTH_SHORT).show();
         }catch (RuntimeException e) {
             Log.e(TAG+"start()",""+e);
-            Toast.makeText(context, "Re:" + e, Toast.LENGTH_SHORT).show();
+        //    Toast.makeText(context, "Re:" + e, Toast.LENGTH_SHORT).show();
         }
     }
     public void pause(){
@@ -230,29 +230,31 @@ public class VideoRecorder implements SurfaceHolder.Callback {
                     Log.d("Exception", "startrim");
                 }
             }
+            mMovieFilePaths.add(edit_movie_path);
             //Toast.makeText(context, edit_file.getAbsolutePath().toString(), Toast.LENGTH_LONG).show();
             // Toast.makeText(context, getDuration(new File(after_edit_file.getAbsolutePath().toString())), Toast.LENGTH_LONG).show();
         } else if (origin_movie_time < VideoActivity.sMovieTime) {
             Log.d(TAG,"-----within 5000ms--mMovieFilePaths.size():"+mMovieFilePaths.size()+"mMovieFilePath:"+mMovieFilePath+"edit_movie_path"+edit_movie_path);
             if (mMovieFilePaths.size() >= 1) { //editedMovies.get(editedMovies.size() - 1).exists()
                 try {
-                    Log.d(TAG,"-----within 5000ms--mMovieFilePaths.size():"+mMovieFilePaths.size());
+                    File pre_movie_file = new File(mMovieFilePaths.get(mMovieFilePaths.size()-1));
+                    Log.d("edit:",mMovieFilePaths.get(mMovieFilePaths.size()-1)+":"+mMovieFilePath+":"+edit_movie_path);
                     boolean result = mVideoEdit.appendMovie(
-                            mMovieFilePaths.get(mMovieFilePaths.size()-1),
-                            mMovieFilePath,
-                            edit_movie_path );
+                            pre_movie_file.getAbsolutePath(),
+                            f_movie.getAbsolutePath(),
+                            f_edit_movie.getAbsolutePath() );
                     if(!result) {
                         //   Toast.makeText(context, "結合失敗", Toast.LENGTH_LONG).show();
                     }
                 } catch (IndexOutOfBoundsException e) {
                     Toast.makeText(context, "IndexOutOfBoundsException", Toast.LENGTH_LONG).show();
                 }
+                mMovieFilePaths.add(edit_movie_path);
             } else {
                 mMovieFilePaths.add(mMovieFilePath);
-                return mMovieFilePath;
+                //       Toast.makeText(context, "5秒未満の動画を生成(origin copy)", Toast.LENGTH_LONG).show();
             }
         }
-        mMovieFilePaths.add(edit_movie_path);
         return edit_movie_path;
     }
     private static int getDuration(File audioFile) {

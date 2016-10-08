@@ -194,17 +194,20 @@ public class VideoActivity extends Activity {
 
         if (mode.equals("single")) {
             if (displayMetrics.widthPixels > 1500 && displayMetrics.heightPixels > 900){
-                Log.d("---single--",">>>>>>>>>>");
+                Log.d("---single--","phone6");
                 setContentView(R.layout.activity_record_standalone_small);
             }else {
-                Log.d("---single--","<<<<<<<<<<");
+                Log.d("---single--","zenpad7");
                 setContentView(R.layout.activity_record_standalone);
             }
-        }else if(mode.equals("dual")){
-            if(displayMetrics.widthPixels > 1500 && displayMetrics.heightPixels > 900)
+        }else if(mode.equals("dual")) {
+            if (displayMetrics.widthPixels > 1500 && displayMetrics.heightPixels > 900){
+                Log.d("---dual--","phone6");
+                setContentView(R.layout.activity_record_synchro_small);
+            }else {
+                Log.d("---dual--","zenpad7");
                 setContentView(R.layout.activity_record_synchro);
-            else
-                setContentView(R.layout.activity_record_standalone_small);
+            }
              /* Synchro only */
             buf = new byte[4];
             buf[3] = 111;
@@ -353,6 +356,7 @@ public class VideoActivity extends Activity {
                     }
                 });
                 break;
+
             case "dual":
                 findViewById(R.id.steal).setOnClickListener(new View.OnClickListener() {
                     @Override

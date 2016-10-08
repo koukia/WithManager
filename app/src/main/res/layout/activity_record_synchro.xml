@@ -33,24 +33,25 @@
                 android:gravity="left"
                 android:weightSum="100">
                 <ImageButton
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
                     android:id="@+id/btn_setting"
                     android:src="@drawable/ico_btn_setting"
                     android:cropToPadding="false"
                     android:contextClickable="false"
                     android:scaleType="centerCrop" />
                 <ImageButton
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
                     android:id="@+id/btn_chenge_scoresheet_and_eventlog"
                     android:src="@drawable/ico_btn_change_scoresheet"
                     android:scaleType="centerCrop" />
                 <ImageButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
                     android:id="@+id/btn_save_or_delete"
-                    android:src="@android:drawable/ic_menu_save" />
+                    android:src="@drawable/ico_btn_save"
+                    android:scaleType="centerCrop" />
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"

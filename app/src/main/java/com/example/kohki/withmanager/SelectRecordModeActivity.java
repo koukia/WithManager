@@ -44,13 +44,11 @@ public class SelectRecordModeActivity extends AppCompatActivity {
             public void onClick(View v) {
                 //---
                 LayoutInflater inflater = (LayoutInflater)context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
-                Log.d("---click", ""+v);
                 final View layout = inflater.inflate(R.layout.record_menu,null);
                 ListView game_list = (ListView)layout.findViewById(R.id.game_log_ist);
                 gameListAdpt = new GameListAdapter(context);
                 mDbHelper = new EventDbHelper(context);
                 mDb = mDbHelper.getWritableDatabase();
-                Log.d("---click", ""+1);
                 try {
                     //SQLiteCursor c = (SQLiteCursor)mDb.rawQuery(sql, null);
                     SQLiteCursor c = (SQLiteCursor)mDb.query(
@@ -63,21 +61,15 @@ public class SelectRecordModeActivity extends AppCompatActivity {
                             int game_start_list_id = c.getInt(c.getColumnIndex(EventContract.Game._ID));
                             gameListAdpt.insert(game_start_list_id, 0);//adapterにセットするしておいてclicklistenerで使う
                             c.moveToNext();
-                            Log.d("---db", "" + i);
                         }
                     }else {
-                        Log.d("---db", "else");
                     }
                 } catch (SQLException e) {
                     Log.e("ERROR", e.toString());
                 }
-                Log.d("---db", "2");
                 game_list.setAdapter(gameListAdpt);
-                Log.d("---db", "3");
                 //---Dialog
-                Log.d("---db", "4");
                 builder = new AlertDialog.Builder(context);
-                Log.d("---db", "5");
                 builder.setTitle("試合記録メニュー");
                 builder.setView(layout);
                 builder.setCancelable(true);
@@ -102,6 +94,7 @@ public class SelectRecordModeActivity extends AppCompatActivity {
         findViewById(R.id.synchro).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 try{
                     BluetoothAdapter Bt = BluetoothAdapter.getDefaultAdapter();
                     if(!Bt.equals(null)){
