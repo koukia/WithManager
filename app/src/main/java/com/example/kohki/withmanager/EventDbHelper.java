@@ -203,4 +203,34 @@ public class EventDbHelper extends SQLiteOpenHelper {
         }
         return column;
     }
+    public static HashMap<String,String> getGameRowFromID(SQLiteDatabase db, int id){
+        Cursor cursor = db.rawQuery("SELECT * FROM "+ EventContract.Game.TABLE_NAME+" WHERE _id = ?", new String[]{String.valueOf(id)});
+        HashMap<String,String> row = new HashMap<>();
+        try {
+            if (cursor.moveToNext()) {
+                row.put(EventContract.Game.COL_DATE_TIME,
+                        cursor.getString(cursor.getColumnIndex(EventContract.Game.COL_DATE_TIME)));
+                row.put(EventContract.Game.COL_GAME_NAME,
+                        cursor.getString(cursor.getColumnIndex(EventContract.Game.COL_GAME_NAME)));
+                row.put(EventContract.Game.COL_GAME_NOTES,
+                        cursor.getString(cursor.getColumnIndex(EventContract.Game.COL_GAME_NOTES)));
+            }
+        } finally {
+            cursor.close();
+        }
+        return row;
+    }
+    public ArrayList<Integer> getRowFromDateTime(SQLiteDatabase db, String date_time){
+        Cursor cursor = db.rawQuery("SELECT * FROM "+ EventContract.Event.TABLE_NAME+" WHERE "+
+                EventContract.Event.COL_DATETIME+" = ?", new String[]{String.valueOf(date_time)});
+        ArrayList column = new ArrayList();
+        try {
+            while (cursor.moveToNext()) {
+                column.add(cursor.getInt(cursor.getColumnIndex(EventContract.Event._ID)));
+            }
+        } finally {
+            cursor.close();
+        }
+        return column;
+    }
 }

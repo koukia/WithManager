@@ -45,8 +45,9 @@
                 android:layout_width="80dp"
                 android:layout_height="80dp"
                 android:id="@+id/btn_save_or_delete"
-                android:src="@android:drawable/ic_menu_save"
-                android:clickable="true" />
+                android:src="@drawable/ico_btn_save"
+                android:clickable="true"
+                android:scaleType="centerCrop" />
 
         </LinearLayout>
         <LinearLayout
