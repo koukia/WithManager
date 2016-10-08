@@ -48,10 +48,19 @@ public class Team extends VideoActivity {
     class TeamSelectListener implements AdapterView.OnItemClickListener{
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            ListView lv_team_list = (ListView) parent;
+            String item = (String) lv_team_list.getItemAtPosition(position);
+            String id_name = lv_team_list.getResources().getResourceEntryName(lv_team_list.getId());
+
+            if (!item.equals("?")){
+
+                adpt_teamList.remove(item);
+                adpt_teamList.insert(item, 1);
+                lv_team_list.setAdapter(adpt_teamList);
+                sortAdapater();
+            }
             if(isSaving) {
-                ListView lv_team_list = (ListView) parent;
-                String item = (String) lv_team_list.getItemAtPosition(position);
-                String id_name = lv_team_list.getResources().getResourceEntryName(lv_team_list.getId());
+
 
                 switch (id_name) {
                     case "our_team_list":
@@ -78,7 +87,7 @@ public class Team extends VideoActivity {
                     sortAdapater();
                 }
                 //記録
-                mEventLogger = new EventLogger(context);
+                mEventLogger = new EventLogger(context, sGameStartDateTime);
                 mEventLogger.addEvent(sTeamAndNum[0], sTeamAndNum[1]);
 
                 //send by bluetooth
@@ -93,9 +102,11 @@ public class Team extends VideoActivity {
                     bc.close();
                 }
                 */
+                mEventLogger.updateEventLog(context, VideoActivity.lv_eventLog,sGameStartDateTime);
+
                 //update View
                 if (VideoActivity.flg_eventMenu == 0) {
-                    mEventLogger.updateEventLog(context, VideoActivity.lv_eventLog);
+                    mEventLogger.updateEventLog(context, VideoActivity.lv_eventLog,sGameStartDateTime);
                 } else if (VideoActivity.flg_eventMenu == 1 && VideoActivity.sEventName == "shoot"){
              //TODO:
                     //       setScoresheet();
@@ -106,6 +117,7 @@ public class Team extends VideoActivity {
             }else{
 
             }
+
         }
     }
     private void sortAdapater(){

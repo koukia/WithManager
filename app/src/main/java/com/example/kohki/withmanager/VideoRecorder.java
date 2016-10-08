@@ -233,9 +233,10 @@ public class VideoRecorder implements SurfaceHolder.Callback {
             //Toast.makeText(context, edit_file.getAbsolutePath().toString(), Toast.LENGTH_LONG).show();
             // Toast.makeText(context, getDuration(new File(after_edit_file.getAbsolutePath().toString())), Toast.LENGTH_LONG).show();
         } else if (origin_movie_time < VideoActivity.sMovieTime) {
-            //   Toast.makeText(context, "within 5000ms\n"+editedMovies.size(), Toast.LENGTH_SHORT).show();
+            Log.d(TAG,"-----within 5000ms--mMovieFilePaths.size():"+mMovieFilePaths.size()+"mMovieFilePath:"+mMovieFilePath+"edit_movie_path"+edit_movie_path);
             if (mMovieFilePaths.size() >= 1) { //editedMovies.get(editedMovies.size() - 1).exists()
                 try {
+                    Log.d(TAG,"-----within 5000ms--mMovieFilePaths.size():"+mMovieFilePaths.size());
                     boolean result = mVideoEdit.appendMovie(
                             mMovieFilePaths.get(mMovieFilePaths.size()-1),
                             mMovieFilePath,

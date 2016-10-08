@@ -202,9 +202,9 @@ public class VideoActivity extends Activity {
             }
         }else if(mode.equals("dual")){
             if(displayMetrics.widthPixels > 1500 && displayMetrics.heightPixels > 900)
-                setContentView(R.layout.activity_synchro_video);
+                setContentView(R.layout.activity_record_synchro);
             else
-                setContentView(R.layout.activity_synchro_video);
+                setContentView(R.layout.activity_record_standalone_small);
              /* Synchro only */
             buf = new byte[4];
             buf[3] = 111;
@@ -212,20 +212,26 @@ public class VideoActivity extends Activity {
         }
 
         context = this;
+        mEventLogger = new EventLogger(context,sGameStartDateTime);
 
-        Date date = new Date();
-        sdf = new SimpleDateFormat("yyyyMMddHHmmss");
-        sGameStartDateTime = sdf.format(date);
+        String ref = itt.getStringExtra("ref");
+        if(ref.equals("new")){
+            Date date = new Date();
+            sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+            sGameStartDateTime = sdf.format(date);
+            mEventLogger.addGameTime(sGameStartDateTime);
+        }else {
+            sGameStartDateTime = ref;
+        }
+
         //    System.out.println("Game start at "+sGameStartDateTime);
-        mEventLogger = new EventLogger(context);
-        mEventLogger.addGameTime(sGameStartDateTime);
         lv_eventLog = (ListView) findViewById(R.id.event_log);
-        mEventLogger.updateEventLog(context, lv_eventLog);
+        mEventLogger.updateEventLog(context, lv_eventLog, sGameStartDateTime);
 
         cDbHelper = new EventDbHelper(context);
         mDB       = cDbHelper.getWritableDatabase();
         //TODO:
-        cDbHelper.onUpgrade(mDB, EventDbHelper.DATABASE_VERSION, EventDbHelper.DATABASE_VERSION);
+    //    cDbHelper.onUpgrade(mDB, EventDbHelper.DATABASE_VERSION, EventDbHelper.DATABASE_VERSION);
 
         //main surfaceview
         mMainSurface = (SurfaceView) findViewById(R.id.main_surface);
@@ -391,7 +397,7 @@ public class VideoActivity extends Activity {
                         menu.removeView(foulsheet);
                         getLayoutInflater().inflate(R.layout.event_log, menu);
                         lv_eventLog = (ListView) findViewById(R.id.event_log);
-                        mEventLogger.updateEventLog(context, lv_eventLog);
+                        mEventLogger.updateEventLog(context, lv_eventLog,sGameStartDateTime);
                         break;
                     case 1://scoresheet
                         LinearLayout eventlog = (LinearLayout) findViewById(R.id.menu_log);
@@ -445,7 +451,8 @@ public class VideoActivity extends Activity {
                 ADB_quarter_save.setNegativeButton("保存して終了する", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-
+                        mRecorder.stop();
+                        mRecorder.pause();
                         Intent itt = new Intent(context, GameResultActivity.class);
                         itt.putExtra("record_mode", "single");
                         itt.putExtra("game_start_date_time", sGameStartDateTime);
@@ -845,7 +852,7 @@ public class VideoActivity extends Activity {
         mEventLogger.addEvent(team, actor, point, is_success, "shoot",
                 file_name, sGameStartDateTime, sCurrentQuarterNum);
         if (flg_eventMenu == 0) {
-            mEventLogger.updateEventLog(context, VideoActivity.lv_eventLog);
+            mEventLogger.updateEventLog(context, VideoActivity.lv_eventLog,sGameStartDateTime);
         } else if (flg_eventMenu == 1){
             setScoresheet();
         }else if(flg_eventMenu == 2) {
