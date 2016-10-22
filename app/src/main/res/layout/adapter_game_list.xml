@@ -27,9 +27,15 @@
             android:layout_width="60dp"
             android:layout_height="wrap_content"
             android:text="参照"
-            android:id="@+id/btn_reference"
-            android:layout_alignParentEnd="false"
-            android:layout_alignParentRight="true" />
+            android:id="@+id/btn_game_reference"
+            android:layout_toLeftOf="@+id/btn_game_delete" />
+
+        <Button
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:text="削除"
+            android:id="@+id/btn_game_delete"
+            android:layout_alignRight="@+id/title" />
     </RelativeLayout>
     <View
         android:layout_width="match_parent"

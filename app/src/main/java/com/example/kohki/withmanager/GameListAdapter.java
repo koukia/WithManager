@@ -1,6 +1,8 @@
 package com.example.kohki.withmanager;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
@@ -24,6 +26,8 @@ public class GameListAdapter extends ArrayAdapter<Integer> {
     private EventDbHelper mDbHelper;
     private SQLiteDatabase mDb;
     private Context context;
+    private String gameStartTime;
+    private AlertDialog.Builder builder;
 
     public GameListAdapter(Context context) {
         super(context, 0);
@@ -44,26 +48,52 @@ public class GameListAdapter extends ArrayAdapter<Integer> {
         if(row.size() == 0){
             return convertView;
         }
-        final String dateitme         = row.get(EventContract.Game.COL_DATE_TIME);
+        gameStartTime         = row.get(EventContract.Game.COL_DATE_TIME);
         String gamename         = row.get(EventContract.Game.COL_GAME_NAME);
         String gamenotes        = row.get(EventContract.Game.COL_GAME_NOTES);
         //title and sub is message on card.
         TextView tv_title = (TextView) convertView.findViewById(R.id.title);
         TextView tv_sub = (TextView) convertView.findViewById(R.id.sub);
      //   tv_title.setText(gamename);
-        tv_title.setText(dateitme);
+        tv_title.setText(gameStartTime);
         tv_sub.setText(gamenotes);
-        convertView.findViewById(R.id.btn_reference).setOnClickListener(new View.OnClickListener() {
+        convertView.findViewById(R.id.btn_game_reference).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 try {
                     Intent ittSelect = new Intent(context, VideoActivity.class);
                     ittSelect.putExtra("mode", "single");
-                    ittSelect.putExtra("ref", dateitme+"");
+                    ittSelect.putExtra("ref", gameStartTime+"");
                     context.startActivity(ittSelect);
                 } catch (Exception e) {
                     Log.v("IntentErr:", e.getMessage() + "," + e);
                 }
+            }
+        });
+        convertView.findViewById(R.id.btn_game_delete).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                builder = new AlertDialog.Builder(context);
+                builder.setTitle("削除しますか？");
+                builder.setCancelable(true);
+                builder.setPositiveButton("はい", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        try {
+                            mDbHelper.deleteGameRecordofGame(mDb, gameStartTime);
+                        } catch (Exception e) {
+                            Log.v("IntentErr:", e.getMessage() + "," + e);
+                        }
+                        SelectRecordModeActivity.alertDialog.dismiss();
+                    }
+                });
+                builder.setNegativeButton("いいえ", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        SelectRecordModeActivity.alertDialog.dismiss();
+                    }
+                });
+                builder.show();
             }
         });
 

@@ -233,4 +233,15 @@ public class EventDbHelper extends SQLiteOpenHelper {
         }
         return column;
     }
+    public boolean deleteGameRecordofGame(SQLiteDatabase db, String game_start_time){
+        try {
+            db.delete(EventContract.Game.TABLE_NAME,
+                    EventContract.Game.COL_DATE_TIME+" = ?", new String[]{String.valueOf(game_start_time)});
+            db.delete(EventContract.Event.TABLE_NAME,
+                    EventContract.Event.COL_DATETIME+" = ?", new String[]{String.valueOf(game_start_time)});
+        } catch (SQLException e){
+            return false;
+        }
+        return true;
+    }
 }

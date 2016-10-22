@@ -33,6 +33,7 @@ public class SelectRecordModeActivity extends AppCompatActivity {
     private SQLiteDatabase mDb;
 
     private AlertDialog.Builder builder;
+    public static AlertDialog alertDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,8 +87,7 @@ public class SelectRecordModeActivity extends AppCompatActivity {
                         }
                     }
                 });
-                builder.show();
-
+                alertDialog = builder.show();
             }
         });
 
